@@ -1,8 +1,6 @@
 package com.ravan.foodie.order.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,11 +55,26 @@ fun OrderScreenComposable(
             )
             SelectSelfRow(
                 name = viewModel.selectedSelf.value,
+                isExpanded = viewModel.shouldShowSelfDialog.value,
                 onClick = { viewModel.onSelectSelfClick() },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-            )
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+            ) {
+                    when (val selfDialogData = viewModel.selfDialogUIModel.value) {
+                        is LoadableData.Loaded<*> -> {
+                            SelfDialog(
+                                data = selfDialogData.data as SelfDialogUIModel,
+                                onSelectSelf = { viewModel.onSelfClick(it) },
+                            )
+                        }
+
+                        is LoadableData.Failed,
+                        LoadableData.Loading,
+                        LoadableData.NotLoaded -> Unit
+                    }
+
+            }
             when (data) {
                 is LoadableData.Failed -> {
                     FoodieFailCard(
@@ -75,9 +88,7 @@ fun OrderScreenComposable(
                 is LoadableData.Loaded<*> -> {
                     OrderScreen(
                         data = data.data as OrderScreenUIModel,
-                        onReserveFoodClick = { viewModel.onOrderFoodClick(it) },
-                        onLoadNextWeek = { viewModel.onLoadNextWeekProgram() },
-                        shouldLoadMore = viewModel.shouldLoadMore.value,
+                        onReserveFoodClick = { viewModel.onOrderFoodClick(it) }
                     )
                 }
 
@@ -103,26 +114,7 @@ fun OrderScreenComposable(
 
         }
 
-        AnimatedVisibility(
-            visible = viewModel.shouldShowSelfDialog.value,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            when (val selfDialogData = viewModel.selfDialogUIModel.value) {
-                is LoadableData.Loaded<*> -> {
-                    SelfDialog(
-                        data = selfDialogData.data as SelfDialogUIModel,
-                        onSelectSelf = { viewModel.onSelfClick(it) },
-                        onBackClick = { viewModel.onBackClick() }
-                    )
-                }
 
-                is LoadableData.Failed,
-                LoadableData.Loading,
-                LoadableData.NotLoaded -> Unit
-            }
-
-        }
 
     }
     LaunchedEffect(true) {

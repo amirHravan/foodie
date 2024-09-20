@@ -23,8 +23,6 @@ import com.ravan.foodie.order.ui.model.OrderFoodDetailUIModel
 fun OrderScreen(
     data: OrderScreenUIModel,
     onReserveFoodClick: (OrderFoodDetailUIModel) -> Unit,
-    shouldLoadMore: Boolean,
-    onLoadNextWeek: () -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -36,19 +34,6 @@ fun OrderScreen(
                 onReserveFoodClick = onReserveFoodClick,
             )
         }
-        if (shouldLoadMore) {
-            item {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .onGloballyPositioned { onLoadNextWeek() }
-                    .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    FoodieProgressIndicator()
-                }
-
-            }
-        }
     }
 }
 
@@ -59,8 +44,6 @@ private fun ReserveScreenPreview() {
         OrderScreen(
             data = orderScreenUIModelFixture,
             onReserveFoodClick = {},
-            onLoadNextWeek = {},
-            shouldLoadMore = false
         )
     }
 }

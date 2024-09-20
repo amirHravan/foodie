@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
@@ -23,7 +24,8 @@ fun FoodieTextIconRow(
     data: FoodieTextIconRowUIModel,
     modifier: Modifier = Modifier,
     color: Color = RavanTheme.colors.text.onPrimary,
-    textStyle: TextStyle = RavanTheme.typography.body1
+    textStyle: TextStyle = RavanTheme.typography.body1,
+    textDecoration: TextDecoration? = null,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -40,7 +42,8 @@ fun FoodieTextIconRow(
             text = data.text,
             color = color,
             modifier = Modifier.offset(y = (-4).dp),
-            style = textStyle
+            style = textStyle,
+            textDecoration  = textDecoration,
         )
 
     }

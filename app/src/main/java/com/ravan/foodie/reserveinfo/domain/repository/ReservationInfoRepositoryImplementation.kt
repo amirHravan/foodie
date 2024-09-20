@@ -8,9 +8,9 @@ class ReservationInfoRepositoryImplementation(
     val api: ReserveInfoApi,
 ) : ReservationInfoRepository {
 
-    override suspend fun getReservationInfo(authenticationToken: String): Result<ReservationInfo> {
+    override suspend fun getReservationInfo(authenticationToken: String, weekStartDate: String): Result<ReservationInfo> {
         return try {
-            val result = api.getReserveInformation(authenticationToken)
+            val result = api.getReserveInformation(authenticationToken, weekStartDate)
             if (result.isSuccessful) {
                 Result.success(result.payload!!.toReservationInfo())
             } else {

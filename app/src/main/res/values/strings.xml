@@ -14,7 +14,7 @@
     <!-- RESERVATION INFO -->
     <string name="reservation_info_screen_title">اطلاعات رزرو</string>
     <string name="reservation_info_screen_failed">زارت!</string>
-    <string name="reservation_info_screen_no_data">اطلاعی برای نمایش وجود ندارد</string>
+    <string name="reservation_info_screen_no_data">غذای رزروی ندارید</string>
 
     <!-- NURTURE PROFILE -->
     <string name="nurture_profile_row_item_name">نام</string>
@@ -24,5 +24,5 @@
     <string name="nurture_profile_titlebar_name">پروفایل</string>
     <string name="order_screen_title_bar">رزرو غذا</string>
     <string name="order_select_self_dialog_title">سلف‌های مجاز</string>
-    <string name="order_order_food_detail_disabled">غیر فعال</string>
+    <string name="order_order_food_detail_disabled">مهلت رزرو این غذا تمام شده</string>
 </resources>

@@ -28,6 +28,7 @@ private val DarkColorsDefault = RavanColors(
         tertiary = RavanBlack,
         success = FunctionalGreen.copy(alpha = 0.2f),
         fail = FunctionalRedDark.copy(alpha = 0.2f),
+        disable = RavanBlack.copy(alpha = 0.2f),
     ),
     border = ContentColors(
         onPrimary = RavanWhite,
@@ -35,6 +36,7 @@ private val DarkColorsDefault = RavanColors(
         onTertiary = RavanWhite,
         onSuccess = FunctionalGreen,
         onFail = FunctionalRedDark,
+        onDisable = RavanWhite,
     ),
     text = ContentColors(
         onPrimary = RavanWhite,
@@ -42,6 +44,7 @@ private val DarkColorsDefault = RavanColors(
         onTertiary = RavanWhite,
         onSuccess = RavanWhite,
         onFail = RavanWhite,
+        onDisable = RavanWhite,
     ),
     link = ContentColors(
         onPrimary = RavanWhite,
@@ -49,6 +52,7 @@ private val DarkColorsDefault = RavanColors(
         onTertiary = RavanWhite,
         onSuccess = RavanWhite,
         onFail = RavanWhite,
+        onDisable = RavanWhite,
     ),
     icon = ContentColors(
         onPrimary = RavanWhite,
@@ -56,6 +60,7 @@ private val DarkColorsDefault = RavanColors(
         onTertiary = RavanWhite,
         onSuccess = FunctionalGreen,
         onFail = FunctionalRed,
+        onDisable = RavanWhite,
     ),
     notificationBadge = FunctionalRedDark,
     isDark = true,
@@ -114,6 +119,7 @@ data class ContentColors(
     val onTertiary: Color,
     val onSuccess: Color,
     val onFail: Color,
+    val onDisable: Color,
 )
 
 data class SurfaceColors(
@@ -122,8 +128,8 @@ data class SurfaceColors(
     val tertiary: Color,
     val success: Color,
     val fail: Color,
-
-    )
+    val disable: Color,
+)
 
 
 private val LocalRavanColors = staticCompositionLocalOf<RavanColors> {

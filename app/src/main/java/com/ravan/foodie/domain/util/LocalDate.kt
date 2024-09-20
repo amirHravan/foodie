@@ -1,11 +1,12 @@
 package com.ravan.foodie.domain.util
 
 import android.os.Build
-import androidx.annotation.RequiresApi
+import android.util.Log
 import java.time.DayOfWeek
 import java.time.LocalDateTime
-import java.time.LocalTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
 fun String.toLocalDayName(): String {
@@ -21,40 +22,55 @@ fun String.toLocalDayName(): String {
     }
 }
 
+fun getPreviousSaturday(): String {
+    var now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        LocalDateTime.now(ZoneId.of("Asia/Tehran"))
+    } else {
+        return "";
+    }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun getCurrentDateTime(): String {
-    val currentDateTime = LocalDateTime.now()
+    now = if (now.dayOfWeek == DayOfWeek.SATURDAY) {
+        now.withHour(0).withMinute(0).withSecond(0).withNano(0)
+    } else {
+        now.with(TemporalAdjusters.previous(DayOfWeek.SATURDAY))
+            .withHour(0).withMinute(0).withSecond(0).withNano(0)
+    }
+
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-    return currentDateTime.format(formatter)
+    val date = now.format(formatter)
+
+    Log.d("prev sat", date)
+
+    return date
 }
 
+fun getNextSaturday(): String {
+    // Get current date and time
+    var now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        LocalDateTime.now(ZoneId.of("Asia/Tehran"))
+    } else {
+        return ""
+    }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun getThisWeekSaturdayDate(): String {
-    val currentDateTime = LocalDateTime.now()
+    // If today is Saturday, find the next Saturday
+    now = if (now.dayOfWeek == DayOfWeek.SATURDAY) {
+        now.with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
+    } else {
+        // If today is not Saturday, find the upcoming Saturday
+        now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
+    }
 
-    val daysUntilSaturday = DayOfWeek.SATURDAY.value - currentDateTime.dayOfWeek.value
-    val daysToAdd = if (daysUntilSaturday < 0) daysUntilSaturday + 7 else daysUntilSaturday
+    // Set the time to 00:00:00
+    now = now.withHour(0).withMinute(0).withSecond(0).withNano(0)
 
-    val upcomingSaturday = currentDateTime.plusDays(daysToAdd.toLong()).with(LocalTime.MIN)
-
+    // Format the date and time to the required pattern
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    val date = now.format(formatter)
+    Log.d("next sat", date)
 
-    return upcomingSaturday.format(formatter)
+    return date
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun getNextSaturdayDate(): String {
-    val currentDateTime = LocalDateTime.now()
-
-    val daysUntilNextSaturday = DayOfWeek.SATURDAY.value - currentDateTime.dayOfWeek.value
-    val daysToAdd =
-        if (daysUntilNextSaturday <= 0) daysUntilNextSaturday + 7 else daysUntilNextSaturday
-
-    val nextSaturday = currentDateTime.plusDays(daysToAdd.toLong()).with(LocalTime.MIN)
-
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
-    return nextSaturday.format(formatter)
+fun main() {
+    println(getNextSaturday())  // Output example: 2024-09-21 00:00:00
 }

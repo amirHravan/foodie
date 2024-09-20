@@ -59,7 +59,6 @@ val orderCardUIModelFixture1 = OrderCardUIModel(
         ),
         MealType.DINNER to listOf(
             orderFoodDetailUIModelSelectedFixture2,
-            orderFoodDetailUIModelNotSelectedFixture2,
         ),
     )
 )
@@ -91,12 +90,7 @@ val orderScreenUIModelFixture = OrderScreenUIModel(
 val selfDialogUIModelFixture = SelfDialogUIModel(
     selfs = listOf(
         SelfRowUIModel("مرکزی", 1),
-        SelfRowUIModel("مرکزی", 2),
-        SelfRowUIModel("مرکزی", 3),
-        SelfRowUIModel("مرکزی", 4),
-        SelfRowUIModel("مرکزی", 5),
-        SelfRowUIModel("مرکزی", 6),
-        SelfRowUIModel("مرکزی", 7),
+        SelfRowUIModel("مرکزی", 1),
     )
 )
 

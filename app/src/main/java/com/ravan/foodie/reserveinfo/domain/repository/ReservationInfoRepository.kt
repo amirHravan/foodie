@@ -5,5 +5,6 @@ import com.ravan.foodie.reserveinfo.domain.model.ReservationInfo
 interface ReservationInfoRepository {
     suspend fun getReservationInfo(
         authenticationToken: String,
+        weekStartDate: String,
     ): Result<ReservationInfo>
 }

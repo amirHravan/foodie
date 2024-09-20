@@ -6,6 +6,8 @@ import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.model.NavigationEvent
 import com.ravan.foodie.domain.ui.viewmodel.RavanViewModel
 import com.ravan.foodie.domain.usecase.GetSavedSamadTokenUseCase
+import com.ravan.foodie.domain.util.getNextSaturday
+import com.ravan.foodie.reserveinfo.domain.model.ReservationInfo
 import com.ravan.foodie.reserveinfo.domain.usecase.GetReservationInformationUseCase
 import com.ravan.foodie.reserveinfo.ui.model.toReservationInfoScreenUIModel
 import kotlinx.coroutines.launch
@@ -22,22 +24,29 @@ class ReservationInfoViewModel(
     fun onLaunch() {
         viewModelScope.launch {
             reservationInfo.value = LoadableData.Loading
+            var data: ReservationInfo? = null
             getSavedSamadTokenUseCase()?.let { token ->
                 getReservationInformationUseCase(token).let { result ->
-                    result.fold(
-                        onSuccess = {
-                            reservationInfo.value =
-                                LoadableData.Loaded(it.toReservationInfoScreenUIModel())
-                        },
-                        onFailure = {
-                            reservationInfo.value = LoadableData.Failed(
-                                it.message ?: "در دریافت برنامه غذایی مشکلی پیش آمده."
-                            )
-                        }
-                    )
+                    result.onSuccess {
+                        data = it
+                    }
+                }
+                getReservationInformationUseCase(
+                    token,
+                    weekStartDate = getNextSaturday()
+                ).let { result ->
+                    result.onSuccess {
+                        data = data?.plus(it) ?: it
+                    }
                 }
             }
-
+            data?.let {
+                reservationInfo.value = LoadableData.Loaded(it.toReservationInfoScreenUIModel())
+            } ?: run {
+                reservationInfo.value = LoadableData.Failed(
+                    "در دریافت برنامه غذایی مشکلی پیش آمده."
+                )
+            }
         }
     }
 

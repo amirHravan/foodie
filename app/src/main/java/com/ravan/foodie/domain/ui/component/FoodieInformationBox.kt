@@ -27,8 +27,8 @@ fun FoodieInformationBox(
 
     Box(
         modifier = modifier
-            .background(backgroundColor)
             .clip(RavanTheme.shapes.r8)
+            .background(backgroundColor)
             .border(1.dp, borderColor, RavanTheme.shapes.r8)
             .padding(8.dp),
         contentAlignment = Alignment.Center,

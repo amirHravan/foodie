@@ -1,12 +1,12 @@
 # Foodie: SUT Food Reservation Client
 
-This is a client for SUT (sharif university of thechnology) food reservation system. **This project don't use any external server. Everything is handled by your phone and Samad servers.**
+This is a client for SUT (sharif university of technology) food reservation system. **This project don't use any external server. Everything is handled by your phone and Samad servers.**
 
 ## 🖥️ Project Description
 
 ### Features
 
-This project is stil under development so there will be more about this part in the future. (hope so🤞)
+This project is still under development so there will be more about this part in the future. (hope so🤞)
 
 #### Login
 
@@ -16,7 +16,7 @@ After your first login your username, password and token is saved in your phone 
 
 #### Reservation
 
-You can reserve your next week food by just pressing any of the desirable foods. Note that based on your university policy probably you can't reserve two foods in the same time, you must cancel one before reserving the other one. You can select diffrenet places for food reservation.
+You can reserve your next week food by just pressing any of the desirable foods. Note that based on your university policy probably you can't reserve two foods in the same time, you must cancel one before reserving the other one. You can select different places for food reservation.
 
 ![Foodie Reservation Places](./images//reservation%20selfs.jpg)
 ![Foodie Reservation Screen](./images/reservation%20[disable].jpg)
@@ -41,7 +41,7 @@ The project architecture is MVVM, this is the main approach approved by GOOGLE. 
 
 - Jetpack Compose - for the main UI framework, so the viewModels are also affected by this fact.
 - Retrofit2 - for connection to the server and api calls.
-- Koin - for dependancy injection. I could use dagge-hilt too but I thought it doesn't matter much at this point so I used my own prefrence.
+- Koin - for dependency injection. I could use dagger-hilt too but I thought it doesn't matter much at this point so I used my own preference.
 - Room - for managing a database in your phone.
 
 ## 👨🏻‍💻 About Me
