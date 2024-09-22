@@ -14,7 +14,7 @@ class ForgetCodeRepositoryImplementation(
         authenticationToken: String,
         reserveId: Int
     ): Result<ForgetCode> {
-        return forgetCodeCache[reserveId]?.let {
+        val forgetCode = forgetCodeCache[reserveId]?.let {
             Result.success(ForgetCode(it))
         } ?: run {
             try {
@@ -28,6 +28,8 @@ class ForgetCodeRepositoryImplementation(
                 Result.failure(e)
             }
         }
+
+        return forgetCode
     }
 
     override fun invalidateCache() {

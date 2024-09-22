@@ -12,7 +12,7 @@ data class ReservationInfoCardUIModel(
 fun ReservationDayInfo.toReservationInfoCardUIModel(): ReservationInfoCardUIModel {
     return ReservationInfoCardUIModel(
         farsiDayName = name,
-        farsiDate = date.toLocalNumber(),
+        farsiDate = iranianDate.toLocalNumber(),
         mealRowUIModelList = mealInfo.mapNotNull { it?.toMealRowUIModel() }
             .sortedBy { !it.consumed }
     )

@@ -16,5 +16,4 @@ interface ForgetCodeApi {
         @Query("dailySale") dailySale: Boolean = false
     ): SamadResponse<ForgetCodeDto>
 
-
 }

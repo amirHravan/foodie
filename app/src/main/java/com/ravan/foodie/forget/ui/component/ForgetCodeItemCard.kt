@@ -21,7 +21,8 @@ import com.ravan.foodie.forget.ui.model.ForgetCodeItemUIModel
 fun ForgetCodeItemCard(
     data: ForgetCodeItemUIModel,
     onGetForgetCodeClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    buttonEnable: Boolean = true
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -33,22 +34,25 @@ fun ForgetCodeItemCard(
             .padding(16.dp)
 
     ) {
-        Text(
-            text = data.mealType.getLocalName(),
-            style = RavanTheme.typography.h5,
-            color = RavanTheme.colors.text.onSecondary,
-        )
 
         data.foodDetails.forEach {
-            ForgetCodeFoodDetailRow(
-                data = it,
-                onGetForgetCodeClick = { onGetForgetCodeClick(it.reserveId) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .border(1.dp, RavanTheme.colors.border.onSecondary, RavanTheme.shapes.r8)
-                    .padding(horizontal = 8.dp, vertical = 16.dp)
-            )
+            it?.let {
+                Text(
+                    text = it.mealName,
+                    style = RavanTheme.typography.h5,
+                    color = RavanTheme.colors.text.onSecondary,
+                )
+                ForgetCodeFoodDetailRow(
+                    data = it,
+                    onGetForgetCodeClick = { onGetForgetCodeClick(it.reserveId) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .border(1.dp, RavanTheme.colors.border.onSecondary, RavanTheme.shapes.r8)
+                        .padding(horizontal = 8.dp, vertical = 16.dp),
+                    buttonEnable = buttonEnable
+                )
+            }
         }
 
     }

@@ -51,7 +51,10 @@ fun ForgetCodeScreenComposable(
             is LoadableData.Loaded<*> -> {
                 ForgetCodeScreen(
                     data = forgetCodeInfo.data as ForgetCodeScreenUIModel,
-                    onGetForgetCode = { viewModel.onGetForgetCode(it) }
+                    onGetForgetCode = { viewModel.onGetForgetCode(it) },
+                    buttonEnable = viewModel.buttonEnables.value,
+                    informationBoxUIModel = viewModel.informationBoxUIModel.value,
+                    showNotification = viewModel.showNotification.value,
                 )
             }
 

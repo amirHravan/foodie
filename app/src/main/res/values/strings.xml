@@ -25,4 +25,8 @@
     <string name="order_screen_title_bar">رزرو غذا</string>
     <string name="order_select_self_dialog_title">سلف‌های مجاز</string>
     <string name="order_order_food_detail_disabled">مهلت رزرو این غذا تمام شده</string>
+
+    <!-- Forget Code -->
+    <string name="forget_code_api_error">"در دریافت کد فراموشی غذای مورد نظر خطایی پیش اومده"</string>
+
 </resources>

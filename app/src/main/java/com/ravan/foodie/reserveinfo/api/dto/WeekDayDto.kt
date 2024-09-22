@@ -16,7 +16,8 @@ data class WeekDayDto(
 fun WeekDayDto.toReservationDayInfo(): ReservationDayInfo {
     return ReservationDayInfo(
         name = dayTranslated,
-        date = dateJStr,
+        iranianDate = dateJStr,
+        date = date,
         mealInfo = mealTypeDtoList?.mapNotNull { it.toReservationMealInfo() } ?: emptyList()
     )
 }

@@ -6,4 +6,5 @@ data class ReservationMealInfo(
     val mealText: String,
     val price: Long,
     val consumed: Boolean = false,
+    val id: Int,
 )

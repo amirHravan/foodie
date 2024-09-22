@@ -25,8 +25,9 @@ import com.ravan.foodie.forget.ui.model.ForgetCodeFoodDetailUIModel
 @Composable
 fun ForgetCodeFoodDetailRow(
     data: ForgetCodeFoodDetailUIModel,
-    onGetForgetCodeClick: () -> Unit,
     modifier: Modifier = Modifier,
+    buttonEnable: Boolean = true,
+    onGetForgetCodeClick: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -66,7 +67,7 @@ fun ForgetCodeFoodDetailRow(
                 data = FoodieButtonUIModel.General(title = "دریافت کد فراموشی", iconRes = null),
                 onClick = onGetForgetCodeClick,
                 shape = RavanTheme.shapes.r8,
-
+                isEnable = buttonEnable
             )
 
         }

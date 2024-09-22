@@ -21,6 +21,7 @@ fun UserMealTypeDto.toReservationMealInfo(): ReservationMealInfo? {
             price = it.price.toLong(),
             consumed = it.consumed,
             mealText = name,
+            id = it.id
         )
     }
 }
