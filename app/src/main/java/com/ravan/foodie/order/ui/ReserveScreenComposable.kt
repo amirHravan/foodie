@@ -88,7 +88,7 @@ fun OrderScreenComposable(
                 is LoadableData.Loaded<*> -> {
                     OrderScreen(
                         data = data.data as OrderScreenUIModel,
-                        onReserveFoodClick = { viewModel.onOrderFoodClick(it) }
+                        onReserveFoodClick = { detail, onFinish -> viewModel.onOrderFoodClick(detail, onFinish) }
                     )
                 }
 

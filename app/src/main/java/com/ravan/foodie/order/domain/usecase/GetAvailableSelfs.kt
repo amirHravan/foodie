@@ -8,9 +8,8 @@ class GetAvailableSelfs(
     val repository: OrderFoodRepository,
 ) {
     suspend operator fun invoke(
-        token: String,
     ): Result<AvailableSelfs> {
-        return repository.getAvailableSelfs(token)
+        return repository.getAvailableSelfs()
             .map { AvailableSelfs(it.map { selfDto -> selfDto.toSelf() }) }
     }
 }

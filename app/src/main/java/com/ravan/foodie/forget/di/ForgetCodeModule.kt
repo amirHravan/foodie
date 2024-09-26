@@ -28,6 +28,6 @@ val forgetCodeModule = module {
     }
 
     viewModel {
-        ForgetCodeViewModel(get(), get(), get())
+        ForgetCodeViewModel(get(), get())
     }
 }

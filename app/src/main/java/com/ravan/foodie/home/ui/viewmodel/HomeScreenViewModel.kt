@@ -1,7 +1,5 @@
 package com.ravan.foodie.home.ui.viewmodel
 
-import com.ravan.foodie.domain.ui.viewmodel.RavanViewModel
+import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
 
-class HomeScreenViewModel : RavanViewModel() {
-
-}
+class HomeScreenViewModel : FoodieViewModel()

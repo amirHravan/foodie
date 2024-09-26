@@ -3,7 +3,9 @@ package com.ravan.foodie.domain.util
 enum class SharedPrefKeys(
     val key: String,
 ) {
-    Username("user_name"),
-    Password("password"),
-    LoginToken("token")
+    Username("USERNAME"),
+    Password("PASSWORD"),
+    LoginToken("ACCESS_TOKEN"),
+    RefreshToken("REFRESH_TOKEN")
+
 }

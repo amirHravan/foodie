@@ -9,8 +9,8 @@ class GetTodayMealUseCase(
     private val getReservationInformationUseCase: GetReservationInformationUseCase,
 ) {
 
-    suspend operator fun invoke(token: String): Result<ReservationInfo> {
-        return getReservationInformationUseCase(token).map {
+    suspend operator fun invoke(): Result<ReservationInfo> {
+        return getReservationInformationUseCase().map {
             ReservationInfo(
                 remainCredit = it.remainCredit,
                 dayInfoList = it.dayInfoList.filter { reservationDayInfo -> reservationDayInfo.date == getToday() }

@@ -1,6 +1,7 @@
 package com.ravan.foodie.domain.util
 
 import android.os.Build
+import android.util.Log
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -50,6 +51,7 @@ fun getPreviousSaturday(): String {
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     val date = now.format(formatter)
+    Log.d("ctime", date)
 
     return date
 }
@@ -76,10 +78,6 @@ fun getNextSaturday(): String {
     // Format the date and time to the required pattern
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     val date = now.format(formatter)
-
+    Log.d("time", date)
     return date
-}
-
-fun main() {
-    println(getNextSaturday())  // Output example: 2024-09-21 00:00:00
 }

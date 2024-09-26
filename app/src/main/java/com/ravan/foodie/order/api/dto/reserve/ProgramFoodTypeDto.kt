@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProgramFoodTypeDto(
-    @SerialName("besideFoodNames") val besideFoodNames: String,
+//    @SerialName("besideFoodNames") val besideFoodNames: String,
     @SerialName("foodId") val foodId: Int,
     @SerialName("foodList") val foodDtoList: List<FoodDto>,
     @SerialName("foodNames") val foodNames: String,

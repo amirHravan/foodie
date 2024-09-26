@@ -33,6 +33,6 @@ val orderModule = module {
     }
 
     viewModel {
-        OrderScreenViewModel(get(), get(), get(), get())
+        OrderScreenViewModel(get(), get(), get())
     }
 }

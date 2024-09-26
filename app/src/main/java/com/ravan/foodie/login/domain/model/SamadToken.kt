@@ -5,8 +5,9 @@ data class SamadToken(
     val expiresIn: Int,
     val firstName: String,
     val lastName: String,
-    val nationalCode: String,
     val refreshToken: String,
     val tokenType: String,
     val userId: Int
-)
+) {
+    val fullToken = "$tokenType $accessToken"
+}

@@ -10,7 +10,6 @@ interface ReserveInfoApi {
 
     @GET("rest/reserves")
     suspend fun getReserveInformation(
-        @Header("Authorization") token: String,
         @Query("weekStartDate") weekStartDate: String,
     ): SamadResponse<ReservationInformationDto>
 }

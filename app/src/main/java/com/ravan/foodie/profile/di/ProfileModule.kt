@@ -1,9 +1,9 @@
 package com.ravan.foodie.profile.di
 
+import com.ravan.foodie.domain.usecase.CheckTokenValidationUseCase
 import com.ravan.foodie.profile.api.ProfileApi
 import com.ravan.foodie.profile.domain.repository.ProfileRepository
 import com.ravan.foodie.profile.domain.repository.ProfileRepositoryImplementation
-import com.ravan.foodie.profile.domain.usecase.CheckTokenValidationUseCase
 import com.ravan.foodie.profile.domain.usecase.GetNurtureProfile
 import com.ravan.foodie.profile.ui.viewmodel.ProfileViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -21,6 +21,6 @@ val profileModule = module {
     factory { GetNurtureProfile(get()) }
 
     viewModel {
-        ProfileViewModel(get(), get())
+        ProfileViewModel(get())
     }
 }

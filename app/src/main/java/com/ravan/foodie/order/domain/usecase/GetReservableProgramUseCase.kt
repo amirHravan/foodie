@@ -8,12 +8,10 @@ class GetReservableProgramUseCase(
     private val repository: OrderFoodRepository,
 ) {
     suspend operator fun invoke(
-        token: String,
         selfId: Int,
         weekStartDate: String,
     ): Result<WeekReservableProgram> {
         return repository.getReserveProgram(
-            authenticationToken = token,
             selfId = selfId,
             weekStartDate = weekStartDate,
         ).map { it.toWeekReserveProgram() }

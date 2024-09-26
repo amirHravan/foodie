@@ -7,8 +7,7 @@ class GetNurtureProfile(
     private val repository: ProfileRepository,
 ) {
     suspend operator fun invoke(
-        token: String
     ): Result<SamadNurtureProfile> {
-        return repository.getNurtureProfile(token)
+        return repository.getNurtureProfile()
     }
 }

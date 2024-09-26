@@ -9,9 +9,9 @@ class SamadLoginUseCase(
     private val savedSamadTokenUseCase: SaveSamadTokenUseCase,
 ) {
 
-    suspend operator fun invoke(userName: String, password: String): Result<SamadToken> {
-        return repository.checkUserNamePassword(userName, password).onSuccess { token ->
-            savedSamadTokenUseCase("${token.tokenType} ${token.accessToken}")
+    suspend operator fun invoke(username: String, password: String): Result<SamadToken> {
+        return repository.checkUserNamePassword(username, password).onSuccess { token ->
+            savedSamadTokenUseCase(token)
         }
     }
 }

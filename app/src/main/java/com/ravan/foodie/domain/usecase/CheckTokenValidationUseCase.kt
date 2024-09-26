@@ -1,9 +1,9 @@
-package com.ravan.foodie.profile.domain.usecase
+package com.ravan.foodie.domain.usecase
 
-import com.ravan.foodie.profile.domain.repository.ProfileRepository
+import com.ravan.foodie.domain.repository.DomainRepository
 
 class CheckTokenValidationUseCase(
-    val repository: ProfileRepository,
+    val repository: DomainRepository,
 ) {
 
     suspend operator fun invoke(token: String): Result<Unit> {

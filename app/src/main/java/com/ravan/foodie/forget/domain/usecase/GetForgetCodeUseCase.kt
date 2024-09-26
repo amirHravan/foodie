@@ -7,11 +7,9 @@ class GetForgetCodeUseCase(
     private val repository: ForgetCodeRepository,
 ) {
     suspend operator fun invoke(
-        samadToken: String,
         reserveId: Int,
     ): Result<ForgetCode> {
         return repository.getForgetCode(
-            authenticationToken = samadToken,
             reserveId = reserveId
         )
     }

@@ -23,6 +23,6 @@ val reserveInfoModule = module {
     }
 
     viewModel {
-        ReservationInfoViewModel(get(), get())
+        ReservationInfoViewModel(get())
     }
 }

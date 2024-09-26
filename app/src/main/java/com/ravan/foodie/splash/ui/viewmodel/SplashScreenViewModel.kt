@@ -7,17 +7,18 @@ import com.ravan.foodie.domain.model.NavigationEvent
 import com.ravan.foodie.domain.model.PreferencesManager
 import com.ravan.foodie.domain.network.ConnectionState
 import com.ravan.foodie.domain.network.currentConnectivityState
-import com.ravan.foodie.domain.ui.viewmodel.RavanViewModel
+import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
+import com.ravan.foodie.domain.usecase.CheckTokenValidationUseCase
 import com.ravan.foodie.domain.usecase.SaveSamadTokenUseCase
 import com.ravan.foodie.domain.util.SharedPrefKeys
-import com.ravan.foodie.profile.domain.usecase.CheckTokenValidationUseCase
+import com.ravan.foodie.login.domain.usecase.SamadLoginUseCase
 import kotlinx.coroutines.launch
 
 class SplashScreenViewModel(
-    private val checkTokenValidationUseCase: CheckTokenValidationUseCase,
     private val saveSamadTokenUseCase: SaveSamadTokenUseCase,
-    private val preferencesManager: PreferencesManager,
-) : RavanViewModel() {
+    private val samadLoginUseCase: SamadLoginUseCase,
+    preferencesManager: PreferencesManager,
+) : FoodieViewModel() {
 
     val username = mutableStateOf("")
     val password = mutableStateOf("")
@@ -34,10 +35,10 @@ class SplashScreenViewModel(
         }
     }
 
-    fun onStartSplash(context: Context) {
+    fun onLaunch(context: Context) {
         when (context.currentConnectivityState) {
             ConnectionState.Available -> {
-                checkTokenAvailability()
+                getAccessToken()
             }
 
             ConnectionState.Unavailable -> {
@@ -46,28 +47,27 @@ class SplashScreenViewModel(
         }
     }
 
-    private fun checkTokenAvailability() {
-        val token = preferencesManager.getData(SharedPrefKeys.LoginToken.key, "")
-        if (token.isEmpty()) {
+    private fun getAccessToken() {
+        if (username.value.isNotEmpty() && password.value.isNotEmpty()) {
+            viewModelScope.launch {
+                samadLoginUseCase(username = username.value, password = password.value).fold(
+                    onSuccess = { samadToken ->
+                        saveSamadTokenUseCase(samadToken)
+                        navHome.navigate()
+                    },
+                    onFailure = {
+                        navLogin.navigate()
+                    }
+                )
+            }
+        } else {
             navLogin.navigate()
-            return
         }
-        viewModelScope.launch {
-            checkTokenValidationUseCase(token).fold(
-                onSuccess = {
-                    saveSamadTokenUseCase(token)
-                    navHome.navigate()
 
-                },
-                onFailure = {
-                    navLogin.navigate()
-                }
-            )
-        }
     }
 
     fun onReload(context: Context) {
         showNetworkError.value = false
-        onStartSplash(context = context)
+        onLaunch(context = context)
     }
 }

@@ -9,8 +9,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SelfWeekProgramDto(
-    @SerialName("buyableFreeFood") val buyableFreeFood: Boolean,
-    @SerialName("buyableFreeFoodToll") val buyableFreeFoodToll: Int,
+//    @SerialName("buyableFreeFood") val buyableFreeFood: Boolean,
+//    @SerialName("buyableFreeFoodToll") val buyableFreeFoodToll: Int,
     @SerialName("cancelRuleViolated") val cancelRuleViolated: Boolean,
     @SerialName("date") val date: String,
     @SerialName("dayTranslated") val dayTranslated: String,
@@ -20,13 +20,13 @@ data class SelfWeekProgramDto(
     @SerialName("foodTypeId") val foodTypeId: Int,
     @SerialName("foodTypeTitle") val foodTypeTitle: String,
     @SerialName("groupId") val groupId: Int,
-    @SerialName("hideBesideFoodInPanel") val hideBesideFoodInPanel: Boolean,
-    @SerialName("hideInPanel") val hideInPanel: Boolean,
+//    @SerialName("hideBesideFoodInPanel") val hideBesideFoodInPanel: Boolean,
+//    @SerialName("hideInPanel") val hideInPanel: Boolean,
     @SerialName("mealTypeId") val mealTypeId: Int,
     @SerialName("mealTypeName") val mealTypeName: String,
     @SerialName("price") val price: Int,
-    @SerialName("priorReserveDate") val priorReserveDate: String,
-    @SerialName("programFoodTypes") val programFoodTypeDtos: List<ProgramFoodTypeDto>,
+//    @SerialName("priorReserveDate") val priorReserveDate: String,
+//    @SerialName("programFoodTypes") val programFoodTypeDtos: List<ProgramFoodTypeDto>,
     @SerialName("programId") val programId: Int,
     @SerialName("reserveRuleViolated") val reserveRuleViolated: Boolean,
     @SerialName("selfId") val selfId: Int,

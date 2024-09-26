@@ -32,7 +32,7 @@ fun SplashScreenComposable(
         viewModel.navHome.setNavigateAction {
             navController.navigate(FoodieRoutes.HomeScreen.route)
         }
-        viewModel.onStartSplash(context)
+        viewModel.onLaunch(context)
     }
 
 

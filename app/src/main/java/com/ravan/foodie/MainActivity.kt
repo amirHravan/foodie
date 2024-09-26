@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ravan.foodie.domain.notification.createNotificationChannel
+import com.ravan.foodie.domain.notification.setAlarm
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.domain.util.FoodieRoutes
 import com.ravan.foodie.forget.ui.ForgetCodeScreenComposable
@@ -14,15 +16,16 @@ import com.ravan.foodie.home.ui.HomeScreenComposable
 import com.ravan.foodie.home.ui.viewmodel.HomeScreenViewModel
 import com.ravan.foodie.login.ui.LoginScreenComposable
 import com.ravan.foodie.login.ui.viewmodel.LoginScreenViewModel
-import com.ravan.foodie.profile.ui.ProfileComposable
-import com.ravan.foodie.profile.ui.viewmodel.ProfileViewModel
 import com.ravan.foodie.order.ui.OrderScreenComposable
 import com.ravan.foodie.order.ui.viewmodel.OrderScreenViewModel
+import com.ravan.foodie.profile.ui.ProfileComposable
+import com.ravan.foodie.profile.ui.viewmodel.ProfileViewModel
 import com.ravan.foodie.reserveinfo.ui.ReservationInfoScreenComposable
 import com.ravan.foodie.reserveinfo.ui.viewmodel.ReservationInfoViewModel
 import com.ravan.foodie.splash.SplashScreenComposable
 import com.ravan.foodie.splash.ui.viewmodel.SplashScreenViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,5 +91,14 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        setUpReserveReminderNotification()
+    }
+
+    private fun setUpReserveReminderNotification() {
+        createNotificationChannel(this)
+
+        setAlarm(this, 20, 0, Calendar.TUESDAY) // 8:00 PM Tuesday
+        setAlarm(this, 15, 0, Calendar.WEDNESDAY) // 3:00 PM Wednesday
     }
 }

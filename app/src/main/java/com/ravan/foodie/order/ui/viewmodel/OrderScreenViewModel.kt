@@ -1,13 +1,13 @@
 package com.ravan.foodie.order.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.model.NavigationEvent
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxState
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxUIModel
-import com.ravan.foodie.domain.ui.viewmodel.RavanViewModel
-import com.ravan.foodie.domain.usecase.GetSavedSamadTokenUseCase
+import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
 import com.ravan.foodie.domain.util.getNextSaturday
 import com.ravan.foodie.domain.util.getPreviousSaturday
 import com.ravan.foodie.order.domain.model.merge
@@ -25,10 +25,9 @@ import kotlinx.coroutines.launch
 
 class OrderScreenViewModel(
     private val getReservableProgramUseCase: GetReservableProgramUseCase,
-    private val getSavedSamadTokenUseCase: GetSavedSamadTokenUseCase,
     private val getAvailableSelfs: GetAvailableSelfs,
     private val reserveFoodUseCase: ReserveFoodUseCase,
-) : RavanViewModel() {
+) : FoodieViewModel() {
 
     // reserve program
     val orderScreenUIModel = mutableStateOf<LoadableData>(LoadableData.NotLoaded)
@@ -63,41 +62,39 @@ class OrderScreenViewModel(
     }
 
     fun onOrderFoodClick(
-        detail: OrderFoodDetailUIModel
+        detail: OrderFoodDetailUIModel,
+        onFinish: () -> Unit,
     ) {
         viewModelScope.launch {
-            getSavedSamadTokenUseCase()?.let { token ->
-                reserveFoodUseCase(
-                    foodTypeId = detail.foodTypeId,
-                    mealTypeId = detail.mealTypeId,
-                    programId = detail.programId,
-                    selected = !detail.isSelected,
-                    token = token,
-                ).fold(
-                    onSuccess = {
-                        informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                            message = "رزرو شما با موفقیت انجام شد",
-                            state = FoodieInformationBoxState.SUCCESS
-                        )
-                        getReservableScreenUIModel(
-                            offlineFirst = true,
-                            onSuccess = {
-                                orderScreenUIModel.value = LoadableData.Loaded(it)
-                            },
-                        )
-                    },
-                    onFailure = {
-                        informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                            message = it.message ?: "در رزرو غذا خطایی پیش آمده",
-                            state = FoodieInformationBoxState.FAILED
-                        )
-                    }
-                )
-                showMessage()
-            }
+            reserveFoodUseCase(
+                foodTypeId = detail.foodTypeId,
+                mealTypeId = detail.mealTypeId,
+                programId = detail.programId,
+                selected = !detail.isSelected,
+            ).fold(
+                onSuccess = {
+                    informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                        message = "عملیات رزرو/حذف با موفقت انجام شد.",
+                        state = FoodieInformationBoxState.SUCCESS
+                    )
+                    getReservableScreenUIModel(
+                        offlineFirst = true,
+                        onSuccess = {
+                            orderScreenUIModel.value = LoadableData.Loaded(it)
+                        },
+                    )
+                },
+                onFailure = {
+                    informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                        message = it.message ?: "در رزرو غذا خطایی پیش آمده",
+                        state = FoodieInformationBoxState.FAILED
+                    )
+                }
+            )
+            showMessage()
+            onFinish()
         }
     }
-
 
 
     fun onBackClick() {
@@ -121,24 +118,23 @@ class OrderScreenViewModel(
 
     fun onSelectSelfClick() {
         viewModelScope.launch {
-            getSavedSamadTokenUseCase()?.let { token ->
-                getAvailableSelfs(token).fold(
-                    onSuccess = {
-                        selfDialogUIModel.value = LoadableData.Loaded(it.toSelfDialogUIModel())
-                        shouldShowSelfDialog.value = true
-                    },
-                    onFailure = {
-                        selfDialogUIModel.value = LoadableData.Failed(
-                            it.message ?: "در گرفتن سلف های مجاز خطایی پیش آمده",
-                        )
-                        informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                            state = FoodieInformationBoxState.FAILED,
-                            message = it.message ?: "در گرفتن سلف‌های مجاز خطایی پیش آمده"
-                        )
-                        showMessage()
-                    }
-                )
-            }
+            getAvailableSelfs().fold(
+                onSuccess = {
+                    selfDialogUIModel.value = LoadableData.Loaded(it.toSelfDialogUIModel())
+                    shouldShowSelfDialog.value = true
+                },
+                onFailure = {
+                    selfDialogUIModel.value = LoadableData.Failed(
+                        it.message ?: "در گرفتن سلف های مجاز خطایی پیش آمده",
+                    )
+                    informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                        state = FoodieInformationBoxState.FAILED,
+                        message = it.message ?: "در گرفتن سلف‌های مجاز خطایی پیش آمده"
+                    )
+                    showMessage()
+                }
+            )
+
         }
     }
 
@@ -167,26 +163,27 @@ class OrderScreenViewModel(
         if (!offlineFirst) {
             orderScreenUIModel.value = LoadableData.Loading
         }
-        val result = getSavedSamadTokenUseCase()?.let { token ->
-            val previousProgram = getReservableProgramUseCase(
-                token = token,
-                selfId = selectedSelfId,
-                weekStartDate = getPreviousSaturday()
+        val previousProgram = getReservableProgramUseCase(
+            selfId = selectedSelfId,
+            weekStartDate = getPreviousSaturday()
+        )
+        val nextProgram = getReservableProgramUseCase(
+            selfId = selectedSelfId,
+            weekStartDate = getNextSaturday()
+        )
+
+        if (previousProgram.isFailure && nextProgram.isFailure) {
+            informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                message = "هیچ برنامه غذایی‌ای برای این سلف تعریف نشده است.",
+                state = FoodieInformationBoxState.FAILED
             )
-            val nextProgram = getReservableProgramUseCase(
-                token = token,
-                selfId = selectedSelfId,
-                weekStartDate = getNextSaturday()
+        } else {
+            Log.d("foods", "$previousProgram | $nextProgram")
+            return onSuccess(
+                previousProgram.getOrNull().merge(nextProgram.getOrNull())
+                    .toReservableScreenUIModel()
             )
 
-            if (previousProgram.isFailure && nextProgram.isFailure) {
-                informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                    message = "هیچ برنامه غذایی‌ای برای این سلف تعریف نشده است.",
-                    state = FoodieInformationBoxState.FAILED
-                )
-            } else {
-                return onSuccess(previousProgram.getOrNull().merge(nextProgram.getOrNull()).toReservableScreenUIModel())
-            }
 
         }
     }

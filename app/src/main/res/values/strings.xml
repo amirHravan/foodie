@@ -28,5 +28,6 @@
 
     <!-- Forget Code -->
     <string name="forget_code_api_error">"در دریافت کد فراموشی غذای مورد نظر خطایی پیش اومده"</string>
+    <string name="notification_content">غذای هفته بعد رو رزرو کردی؟</string>
 
 </resources>

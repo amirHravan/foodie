@@ -72,7 +72,7 @@ val orderCardUIModelFixture2 = OrderCardUIModel(
             orderFoodDetailUIModelSelectedFixture1,
             orderFoodDetailUIModelNotSelectedFixture2,
 
-        ),
+            ),
         MealType.DINNER to listOf(
             orderFoodDetailUIModelSelectedFixture2,
             orderFoodDetailUIModelNotSelectedFixture1,

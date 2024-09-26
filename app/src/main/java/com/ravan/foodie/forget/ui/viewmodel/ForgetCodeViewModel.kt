@@ -6,8 +6,7 @@ import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.model.NavigationEvent
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxState
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxUIModel
-import com.ravan.foodie.domain.ui.viewmodel.RavanViewModel
-import com.ravan.foodie.domain.usecase.GetSavedSamadTokenUseCase
+import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
 import com.ravan.foodie.forget.domain.usecase.GetForgetCodeUseCase
 import com.ravan.foodie.forget.domain.usecase.GetTodayMealUseCase
 import com.ravan.foodie.forget.ui.model.toForgetCodeScreenUIModel
@@ -18,8 +17,7 @@ import kotlinx.coroutines.launch
 class ForgetCodeViewModel(
     private val getForgetCodeUseCase: GetForgetCodeUseCase,
     private val getTodayMealUseCase: GetTodayMealUseCase,
-    private val getSavedSamadTokenUseCase: GetSavedSamadTokenUseCase,
-): RavanViewModel() {
+) : FoodieViewModel() {
 
     val forgetCodeScreenUIModel = mutableStateOf<LoadableData>(LoadableData.NotLoaded)
     val navBack = NavigationEvent()
@@ -47,28 +45,27 @@ class ForgetCodeViewModel(
         buttonEnables.value = false
 
         viewModelScope.launch {
-            getSavedSamadTokenUseCase()?.let { token ->
-                getForgetCodeUseCase(samadToken = token, reserveId = reserveId).fold(
-                    onSuccess = { forgetCode ->
-                        forgetCodeMap[reserveId] = forgetCode.code
-                        forgetCodeScreenUIModel.value = LoadableData.Loaded(
-                            todayMealData?.toForgetCodeScreenUIModel(forgetCodeMap)
-                        )
-                    },
-                    onFailure = {
-                        informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                            state = FoodieInformationBoxState.FAILED,
-                            message = "در دریافت کد فراموشی غذای مورد نظر خطایی پیش اومده",
-                        )
+            getForgetCodeUseCase(reserveId = reserveId).fold(
+                onSuccess = { forgetCode ->
+                    forgetCodeMap[reserveId] = forgetCode.code
+                    forgetCodeScreenUIModel.value = LoadableData.Loaded(
+                        todayMealData?.toForgetCodeScreenUIModel(forgetCodeMap)
+                    )
+                },
+                onFailure = {
+                    informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                        state = FoodieInformationBoxState.FAILED,
+                        message = "در دریافت کد فراموشی غذای مورد نظر خطایی پیش اومده",
+                    )
 
-                        showNotification.value = true
-                        viewModelScope.launch {
-                            delay(3000)
-                            showNotification.value = false
-                        }
+                    showNotification.value = true
+                    viewModelScope.launch {
+                        delay(3000)
+                        showNotification.value = false
                     }
-                )
-            }
+                }
+            )
+
             buttonEnables.value = true
         }
 
@@ -77,19 +74,18 @@ class ForgetCodeViewModel(
     private fun loadForgetCodePage() {
         forgetCodeScreenUIModel.value = LoadableData.Loading
         viewModelScope.launch {
-            getSavedSamadTokenUseCase()?.let { token ->
-                getTodayMealUseCase(token = token).fold(
-                    onSuccess = {
-                        todayMealData = it
-                        forgetCodeScreenUIModel.value =
-                            LoadableData.Loaded(it.toForgetCodeScreenUIModel(forgetCodeMap))
-                    },
-                    onFailure = {
-                        forgetCodeScreenUIModel.value =
-                            LoadableData.Failed("در دریافت اطلاعات صفحه مشکلی پیش آمده. زارت!")
-                    }
-                )
-            }
+            getTodayMealUseCase().fold(
+                onSuccess = {
+                    todayMealData = it
+                    forgetCodeScreenUIModel.value =
+                        LoadableData.Loaded(it.toForgetCodeScreenUIModel(forgetCodeMap))
+                },
+                onFailure = {
+                    forgetCodeScreenUIModel.value =
+                        LoadableData.Failed("در دریافت اطلاعات صفحه مشکلی پیش آمده. زارت!")
+                }
+            )
+
         }
     }
 
