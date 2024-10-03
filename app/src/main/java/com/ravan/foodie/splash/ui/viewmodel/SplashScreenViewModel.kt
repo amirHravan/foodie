@@ -10,7 +10,6 @@ import com.ravan.foodie.domain.network.ConnectionState
 import com.ravan.foodie.domain.network.currentConnectivityState
 import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
 import com.ravan.foodie.domain.usecase.CacheAccessTokenUseCase
-import com.ravan.foodie.domain.usecase.CheckTokenValidationUseCase
 import com.ravan.foodie.domain.usecase.LoginUseCase
 import com.ravan.foodie.domain.usecase.RefreshAccessTokenUseCase
 import com.ravan.foodie.domain.util.SharedPrefKeys

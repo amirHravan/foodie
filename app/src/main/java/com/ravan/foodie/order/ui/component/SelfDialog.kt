@@ -2,7 +2,6 @@ package com.ravan.foodie.order.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -14,11 +13,11 @@ import androidx.compose.ui.unit.dp
 import com.ravan.foodie.domain.ui.component.FoodieDivider
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.order.ui.fixture.selfDialogUIModelFixture
-import com.ravan.foodie.order.ui.model.SelfDialogUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
+import com.ravan.foodie.order.ui.model.SelfDialogUIModel
 
 @Composable
-fun ColumnScope.SelfDialog(
+fun SelfDialog(
     data: SelfDialogUIModel,
     onSelectSelf: (SelfDialogRowUIModel) -> Unit,
 ) {
