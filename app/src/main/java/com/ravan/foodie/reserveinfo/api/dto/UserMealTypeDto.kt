@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserMealTypeDto(
-    @SerialName("date") val date: String,
-    @SerialName("dateTime") val dateTime: Long,
-    @SerialName("mealTypeId") val mealTypeId: Int,
-    @SerialName("name") val name: String,
-    @SerialName("reserve") val reserveDto: ReserveDto?
+//    @SerialName("date") val date: String,
+//    @SerialName("dateTime") val dateTime: Long,
+//    @SerialName("mealTypeId") val mealTypeId: Int,
+    @SerialName("name") val name: String = "",
+    @SerialName("reserve") val reserveDto: ReserveDto? = null
 )
 
 fun UserMealTypeDto.toReservationMealInfo(): ReservationMealInfo? {
@@ -21,7 +21,8 @@ fun UserMealTypeDto.toReservationMealInfo(): ReservationMealInfo? {
             price = it.price.toLong(),
             consumed = it.consumed,
             mealText = name,
-            id = it.id
+            id = it.id,
+            hasPassed = it.timeDistanceUntilToday < 0,
         )
     }
 }

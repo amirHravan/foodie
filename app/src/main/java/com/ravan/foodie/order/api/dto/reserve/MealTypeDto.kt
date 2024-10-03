@@ -5,9 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MealTypeDto(
-    @SerialName("abbreviation") val abbreviation: String,
-    @SerialName("disPriority") val disPriority: Int,
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String
+//    @SerialName("disPriority") val disPriority: Int,
+//    @SerialName("abbreviation") val abbreviation: String,
 )
 

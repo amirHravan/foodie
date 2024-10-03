@@ -1,9 +1,7 @@
 package com.ravan.foodie.order.domain.usecase
 
-import android.util.Log
 import com.ravan.foodie.order.domain.model.ReserveRequestBodyData
 import com.ravan.foodie.order.domain.repository.OrderFoodRepository
-import kotlinx.serialization.json.Json
 
 class ReserveFoodUseCase(
     private val repository: OrderFoodRepository

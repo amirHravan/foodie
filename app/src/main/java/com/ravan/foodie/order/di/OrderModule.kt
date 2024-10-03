@@ -17,7 +17,7 @@ val orderModule = module {
     }
 
     single<OrderFoodRepository> {
-        OrderFoodRepositoryImplementation(get())
+        OrderFoodRepositoryImplementation(get(), get())
     }
 
     factory {
@@ -33,6 +33,6 @@ val orderModule = module {
     }
 
     viewModel {
-        OrderScreenViewModel(get(), get(), get())
+        OrderScreenViewModel(get(), get(), get(), get())
     }
 }

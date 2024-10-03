@@ -2,7 +2,7 @@ package com.ravan.foodie.domain.ui.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -24,12 +24,13 @@ fun FoodieTextIconRow(
     data: FoodieTextIconRowUIModel,
     modifier: Modifier = Modifier,
     color: Color = RavanTheme.colors.text.onPrimary,
-    textStyle: TextStyle = RavanTheme.typography.body1,
+    textStyle: TextStyle = RavanTheme.typography.body2,
     textDecoration: TextDecoration? = null,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .padding(4.dp)
     ) {
         Icon(
             painter = painterResource(id = data.iconRes),
@@ -41,9 +42,8 @@ fun FoodieTextIconRow(
         Text(
             text = data.text,
             color = color,
-            modifier = Modifier.offset(y = (-4).dp),
             style = textStyle,
-            textDecoration  = textDecoration,
+            textDecoration = textDecoration,
         )
 
     }

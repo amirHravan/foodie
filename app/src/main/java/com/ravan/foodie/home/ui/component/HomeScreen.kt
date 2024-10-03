@@ -15,11 +15,15 @@ import com.ravan.foodie.domain.ui.theme.RavanTheme
 
 @Composable
 fun HomeScreen(
-    onCodeClick: () -> Unit,
     onLunchClick: () -> Unit,
     onCalenderClick: () -> Unit,
     onProfileClick: () -> Unit,
-) {
+    onSettingsClick: () -> Unit,
+    onAutomaticReserveClick: () -> Unit,
+    onAboutUsClick: () -> Unit,
+    onDailySaleClick: () -> Unit,
+
+    ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -28,11 +32,14 @@ fun HomeScreen(
     ) {
         Box(modifier = Modifier.weight(1f))
         HomeButtonList(
-            onCodeClick = onCodeClick,
             onLunchClick = onLunchClick,
             onCalenderClick = onCalenderClick,
             onProfileClick = onProfileClick,
-            modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp)
+            onSettingsClick = onSettingsClick,
+            onAutomaticReserveClick = onAutomaticReserveClick,
+            onAboutUsClick = onAboutUsClick,
+            onDailySaleClick = onDailySaleClick,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
     }
@@ -43,10 +50,13 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     RavanTheme {
         HomeScreen(
-            onCodeClick = {},
             onLunchClick = {},
             onProfileClick = {},
             onCalenderClick = {},
+            onSettingsClick = {},
+            onAutomaticReserveClick = {},
+            onAboutUsClick = {},
+            onDailySaleClick = {},
         )
     }
 

@@ -1,13 +1,17 @@
 package com.ravan.foodie.order.domain.repository
 
 import android.util.Log
+import com.ravan.foodie.domain.network.SamadResponse
 import com.ravan.foodie.order.api.OrderApi
 import com.ravan.foodie.order.api.dto.reserve.ReserveProgramDto
 import com.ravan.foodie.order.api.dto.self.SelfDto
 import com.ravan.foodie.order.domain.model.ReserveRequestBodyData
+import kotlinx.serialization.json.Json
+import retrofit2.HttpException
 
 class OrderFoodRepositoryImplementation(
-    private val api: OrderApi
+    private val api: OrderApi,
+    private val json: Json,
 ) : OrderFoodRepository {
 
     override suspend fun reserveFood(
@@ -19,14 +23,26 @@ class OrderFoodRepositoryImplementation(
                 programId = programId,
                 reservableFoodDetail = reserveRequestBodyData
             )
-            Log.d("temp", response.toString())
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Throwable(response.message()))
+                Result.failure(Throwable(response.getErrorMessage()))
+            }
+        } catch (e: HttpException) {
+            Log.e("OrderFoodRepository", "reserveFood: ${e.message}")
+            if (e.code() == 400) {
+                val errorBody = e.response()?.errorBody()?.string()
+                if (errorBody != null) {
+                    val error = json.decodeFromString<SamadResponse<Unit>>(errorBody)
+                    Result.failure(Throwable(error.getErrorMessage()))
+                } else {
+                    Result.failure(e)
+                }
+            } else {
+                Result.failure(e)
             }
         } catch (e: Exception) {
-            Log.e("OrderFoodRepository:reserveFood", "Error ${e.message}")
+            Log.e("OrderFoodRepository", "reserveFood: ${e.message}")
             Result.failure(Throwable("در ارتباط با سرور به مشکل خوردیم."))
         }
     }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,9 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
+import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 
@@ -28,6 +31,7 @@ fun FoodieTitleBar(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     tint: Color = RavanTheme.colors.icon.onPrimary,
+    content: (@Composable () -> Unit)? = null
 ) {
     Column(
         modifier = modifier
@@ -39,20 +43,36 @@ fun FoodieTitleBar(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_back),
-                contentDescription = null,
-                tint = tint,
-                modifier = Modifier
-                    .clip(RavanTheme.shapes.pill)
-                    .clickable { onBackClick() }
-            )
-            Spacer(modifier = Modifier.size(16.dp))
-            Text(text = data.title, color = tint, style = RavanTheme.typography.h5)
+            TitleBackComponent(tint = tint, onBackClick = onBackClick, title = data.title)
+            content?.let { it() }
         }
         FoodieDivider(color = tint, thickness = 1)
     }
 
+}
+
+@Composable
+private fun RowScope.TitleBackComponent(
+    title: String,
+    tint: Color,
+    onBackClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier.weight(1f),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_back),
+            contentDescription = null,
+            tint = tint,
+            modifier = Modifier
+                .clip(RavanTheme.shapes.pill)
+                .clickable { onBackClick() }
+        )
+        Spacer(modifier = Modifier.size(16.dp))
+        Text(text = title, color = tint, style = RavanTheme.typography.h4)
+    }
 }
 
 @Preview
@@ -62,6 +82,16 @@ fun FoodieTitleBarPreview() {
         FoodieTitleBar(
             data = FoodieTitleBarUIModel(title = "عنوان"),
             onBackClick = { },
+            content = {
+                FoodieButton(
+                    data = FoodieButtonUIModel.General(
+                        iconRes = R.drawable.ic_payment,
+                        title = stringResource(id = R.string.order_increase_credit_button)
+                    ),
+                    onClick = {},
+
+                    )
+            }
         )
     }
 }

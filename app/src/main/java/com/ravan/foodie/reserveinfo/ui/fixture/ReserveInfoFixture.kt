@@ -8,6 +8,7 @@ val reserveInfoMealRowUIModelFixture1 = MealRowUIModel(
     mealName = "ناهار",
     foodName = "خوراک کتلت",
     selfName = "مرکزی - سلف دانشجویان آقا",
+    reserveId = 0,
     consumed = false,
 )
 
@@ -15,18 +16,21 @@ val reserveInfoMealRowUIModelFixture2 = MealRowUIModel(
     mealName = "صبحانه",
     foodName = "شامی کباب",
     selfName = "مرکزی سلف دانشجویان آقا",
+    reserveId = 0,
 )
 
 val reserveInfoMealRowUIModelFixture3 = MealRowUIModel(
     mealName = "ناهار",
     foodName = "کوفت و مرض",
     selfName = "مرکزی سلف دانشجویان آقا",
+    reserveId = 0,
 )
 
 val reserveInfoMealRowUIModelFixture4 = MealRowUIModel(
     mealName = "شام",
     foodName = "درد بی‌درمون",
     selfName = "مرکزی سلف دانشجویان آقا",
+    reserveId = 0,
 )
 
 val reserveInfoCardUIModelFixture = ReservationInfoCardUIModel(

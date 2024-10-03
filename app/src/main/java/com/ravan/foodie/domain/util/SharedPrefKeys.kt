@@ -5,7 +5,8 @@ enum class SharedPrefKeys(
 ) {
     Username("USERNAME"),
     Password("PASSWORD"),
-    LoginToken("ACCESS_TOKEN"),
-    RefreshToken("REFRESH_TOKEN")
+    AccessToken("ACCESS_TOKEN"),
+    RefreshToken("REFRESH_TOKEN"),
+    NotificationsEnabled("NOTIFICATIONS_ENABLED"),
 
 }

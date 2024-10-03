@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.ravan.foodie.domain.util.SharedPrefKeys
 import java.util.Calendar
 
 const val NOTIFICATION_CHANNEL_ID = "FOODIE_LOCAL_CHANNEL"
@@ -34,7 +35,7 @@ fun setAlarm(context: Context, hour: Int, minute: Int, dayOfWeek: Int) {
             context,
             dayOfWeek,
             intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
     val calendar = Calendar.getInstance().apply {
@@ -54,4 +55,33 @@ fun setAlarm(context: Context, hour: Int, minute: Int, dayOfWeek: Int) {
         AlarmManager.INTERVAL_DAY * 7,
         pendingIntent
     )
+}
+
+fun setAlarmsBasedOnPreference(
+    context: Context,
+) {
+    if (isNotificationEnabled(context)) {
+        setAlarm(context, 20, 0, Calendar.TUESDAY)
+        setAlarm(context, 15, 0, Calendar.WEDNESDAY)
+    } else {
+        cancelAlarm(context, Calendar.TUESDAY)
+        cancelAlarm(context, Calendar.WEDNESDAY)
+    }
+}
+
+private fun cancelAlarm(context: Context, dayOfWeek: Int) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, NotificationReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        dayOfWeek,
+        intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+    )
+    alarmManager.cancel(pendingIntent)
+}
+
+private fun isNotificationEnabled(context: Context): Boolean {
+    val sharedPreferences = context.getSharedPreferences("", Context.MODE_PRIVATE)
+    return sharedPreferences.getBoolean(SharedPrefKeys.NotificationsEnabled.key, true)
 }

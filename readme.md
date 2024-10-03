@@ -1,49 +1,52 @@
-# Foodie: SUT Food Reservation Client
+# 🍽️ Foodie: SUT Food Reservation Client
 
-This is a client for SUT (sharif university of technology) food reservation system. **This project don't use any external server. Everything is handled by your phone and Samad servers.**
+Welcome to **Foodie**, a client for the Sharif University of Technology (SUT) food reservation system. This app directly interacts with the **Samad** servers, and no external server is involved. **All processes are handled on your phone**, ensuring your data privacy and security.
 
 ## 🖥️ Project Description
 
-### Features
+Foodie simplifies the food reservation process for SUT students, allowing seamless interaction with the Samad servers. As the app is under active development, new features will be added in the future.
 
-This project is still under development so there will be more about this part in the future. (hope so🤞)
+### ✨ Features
 
-#### Login
+#### 1. **Login**
+- The first time you log in, your **username** and **password** are securely stored on your phone.
+- As long as the app can authenticate with Samad servers using your credentials, you won't need to log in again.
 
-After your first login your username, password and token is saved in your phone so that you won't see the login page as long as the app can see the servers through your username, password.
+#### 2. **Food Reservation**
+- Reserve food for the upcoming week by simply selecting the desired meal.
+- **Note**: Based on university policy, double booking may not be allowed. You must cancel an existing reservation to book another for the same time slot.
+- Choose from different reservation locations within the university.
 
-![Login](./images/login.jpg)
+#### 3. **Reservation Information**
+- View all your reservations in a convenient card-list format.
+- Regardless of the reservation location, your bookings are aggregated in one place for easy management.
 
-#### Reservation
+#### 4. **Profile Management**
+- View and manage personal information retrieved directly from the Samad system.
+- **Important**: There is **no intermediary server** between your phone and the Samad servers, ensuring that your personal data remains secure and private.
 
-You can reserve your next week food by just pressing any of the desirable foods. Note that based on your university policy probably you can't reserve two foods in the same time, you must cancel one before reserving the other one. You can select different places for food reservation.
+## 🛠️ Project Architecture & Tech Stack
 
-![Foodie Reservation Places](./images//reservation%20selfs.jpg)
-![Foodie Reservation Screen](./images/reservation%20[disable].jpg)
-![Foodie Reservation Success](./images/reservation%20[success].jpg)
-![Foodie Reservation Cancel](./images/reservation%20[fail].jpg)
+Foodie follows the **Model-View-ViewModel (MVVM)** architecture, a design pattern officially recommended by Google for Android development. This separation of concerns ensures better maintainability, testability, and scalability of the app.
 
-#### Reservation Information
+### Frameworks & Libraries
+- **Jetpack Compose**: Used for UI design, leveraging declarative components. Compose simplifies the creation of dynamic and modern UIs.
+- **Retrofit2**: Handles API communication with Samad servers.
+- **Koin**: A lightweight dependency injection framework that facilitates modular development. Koin was chosen over Dagger-Hilt for its simplicity and ease of integration.
+- **Room**: A persistence library that provides an abstraction layer over SQLite to manage the local database efficiently.
+- **Coroutines**: Used for asynchronous programming, ensuring smooth and responsive user interactions.
 
-You can see all your reservations in a card list view, it doesn't matter in what place you reserved your food, you can see it here.
+## 📖 Usage
 
-![Reservation Information](./images/reservation%20info.jpg)
+1. **Login**: Enter your university credentials (username and password) to log in.
+2. **Reserve**: Select meals for the upcoming week and confirm your reservation.
+3. **View Reservations**: Manage your current reservations in the app.
+4. **Profile**: Review personal information securely fetched from Samad servers.
 
-#### Profile
+## 🤝 Contributing
 
-There is a bit of your information in samad app. I repeat **there is no middle in server in connection of your phone to the server**, so you shouldn't be concerned about the information that my app provides.
+We welcome contributions from the community! If you'd like to contribute, please check out the [CONTRIBUTING.md](contributing.md) for guidelines.
 
-![Profile](./images/profile.jpg)
+## 👨🏻‍💻 About the Author
 
-### FrameWorks
-
-The project architecture is MVVM, this is the main approach approved by GOOGLE. This project also uses the following frameworks:
-
-- Jetpack Compose - for the main UI framework, so the viewModels are also affected by this fact.
-- Retrofit2 - for connection to the server and api calls.
-- Koin - for dependency injection. I could use dagger-hilt too but I thought it doesn't matter much at this point so I used my own preference.
-- Room - for managing a database in your phone.
-
-## 👨🏻‍💻 About Me
-
-My name is `Amir Hossein Ravan Nakhjavani`. If you have any comments regarding the project -from design to the bottom level implementation- feel free to send me an email, so we could discuss about it.
+I’m **Amir Hossein Ravan Nakhjavani**, a passionate CE student. If you have any feedback or questions about this project, feel free to contact me via email. I’m open to discussions on design, implementation, or potential improvements!

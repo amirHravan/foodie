@@ -9,8 +9,8 @@ class DomainRepositoryImplementation(
 
     var user: RavanUser? = null
 
-    override suspend fun checkTokenValidation(token: String): Result<Unit> {
-        val result = domainApi.pingServer(token)
+    override suspend fun checkTokenValidation(): Result<Unit> {
+        val result = domainApi.pingServer()
         return if (result.isSuccessful) {
             Result.success(Unit)
         } else {

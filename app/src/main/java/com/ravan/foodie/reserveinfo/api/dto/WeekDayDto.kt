@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WeekDayDto(
-    @SerialName("date") val date: String,
-    @SerialName("dateJStr") val dateJStr: String,
-    @SerialName("day") val day: String,
-    @SerialName("dayTranslated") val dayTranslated: String,
-    @SerialName("mealTypes") val mealTypeDtoList: List<UserMealTypeDto>? = null
+    @SerialName("date") val date: String = "",
+    @SerialName("dateJStr") val dateJStr: String = "",
+//    @SerialName("day") val day: String,
+    @SerialName("dayTranslated") val dayTranslated: String = "",
+    @SerialName("mealTypes") val mealTypeDtoList: List<UserMealTypeDto> = emptyList()
 )
 
 fun WeekDayDto.toReservationDayInfo(): ReservationDayInfo {
@@ -18,6 +18,7 @@ fun WeekDayDto.toReservationDayInfo(): ReservationDayInfo {
         name = dayTranslated,
         iranianDate = dateJStr,
         date = date,
-        mealInfo = mealTypeDtoList?.mapNotNull { it.toReservationMealInfo() } ?: emptyList()
+        mealInfo = mealTypeDtoList.mapNotNull { it.toReservationMealInfo() }
+            .filter { !it.hasPassed }
     )
 }

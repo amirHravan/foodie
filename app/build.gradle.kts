@@ -14,7 +14,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0-beta01"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -63,8 +63,11 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material")
     implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
     testImplementation("junit:junit:4.13.2")
+
+    // Accompanists
+    implementation("com.google.accompanist:accompanist-permissions:0.33.1-alpha")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
 
     // Koin
     implementation(platform("io.insert-koin:koin-bom:3.5.6"))

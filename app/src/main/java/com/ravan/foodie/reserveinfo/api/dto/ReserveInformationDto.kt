@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ReservationInformationDto(
-    @SerialName("mealTypes") val mealTypeDtoList: List<MealTypeDto>,
-    @SerialName("remainCredit") val remainCredit: Int,
-    @SerialName("weekDays") val weekDayDtoList: List<WeekDayDto>
+    @SerialName("remainCredit") val remainCredit: Int = 0,
+    @SerialName("weekDays") val weekDayDtoList: List<WeekDayDto> = emptyList()
+//    @SerialName("mealTypes") val mealTypeDtoList: List<MealTypeDto>,
 )
 
 fun ReservationInformationDto.toReservationInfo(): ReservationInfo {
@@ -20,5 +20,5 @@ fun ReservationInformationDto.toReservationInfo(): ReservationInfo {
 }
 
 fun ReservationInformationDto.toReservationDayInfoList(): List<ReservationDayInfo> {
-    return weekDayDtoList.map { it.toReservationDayInfo() }
+    return weekDayDtoList.map { it.toReservationDayInfo() }.filter { it.mealInfo.isNotEmpty() }
 }

@@ -18,6 +18,6 @@ fun SelfDayReservableProgram.toReserveCardUIModel(): OrderCardUIModel {
         this.dayName,
         this.reserveInfoList.mapValues { (_, value) ->
             value.map { it.toReserveFoodDetailUIModel() }
-        }
+        }.filter { (_, value) -> value.isNotEmpty() }
     )
 }

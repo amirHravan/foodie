@@ -1,5 +1,6 @@
 package com.ravan.foodie.login.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -10,67 +11,58 @@ import com.ravan.foodie.domain.ui.model.FoodieInformationBoxState
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxUIModel
 import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
 import com.ravan.foodie.domain.util.SharedPrefKeys
+import com.ravan.foodie.domain.util.toEnglishNumber
+import com.ravan.foodie.domain.util.toLocalNumber
 import com.ravan.foodie.login.domain.model.SamadToken
 import com.ravan.foodie.login.domain.usecase.SamadLoginUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class LoginScreenViewModel(
-    val samadLoginUseCase: SamadLoginUseCase,
+    private val samadLoginUseCase: SamadLoginUseCase,
     private val preferencesManager: PreferencesManager,
 ) : FoodieViewModel() {
 
     val username = mutableStateOf("")
     val password = mutableStateOf("")
-    val loginToken: MutableState<LoadableData> = mutableStateOf(LoadableData.NotLoaded)
+    val loginToken: MutableState<LoadableData<String>> = mutableStateOf(LoadableData.NotLoaded)
     val informationBoxData: MutableState<FoodieInformationBoxUIModel?> = mutableStateOf(null)
 
     val navHome: NavigationEvent = NavigationEvent()
 
     fun onLaunch() {
-        preferencesManager.getData(SharedPrefKeys.Username.key, "").let {
-            username.value = it
+        preferencesManager.getString(SharedPrefKeys.Username.key, "").let {
+            username.value = it.toLocalNumber()
         }
-        preferencesManager.getData(SharedPrefKeys.Password.key, "").let {
-            password.value = it
+        preferencesManager.getString(SharedPrefKeys.Password.key, "").let {
+            password.value = it.toLocalNumber()
         }
+        Log.d("LoginScreenViewModel", "onLaunch: ${username.value}, ${password.value}")
         if (username.value.isEmpty() || password.value.isEmpty()) {
             return
         }
-        viewModelScope.launch {
-            samadLoginUseCase(username = username.value, password = password.value).fold(
-                onSuccess = { samadToken ->
-                    saveData(samadToken)
-                    loginToken.value = LoadableData.Loaded(samadToken.fullToken)
-                    navHome.navigate()
-                },
-                onFailure = {
-
-                }
-            )
-
-        }
-
-
+        onLoginClick()
     }
 
     fun onUserNameChange(newUserName: String) {
-        username.value = newUserName
+        username.value = newUserName.toLocalNumber()
     }
 
     fun onPasswordChange(newPassword: String) {
-        password.value = newPassword
+        password.value = newPassword.toLocalNumber()
     }
 
     fun onLoginClick() {
+        loginToken.value = LoadableData.Loading
         viewModelScope.launch {
             samadLoginUseCase(username.value, password.value).fold(
                 onSuccess = {
                     saveData(it)
-                    loginToken.value = LoadableData.Loaded(it.fullToken)
+                    loginToken.value = LoadableData.Loaded(it.accessToken)
                     navHome.navigate()
                 },
                 onFailure = {
+                    Log.d("LoginScreenViewModel", "onLaunch: $it")
                     loginToken.value = LoadableData.Failed("رمزعبور/نام‌کاربری اشتباه است.")
                     showInformationBox(
                         message = "رمزعبور/نام‌کاربری اشتباه است.",
@@ -82,16 +74,10 @@ class LoginScreenViewModel(
     }
 
     private fun saveData(token: SamadToken) {
-        preferencesManager.saveData(SharedPrefKeys.Username.key, username.value)
-        preferencesManager.saveData(SharedPrefKeys.Password.key, password.value)
-        preferencesManager.saveData(
-            SharedPrefKeys.LoginToken.key,
-            "${token.tokenType} ${token.accessToken}"
-        )
-        preferencesManager.saveData(
-            SharedPrefKeys.RefreshToken.key,
-            token.refreshToken
-        )
+        preferencesManager.putString(SharedPrefKeys.Username.key, username.value.toEnglishNumber())
+        preferencesManager.putString(SharedPrefKeys.Password.key, password.value.toEnglishNumber())
+        preferencesManager.putString(SharedPrefKeys.AccessToken.key, token.accessToken)
+        preferencesManager.putString(SharedPrefKeys.RefreshToken.key, token.refreshToken)
     }
 
     private fun showInformationBox(message: String, state: FoodieInformationBoxState) {

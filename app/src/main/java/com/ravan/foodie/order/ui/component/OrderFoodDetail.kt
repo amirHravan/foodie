@@ -65,7 +65,13 @@ fun OrderFoodDetail(
                 ),
                 color = RavanTheme.colors.text.onSecondary,
                 textStyle = RavanTheme.typography.body2,
-                modifier = Modifier.border(1.dp, RavanTheme.colors.border.onSecondary, RavanTheme.shapes.r4).padding(horizontal = 4.dp),
+                modifier = Modifier
+                    .border(
+                        1.dp,
+                        RavanTheme.colors.border.onSecondary,
+                        RavanTheme.shapes.r4
+                    )
+                    .padding(horizontal = 4.dp),
             )
         }
     }

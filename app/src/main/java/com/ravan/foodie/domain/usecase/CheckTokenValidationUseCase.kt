@@ -6,7 +6,7 @@ class CheckTokenValidationUseCase(
     val repository: DomainRepository,
 ) {
 
-    suspend operator fun invoke(token: String): Result<Unit> {
-        return repository.checkTokenValidation(token)
+    suspend operator fun invoke(): Result<Unit> {
+        return repository.checkTokenValidation()
     }
 }

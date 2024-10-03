@@ -3,15 +3,18 @@ package com.ravan.foodie
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ravan.foodie.dailysell.ui.DailySellComposable
+import com.ravan.foodie.dailysell.ui.viewmodel.DailySellViewModel
 import com.ravan.foodie.domain.notification.createNotificationChannel
-import com.ravan.foodie.domain.notification.setAlarm
+import com.ravan.foodie.domain.notification.setAlarmsBasedOnPreference
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.domain.util.FoodieRoutes
-import com.ravan.foodie.forget.ui.ForgetCodeScreenComposable
-import com.ravan.foodie.forget.ui.viewmodel.ForgetCodeViewModel
 import com.ravan.foodie.home.ui.HomeScreenComposable
 import com.ravan.foodie.home.ui.viewmodel.HomeScreenViewModel
 import com.ravan.foodie.login.ui.LoginScreenComposable
@@ -22,10 +25,11 @@ import com.ravan.foodie.profile.ui.ProfileComposable
 import com.ravan.foodie.profile.ui.viewmodel.ProfileViewModel
 import com.ravan.foodie.reserveinfo.ui.ReservationInfoScreenComposable
 import com.ravan.foodie.reserveinfo.ui.viewmodel.ReservationInfoViewModel
-import com.ravan.foodie.splash.SplashScreenComposable
+import com.ravan.foodie.settings.ui.SettingsComposable
+import com.ravan.foodie.settings.ui.viewmodel.SettingsViewModel
+import com.ravan.foodie.splash.ui.SplashScreenComposable
 import com.ravan.foodie.splash.ui.viewmodel.SplashScreenViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,19 +41,26 @@ class MainActivity : ComponentActivity() {
                 NavHost(
                     navController = navController,
                     startDestination = FoodieRoutes.SplashScreen.route,
+                    enterTransition = { fadeIn(animationSpec = tween(700)) },
+                    exitTransition = { fadeOut(animationSpec = tween(700)) },
+                    popEnterTransition = { fadeIn(animationSpec = tween(700)) },
+                    popExitTransition = { fadeOut(animationSpec = tween(700)) }
+
                 ) {
                     composable(FoodieRoutes.SplashScreen.route) {
                         val splashScreenViewModel = getViewModel<SplashScreenViewModel>();
                         SplashScreenComposable(
                             viewModel = splashScreenViewModel,
-                            navController = navController
+                            navController = navController,
+                            finish = { finish() }
                         )
                     }
                     composable(FoodieRoutes.LoginScreen.route) {
                         val loginViewModel = getViewModel<LoginScreenViewModel>();
                         LoginScreenComposable(
                             viewModel = loginViewModel,
-                            navController = navController
+                            navController = navController,
+                            finish = { finish() }
                         )
                     }
                     composable(FoodieRoutes.HomeScreen.route) {
@@ -81,10 +92,17 @@ class MainActivity : ComponentActivity() {
                             navController = navController
                         )
                     }
-                    composable(FoodieRoutes.ForgetCodeScreen.route) {
-                        val reservationInfoViewModel = getViewModel<ForgetCodeViewModel>();
-                        ForgetCodeScreenComposable(
-                            viewModel = reservationInfoViewModel,
+                    composable(FoodieRoutes.DailySaleScreen.route) {
+                        val dailySellViewModel = getViewModel<DailySellViewModel>();
+                        DailySellComposable(
+                            viewModel = dailySellViewModel,
+                            navController = navController
+                        )
+                    }
+                    composable(FoodieRoutes.SettingsScreen.route) {
+                        val settingsViewModel = getViewModel<SettingsViewModel>();
+                        SettingsComposable(
+                            viewModel = settingsViewModel,
                             navController = navController
                         )
                     }
@@ -92,13 +110,8 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        setUpReserveReminderNotification()
-    }
-
-    private fun setUpReserveReminderNotification() {
         createNotificationChannel(this)
-
-        setAlarm(this, 20, 0, Calendar.TUESDAY) // 8:00 PM Tuesday
-        setAlarm(this, 15, 0, Calendar.WEDNESDAY) // 3:00 PM Wednesday
+        setAlarmsBasedOnPreference(this)
     }
+
 }

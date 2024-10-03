@@ -17,7 +17,7 @@ class LoginRepositoryImplementation(
         return if (result.isSuccessful)
             Result.success(result.body()!!.toSamadToken())
         else {
-            Log.e("LoginRepository", "Error: ${result.errorBody()}")
+            Log.e("LoginRepository", "Error: ${result.errorBody()?.string()}")
             Result.failure(Exception("Error: ${result.errorBody()}"))
         }
     }

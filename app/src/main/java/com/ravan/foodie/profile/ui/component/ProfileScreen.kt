@@ -32,7 +32,8 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(RavanTheme.colors.background.primary),
+            .background(RavanTheme.colors.background.primary)
+            .padding(top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
     ) {
@@ -43,25 +44,22 @@ fun ProfileScreen(
             ),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
-        FoodieDivider()
         ProfileItemRow(
             data = ProfileItemRowUIModel(
                 title = stringResource(R.string.nurture_profile_row_item_usrname),
                 value = data.userName.toLocalNumber()
             ), modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
-        FoodieDivider()
         ProfileItemRow(
             data = ProfileItemRowUIModel(
                 title = stringResource(R.string.nurture_profile_row_item_credit),
                 value = data.credit.toLocalNumber()
             ), modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
-        FoodieDivider()
         if (data.creditTransfers.isNotEmpty()) {
             LazyColumn(
                 modifier = Modifier
-                    .padding(24.dp)
+                    .padding(top = 16.dp)
                     .clip(RavanTheme.shapes.r12)
                     .weight(1f)
                     .background(RavanTheme.colors.background.secondary)

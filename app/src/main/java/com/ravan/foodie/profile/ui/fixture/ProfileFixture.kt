@@ -23,15 +23,9 @@ val profileNurtureProfileUserDto = NurtureProfileUserDto(
     firstName = "اصغر",
     lastName = "فرهادی",
     username = "400100400",
-    enabled = true,
-    gender = "MALE",
-    id = 1,
-    nationalCode = "00000000",
-    personnel = false,
 )
 
 val profileNurtureProfileDto = NurtureProfileDto(
-    createDate = "2021-09-01 00:00:00",
     credit = 1000,
     creditChanges = listOf(
         profileCreditTransferDto2,
@@ -40,6 +34,5 @@ val profileNurtureProfileDto = NurtureProfileDto(
         profileCreditTransferDto1,
         profileCreditTransferDto3,
     ),
-    id = 1,
     nurtureProfileUserDto = profileNurtureProfileUserDto,
 )

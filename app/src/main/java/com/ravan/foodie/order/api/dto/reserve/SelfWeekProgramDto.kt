@@ -9,28 +9,28 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SelfWeekProgramDto(
-//    @SerialName("buyableFreeFood") val buyableFreeFood: Boolean,
-//    @SerialName("buyableFreeFoodToll") val buyableFreeFoodToll: Int,
     @SerialName("cancelRuleViolated") val cancelRuleViolated: Boolean,
     @SerialName("date") val date: String,
     @SerialName("dayTranslated") val dayTranslated: String,
-    @SerialName("daysDifferenceWithToday") val daysDifferenceWithToday: Int,
     @SerialName("foodId") val foodId: Int,
     @SerialName("foodName") val foodName: String,
     @SerialName("foodTypeId") val foodTypeId: Int,
-    @SerialName("foodTypeTitle") val foodTypeTitle: String,
-    @SerialName("groupId") val groupId: Int,
-//    @SerialName("hideBesideFoodInPanel") val hideBesideFoodInPanel: Boolean,
-//    @SerialName("hideInPanel") val hideInPanel: Boolean,
     @SerialName("mealTypeId") val mealTypeId: Int,
-    @SerialName("mealTypeName") val mealTypeName: String,
     @SerialName("price") val price: Int,
-//    @SerialName("priorReserveDate") val priorReserveDate: String,
-//    @SerialName("programFoodTypes") val programFoodTypeDtos: List<ProgramFoodTypeDto>,
     @SerialName("programId") val programId: Int,
     @SerialName("reserveRuleViolated") val reserveRuleViolated: Boolean,
     @SerialName("selfId") val selfId: Int,
-    @SerialName("validTotalCount") val validTotalCount: Int
+    @SerialName("daysDifferenceWithToday") val daysDifferenceWithToday: Int,
+//    @SerialName("foodTypeTitle") val foodTypeTitle: String,
+//    @SerialName("groupId") val groupId: Int,
+//    @SerialName("mealTypeName") val mealTypeName: String,
+//    @SerialName("validTotalCount") val validTotalCount: Int
+//    @SerialName("buyableFreeFood") val buyableFreeFood: Boolean,
+//    @SerialName("buyableFreeFoodToll") val buyableFreeFoodToll: Int,
+//    @SerialName("hideBesideFoodInPanel") val hideBesideFoodInPanel: Boolean,
+//    @SerialName("hideInPanel") val hideInPanel: Boolean,
+//    @SerialName("priorReserveDate") val priorReserveDate: String,
+//    @SerialName("programFoodTypes") val programFoodTypeDtos: List<ProgramFoodTypeDto>,
 )
 
 fun SelfWeekProgramDto.toReservableFoodDetail(
@@ -44,7 +44,8 @@ fun SelfWeekProgramDto.toReservableFoodDetail(
         foodName = foodName,
         price = price.toLong(),
         isReserved = isSelected,
-        isDisabled = reserveRuleViolated || cancelRuleViolated
+        isDisabled = reserveRuleViolated || cancelRuleViolated,
+        hasPassed = daysDifferenceWithToday < 0
     )
 }
 
@@ -57,7 +58,7 @@ fun List<SelfWeekProgramDto>.toReservableFoodMap(
                 it.toReservableFoodDetail(
                     userWeekReserveDtoList.any { userWeekReserveDto -> userWeekReserveDto.foodId == it.foodId }
                 )
-            }
+            }.filter { !it.hasPassed }
         }
 }
 

@@ -21,13 +21,12 @@ import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.reserveinfo.ui.fixture.reserveInfoScreenUIModelFixture
-import com.ravan.foodie.reserveinfo.ui.model.MealRowUIModel
-import com.ravan.foodie.reserveinfo.ui.model.ReservationInfoCardUIModel
 import com.ravan.foodie.reserveinfo.ui.model.ReservationInfoScreenUIModel
 
 @Composable
 fun ReservationInfoScreen(
-    data: ReservationInfoScreenUIModel
+    data: ReservationInfoScreenUIModel,
+    onGetForgetCodeClick: (Int, () -> Unit) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -63,6 +62,7 @@ fun ReservationInfoScreen(
                     key = { it.farsiDate }) { reservationInfoCardUIModel ->
                     ReservationInfoCard(
                         data = reservationInfoCardUIModel,
+                        onGetForgetCodeClick = onGetForgetCodeClick,
                         modifier = Modifier
                             .width(320.dp)
                             .fillParentMaxHeight(0.97f)
@@ -86,6 +86,7 @@ fun ReservationInfoScreenPreview() {
     RavanTheme {
         ReservationInfoScreen(
             data = reserveInfoScreenUIModelFixture,
+            onGetForgetCodeClick = { _, _ -> }
         )
     }
 }

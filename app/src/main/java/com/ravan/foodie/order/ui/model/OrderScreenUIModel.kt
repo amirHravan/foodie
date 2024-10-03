@@ -11,5 +11,6 @@ fun WeekReservableProgram.toReservableScreenUIModel(
 ): OrderScreenUIModel {
     return OrderScreenUIModel(
         orderCardUIModelList = selfWeekProgram.map { it.toReserveCardUIModel() }
+            .filter { it.reserveInfoList.isNotEmpty() }
     )
 }

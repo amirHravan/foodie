@@ -1,10 +1,13 @@
 package com.ravan.foodie.domain.ui.theme
 
 import androidx.compose.material.Typography
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.sp
 import com.ravan.foodie.R
 
@@ -24,56 +27,112 @@ private val Kalameh = FontFamily(
 val RavanTypography = typographyFromDefaults(
     h1 = TextStyle(
         fontFamily = Kalameh,
-        fontWeight = FontWeight.Black
+        fontWeight = FontWeight.Black,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        ),
     ),
     h2 = TextStyle(
         fontFamily = Kalameh,
-        fontWeight = FontWeight.Black
+        fontWeight = FontWeight.Black,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        ),
     ),
     h3 = TextStyle(
         fontFamily = Kalameh,
+        fontSize = 26.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        ),
         fontWeight = FontWeight.Bold
     ),
     h4 = TextStyle(
         fontFamily = Kalameh,
+        fontSize = 24.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        ),
         fontWeight = FontWeight.Bold,
     ),
     h5 = TextStyle(
         fontFamily = Kalameh,
+        fontSize = 22.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        ),
         fontWeight = FontWeight.Bold
     ),
     h6 = TextStyle(
         fontFamily = Kalameh,
+        fontSize = 20.sp,
         fontWeight = FontWeight.Bold,
     ),
     subtitle1 = TextStyle(
         fontFamily = Kalameh,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Thin,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        )
     ),
     subtitle2 = TextStyle(
         fontFamily = Kalameh,
-        fontWeight = FontWeight.Thin
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Thin,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        )
     ),
     body1 = TextStyle(
         fontFamily = Kalameh,
+        fontSize = 20.sp,
         fontWeight = FontWeight.Normal,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.Both
+        ),
+        textDirection = TextDirection.ContentOrRtl,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        )
     ),
     body2 = TextStyle(
         fontFamily = Kalameh,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Normal,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.Both
+        ),
+        textDirection = TextDirection.ContentOrRtl,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        )
+
     ),
     button = TextStyle(
         fontFamily = Kalameh,
-        fontWeight = FontWeight.Bold,
-        fontSize = 24.sp,
+        fontWeight = FontWeight.Normal,
+        fontSize = 18.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        )
     ),
     caption = TextStyle(
         fontFamily = Kalameh,
-        fontWeight = FontWeight.Thin
+        fontWeight = FontWeight.Thin,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        )
+
     ),
     overline = TextStyle(
         fontFamily = Kalameh,
-        fontWeight = FontWeight.Thin
+        fontWeight = FontWeight.Thin,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        )
     )
 )
 

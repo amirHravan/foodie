@@ -9,11 +9,13 @@ data class ReservationInfoCardUIModel(
     val mealRowUIModelList: List<MealRowUIModel>,
 )
 
-fun ReservationDayInfo.toReservationInfoCardUIModel(): ReservationInfoCardUIModel {
+fun ReservationDayInfo.toReservationInfoCardUIModel(
+    forgetCodeMap: Map<Int, String>
+): ReservationInfoCardUIModel {
     return ReservationInfoCardUIModel(
         farsiDayName = name,
         farsiDate = iranianDate.toLocalNumber(),
-        mealRowUIModelList = mealInfo.mapNotNull { it?.toMealRowUIModel() }
+        mealRowUIModelList = mealInfo.mapNotNull { it?.toMealRowUIModel(forgetCodeMap[it.id]) }
             .sortedBy { !it.consumed }
     )
 }

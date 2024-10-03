@@ -20,6 +20,7 @@ import com.ravan.foodie.reserveinfo.ui.model.ReservationInfoCardUIModel
 @Composable
 fun ReservationInfoCard(
     data: ReservationInfoCardUIModel,
+    onGetForgetCodeClick: (Int, () -> Unit) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -36,6 +37,7 @@ fun ReservationInfoCard(
             )
             MealRow(
                 data = mealRowUIModel,
+                onGetForgetCodeClick = onGetForgetCodeClick,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -59,7 +61,7 @@ private fun ReservationInfoCardHeader(data: ReservationInfoCardUIModel) {
         )
         Text(
             text = data.farsiDate,
-            style = RavanTheme.typography.h6,
+            style = RavanTheme.typography.h4,
             modifier = Modifier
         )
     }
@@ -70,7 +72,8 @@ private fun ReservationInfoCardHeader(data: ReservationInfoCardUIModel) {
 private fun ReservationInfoCardPreview() {
     RavanTheme {
         ReservationInfoCard(
-            data = reserveInfoCardUIModelFixture
+            data = reserveInfoCardUIModelFixture,
+            onGetForgetCodeClick = { _, _ -> }
         )
     }
 }

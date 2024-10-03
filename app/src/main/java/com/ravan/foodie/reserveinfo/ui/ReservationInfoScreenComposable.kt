@@ -1,24 +1,29 @@
 package com.ravan.foodie.reserveinfo.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ravan.foodie.R
 import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.ui.component.FoodieFailCard
+import com.ravan.foodie.domain.ui.component.FoodieInformationBox
 import com.ravan.foodie.domain.ui.component.FoodieProgressIndicator
 import com.ravan.foodie.domain.ui.component.FoodieTitleBar
 import com.ravan.foodie.domain.ui.model.FoodieFailCardUIModel
 import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.reserveinfo.ui.component.ReservationInfoScreen
-import com.ravan.foodie.reserveinfo.ui.model.ReservationInfoScreenUIModel
 import com.ravan.foodie.reserveinfo.ui.viewmodel.ReservationInfoViewModel
 
 @Composable
@@ -26,51 +31,77 @@ fun ReservationInfoScreenComposable(
     viewModel: ReservationInfoViewModel,
     navController: NavController,
 ) {
-    val reservationInfo = remember(
-        viewModel.reservationInfo.value
-    ) { viewModel.reservationInfo.value }
-    Column(
+
+    val reservationInfoUIModel = remember(
+        viewModel.reservationInfoUIModel.value
+    ) { viewModel.reservationInfoUIModel.value }
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(RavanTheme.colors.background.primary)
     ) {
-        FoodieTitleBar(
-            data = FoodieTitleBarUIModel(
-                title = stringResource(id = R.string.reservation_info_screen_title),
-            ), onBackClick = { viewModel.onBackClick() }
-        )
-        when (reservationInfo) {
-            is LoadableData.Failed -> {
-                FoodieFailCard(
-                    data = FoodieFailCardUIModel(
-                        title = reservationInfo.message,
-                    ), onReloadClick = { viewModel.onRefresh() },
-                    modifier = Modifier.fillMaxSize()
-                )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(RavanTheme.colors.background.primary)
+        ) {
+            FoodieTitleBar(
+                data = FoodieTitleBarUIModel(
+                    title = stringResource(id = R.string.reservation_info_screen_title),
+                ), onBackClick = { viewModel.onBackClick() }
+            )
+            when (reservationInfoUIModel) {
+                is LoadableData.Failed -> {
+                    FoodieFailCard(
+                        data = FoodieFailCardUIModel(
+                            title = reservationInfoUIModel.message,
+                        ), onReloadClick = { viewModel.onRefresh() },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                is LoadableData.Loaded -> {
+                    reservationInfoUIModel.data?.let {
+                        ReservationInfoScreen(
+                            data = it,
+                            onGetForgetCodeClick = { id, onFinish ->
+                                viewModel.onGetForgetCode(
+                                    id,
+                                    onFinish
+                                )
+                            }
+                        )
+                    }
+                }
+
+                is LoadableData.Loading -> {
+                    FoodieProgressIndicator(
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
+
+                is LoadableData.NotLoaded -> Unit
             }
 
-            is LoadableData.Loaded<*> -> {
-                ReservationInfoScreen(
-                    data = reservationInfo.data as ReservationInfoScreenUIModel,
-                )
-            }
+            AnimatedVisibility(visible = viewModel.showMessage.value) {
+                viewModel.informationBoxUIModel.value?.let {
+                    FoodieInformationBox(
+                        data = it,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    )
+                }
 
-            is LoadableData.Loading -> {
-                FoodieProgressIndicator(
-                    modifier = Modifier.fillMaxSize(),
-                )
             }
-
-            is LoadableData.NotLoaded -> Unit
         }
-
     }
 
     LaunchedEffect(true) {
         viewModel.onLaunch()
     }
 
-    LaunchedEffect(reservationInfo) {
+    LaunchedEffect(reservationInfoUIModel) {
         viewModel.navBack.setNavigateAction {
             navController.popBackStack()
         }

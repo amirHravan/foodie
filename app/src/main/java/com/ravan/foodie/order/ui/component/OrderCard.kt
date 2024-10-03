@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -32,37 +33,38 @@ fun LazyListScope.orderCard(
     data: OrderCardUIModel,
     onReserveFoodClick: (OrderFoodDetailUIModel, () -> Unit) -> Unit,
 ) {
-    stickyHeader {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(RavanTheme.colors.background.primary)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = data.farsiDayName,
-                style = RavanTheme.typography.h4,
-                modifier = Modifier,
-                color = RavanTheme.colors.text.onPrimary
+    if (data.reserveInfoList.isNotEmpty()) {
+        stickyHeader {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(RavanTheme.colors.background.primary)
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = data.farsiDayName,
+                    style = RavanTheme.typography.h4,
+                    modifier = Modifier,
+                    color = RavanTheme.colors.text.onPrimary
+                )
+            }
+            FoodieDivider(
+                color = RavanTheme.colors.border.onPrimary,
+                thickness = 2,
             )
         }
-        FoodieDivider(
-            color = RavanTheme.colors.border.onPrimary,
-            thickness = 2,
-        )
-    }
-
-    data.reserveInfoList.forEach { (mealType, reservationFoodDetailList) ->
-        item {
+        itemsIndexed(data.reserveInfoList.toList()) { _, (mealType, reservationFoodDetailList) ->
             OrderMealTypeSection(
                 mealType,
                 reservationFoodDetailList,
                 onReserveFoodClick,
+                modifier = Modifier.padding(8.dp)
             )
         }
     }
+
 }
 
 @Composable
@@ -92,7 +94,7 @@ private fun OrderMealTypeSection(
                     .padding(16.dp)
                     .fillMaxWidth()
             )
-        } else {
+        } else if (reservationFoodDetailList.isNotEmpty()) {
 
             Text(
                 text = mealType.getLocalName(),
@@ -110,7 +112,8 @@ private fun OrderMealTypeSection(
                     data = reservationFoodDetail,
                     onReserveFoodDetailClick = {
                         isLoading.value = true
-                        onReserveFoodClick(reservationFoodDetail
+                        onReserveFoodClick(
+                            reservationFoodDetail
                         ) { isLoading.value = false }
                     },
                     modifier = Modifier
@@ -128,7 +131,7 @@ private fun OrderCardPreview() {
         LazyColumn {
             orderCard(
                 data = orderCardUIModelFixture1,
-                onReserveFoodClick = {_, _ -> }
+                onReserveFoodClick = { _, _ -> }
             )
         }
     }

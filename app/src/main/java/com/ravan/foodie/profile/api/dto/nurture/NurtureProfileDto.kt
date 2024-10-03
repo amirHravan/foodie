@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NurtureProfileDto(
-    @SerialName("createDate") val createDate: String,
     @SerialName("credit") val credit: Int,
     @SerialName("creditChanges") val creditChanges: List<CreditChangeDto>,
-    @SerialName("id") val id: Int,
     @SerialName("user") val nurtureProfileUserDto: NurtureProfileUserDto
+//    @SerialName("createDate") val createDate: String,
+//    @SerialName("id") val id: Int,
 )
 
 fun NurtureProfileDto.toSamadNurtureProfile(): SamadNurtureProfile {

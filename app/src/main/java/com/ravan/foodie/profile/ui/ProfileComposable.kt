@@ -18,7 +18,6 @@ import com.ravan.foodie.domain.ui.model.FoodieFailCardUIModel
 import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.profile.ui.component.ProfileScreen
-import com.ravan.foodie.profile.ui.model.ProfileScreenUIModel
 import com.ravan.foodie.profile.ui.viewmodel.ProfileViewModel
 
 @Composable
@@ -27,8 +26,8 @@ fun ProfileComposable(
     navController: NavController,
 ) {
 
-    val profileUIModel = remember(viewModel.profileUIModel.value) {
-        viewModel.profileUIModel.value
+    val profileUIModel = remember(viewModel.profileScreenUIModel.value) {
+        viewModel.profileScreenUIModel.value
     }
     Column(
         Modifier
@@ -47,8 +46,8 @@ fun ProfileComposable(
                 )
             }
 
-            is LoadableData.Loaded<*> -> {
-                ProfileScreen(data = profileUIModel.data as ProfileScreenUIModel)
+            is LoadableData.Loaded -> {
+                ProfileScreen(data = profileUIModel.data)
             }
 
             is LoadableData.Failed -> {

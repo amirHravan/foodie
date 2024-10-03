@@ -34,7 +34,7 @@ private fun ReserveScreenPreview() {
     RavanTheme {
         OrderScreen(
             data = orderScreenUIModelFixture,
-            onReserveFoodClick = {_, _ -> },
+            onReserveFoodClick = { _, _ -> },
         )
     }
 }

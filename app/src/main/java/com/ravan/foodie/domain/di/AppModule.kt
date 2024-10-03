@@ -8,7 +8,8 @@ import com.ravan.foodie.domain.network.AuthInterceptor
 import com.ravan.foodie.domain.repository.DomainRepository
 import com.ravan.foodie.domain.repository.DomainRepositoryImplementation
 import com.ravan.foodie.domain.repository.TokenProvider
-import com.ravan.foodie.domain.usecase.SaveSamadTokenUseCase
+import com.ravan.foodie.domain.usecase.CacheAccessTokenUseCase
+import com.ravan.foodie.domain.usecase.CheckTokenValidationUseCase
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -19,18 +20,20 @@ import retrofit2.Retrofit
 val appModule = module {
     val networkJson = Json { ignoreUnknownKeys = true }
 
-    single { TokenProvider() }
-
-    single {
-        PreferencesManager(get())
-    }
+    single { networkJson }
 
     single {
         Retrofit.Builder()
-        .baseUrl("https://setad.dining.sharif.edu/")
-        .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
-        .build()
-        .create(TokenApi::class.java)
+            .baseUrl("https://setad.dining.sharif.edu/")
+            .addConverterFactory(networkJson.asConverterFactory("application/json".toMediaType()))
+            .build()
+            .create(TokenApi::class.java)
+    }
+
+    single { TokenProvider(get<TokenApi>()) }
+
+    single {
+        PreferencesManager(get())
     }
 
     single {
@@ -50,8 +53,9 @@ val appModule = module {
 
     single { get<Retrofit.Builder>().build().create(DomainApi::class.java) }
 
-
     single<DomainRepository> { DomainRepositoryImplementation(get()) }
 
-    factory { SaveSamadTokenUseCase(get()) }
+    factory { CacheAccessTokenUseCase(get()) }
+
+    factory { CheckTokenValidationUseCase(get()) }
 }

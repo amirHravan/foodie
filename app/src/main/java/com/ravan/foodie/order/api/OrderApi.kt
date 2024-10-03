@@ -4,7 +4,6 @@ import com.ravan.foodie.domain.network.SamadResponse
 import com.ravan.foodie.order.api.dto.reserve.ReserveProgramDto
 import com.ravan.foodie.order.api.dto.self.SelfDto
 import com.ravan.foodie.order.domain.model.ReserveRequestBodyData
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
@@ -23,7 +22,7 @@ interface OrderApi {
     suspend fun reserveFood(
         @Path("programId") programId: Int,
         @Body reservableFoodDetail: ReserveRequestBodyData,
-    ): Response<Unit>
+    ): SamadResponse<Unit>
 
     @GET("rest/selfs")
     suspend fun getAvailableSelfs(

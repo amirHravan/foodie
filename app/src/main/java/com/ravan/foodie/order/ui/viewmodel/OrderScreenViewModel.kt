@@ -1,8 +1,9 @@
 package com.ravan.foodie.order.ui.viewmodel
 
-import android.util.Log
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.ravan.foodie.credit.domain.usecase.GetRedirectLoginAsTokenUseCase
 import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.model.NavigationEvent
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxState
@@ -16,6 +17,7 @@ import com.ravan.foodie.order.domain.usecase.GetReservableProgramUseCase
 import com.ravan.foodie.order.domain.usecase.ReserveFoodUseCase
 import com.ravan.foodie.order.ui.model.OrderFoodDetailUIModel
 import com.ravan.foodie.order.ui.model.OrderScreenUIModel
+import com.ravan.foodie.order.ui.model.SelfDialogUIModel
 import com.ravan.foodie.order.ui.model.SelfRowUIModel
 import com.ravan.foodie.order.ui.model.toReservableScreenUIModel
 import com.ravan.foodie.order.ui.model.toSelfDialogUIModel
@@ -27,15 +29,17 @@ class OrderScreenViewModel(
     private val getReservableProgramUseCase: GetReservableProgramUseCase,
     private val getAvailableSelfs: GetAvailableSelfs,
     private val reserveFoodUseCase: ReserveFoodUseCase,
+    private val getRedirectLoginAsTokenUseCase: GetRedirectLoginAsTokenUseCase,
 ) : FoodieViewModel() {
 
     // reserve program
-    val orderScreenUIModel = mutableStateOf<LoadableData>(LoadableData.NotLoaded)
+    val orderScreenUIModel =
+        mutableStateOf<LoadableData<OrderScreenUIModel>>(LoadableData.NotLoaded)
 
     // selected self row
     private var selectedSelfId = -1
     val selectedSelf = mutableStateOf("")
-    val selfDialogUIModel = mutableStateOf<LoadableData>(LoadableData.NotLoaded)
+    val selfDialogUIModel = mutableStateOf<LoadableData<SelfDialogUIModel>>(LoadableData.NotLoaded)
     val shouldShowSelfDialog = mutableStateOf(false)
 
     // information box
@@ -178,7 +182,6 @@ class OrderScreenViewModel(
                 state = FoodieInformationBoxState.FAILED
             )
         } else {
-            Log.d("foods", "$previousProgram | $nextProgram")
             return onSuccess(
                 previousProgram.getOrNull().merge(nextProgram.getOrNull())
                     .toReservableScreenUIModel()
@@ -186,6 +189,43 @@ class OrderScreenViewModel(
 
 
         }
+    }
+
+    fun onIncreaseCreditClick(
+        invokeIntent: (String) -> Unit,
+    ) {
+        // Define the URL and add query parameters
+
+        viewModelScope.launch {
+
+            getRedirectLoginAsTokenUseCase().fold(
+                onSuccess = {
+                    informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                        message = "در حال انتقال به صفحه افزایش اعتبار...",
+                        state = FoodieInformationBoxState.SUCCESS
+                    )
+
+                    val url = Uri.Builder()
+                        .scheme("https")  // Protocol (https, http, etc.)
+                        .authority("setad.dining.sharif.edu")  // Base URL
+                        .appendPath("j_security_check")  // Path segment (if any)
+                        .appendQueryParameter("loginAsToken", it.loginAsToken)  // Add query params
+                        .appendQueryParameter("redirect", "/nurture/user/credit/charge/view.rose")
+                        .build()
+                        .toString()
+
+                    invokeIntent(url)
+                },
+                onFailure = {
+                    informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                        message = it.message ?: "در افزایش اعتبار خطایی پیش آمده",
+                        state = FoodieInformationBoxState.FAILED
+                    )
+                }
+            )
+            showMessage()
+        }
+
     }
 
 }

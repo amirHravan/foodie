@@ -13,10 +13,13 @@ import com.ravan.foodie.home.ui.model.HomeButtonUIModel
 
 @Composable
 fun HomeButtonList(
-    onCodeClick: () -> Unit,
     onLunchClick: () -> Unit,
     onCalenderClick: () -> Unit,
     onProfileClick: () -> Unit,
+    onSettingsClick: () -> Unit,
+    onAutomaticReserveClick: () -> Unit,
+    onAboutUsClick: () -> Unit,
+    onDailySaleClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
@@ -24,6 +27,8 @@ fun HomeButtonList(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        item {}
+
         item {
             HomeButton(
                 data = HomeButtonUIModel(R.drawable.ic_calender),
@@ -37,12 +42,20 @@ fun HomeButtonList(
                 onClick = onLunchClick,
             )
         }
+
         item {
             HomeButton(
-                data = HomeButtonUIModel(R.drawable.ic_code),
-                onClick = onCodeClick,
+                data = HomeButtonUIModel(R.drawable.ic_shopping_cart),
+                onClick = onDailySaleClick,
             )
         }
+
+//        item {
+//            HomeButton(
+//                data = HomeButtonUIModel(R.drawable.ic_smart_toy),
+//                onClick = onAutomaticReserveClick,
+//            )
+//        }
 
         item {
             HomeButton(
@@ -50,6 +63,22 @@ fun HomeButtonList(
                 onClick = onProfileClick,
             )
         }
+
+        item {
+            HomeButton(
+                data = HomeButtonUIModel(R.drawable.ic_tune),
+                onClick = onSettingsClick,
+            )
+        }
+
+//        item {
+//            HomeButton(
+//                data = HomeButtonUIModel(R.drawable.ic_info),
+//                onClick = onAboutUsClick,
+//            )
+//        }
+
+        item {}
     }
 }
 
@@ -58,10 +87,13 @@ fun HomeButtonList(
 fun HomeButtonListPreview() {
     RavanTheme {
         HomeButtonList(
-            onCodeClick = {},
             onLunchClick = {},
             onCalenderClick = {},
             onProfileClick = {},
+            onAutomaticReserveClick = {},
+            onSettingsClick = {},
+            onAboutUsClick = {},
+            onDailySaleClick = {},
             modifier = Modifier
         )
     }

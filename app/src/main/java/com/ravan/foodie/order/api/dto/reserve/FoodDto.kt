@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FoodDto(
-    @SerialName("averageScore") val averageScore: Double,
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
-    @SerialName("voteCount") val voteCount: Int
+//    @SerialName("averageScore") val averageScore: Double,
+//    @SerialName("voteCount") val voteCount: Int
 )

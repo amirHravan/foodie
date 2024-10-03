@@ -3,6 +3,8 @@ package com.ravan.foodie.reserveinfo.di
 import com.ravan.foodie.reserveinfo.api.ReserveInfoApi
 import com.ravan.foodie.reserveinfo.domain.repository.ReservationInfoRepository
 import com.ravan.foodie.reserveinfo.domain.repository.ReservationInfoRepositoryImplementation
+import com.ravan.foodie.reserveinfo.domain.usecase.GetForgetCodeMapCacheUseCase
+import com.ravan.foodie.reserveinfo.domain.usecase.GetForgetCodeUseCase
 import com.ravan.foodie.reserveinfo.domain.usecase.GetReservationInformationUseCase
 import com.ravan.foodie.reserveinfo.ui.viewmodel.ReservationInfoViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -23,6 +25,15 @@ val reserveInfoModule = module {
     }
 
     viewModel {
-        ReservationInfoViewModel(get())
+        ReservationInfoViewModel(get(), get(), get())
     }
+
+    factory {
+        GetForgetCodeUseCase(get())
+    }
+
+    factory {
+        GetForgetCodeMapCacheUseCase(get())
+    }
+
 }

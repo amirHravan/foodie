@@ -1,7 +1,6 @@
 package com.ravan.foodie.profile.ui.component
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Icon
@@ -10,11 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
 import com.ravan.foodie.domain.ui.theme.RavanTheme
-import com.ravan.foodie.domain.util.toLocalNumber
 import com.ravan.foodie.profile.api.dto.nurture.toCreditTransfer
 import com.ravan.foodie.profile.ui.fixture.profileCreditTransferDto1
 import com.ravan.foodie.profile.ui.model.CreditTransferUIModel
@@ -30,23 +29,25 @@ fun CreditTransferRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            painter = painterResource(id = getIconResource(data.amount > 0)),
+            painter = painterResource(id = getIconResource(data.isPositive)),
             contentDescription = null,
             tint = RavanTheme.colors.icon.onSuccess
         )
-        Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = data.amount.toString().toLocalNumber(),
-            style = RavanTheme.typography.body1,
+            text = data.amount,
+            style = RavanTheme.typography.body1.copy(textAlign = TextAlign.Center),
             color = RavanTheme.colors.text.onSecondary,
-            modifier = Modifier.offset(y = (-6).dp)
+            modifier = Modifier
+                .offset(x = 20.dp)
+                .weight(1f)
+
         )
-        Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = data.date.toLocalNumber(),
-            style = RavanTheme.typography.body1,
+            text = data.date,
+            style = RavanTheme.typography.body1.copy(textAlign = TextAlign.End),
             color = RavanTheme.colors.text.onSecondary,
-            modifier = Modifier.offset(y = (-6).dp)
+            modifier = Modifier
+                .fillMaxWidth(0.3f)
         )
     }
 
