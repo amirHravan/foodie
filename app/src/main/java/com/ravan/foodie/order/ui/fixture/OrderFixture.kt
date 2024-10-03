@@ -5,7 +5,7 @@ import com.ravan.foodie.order.ui.model.OrderCardUIModel
 import com.ravan.foodie.order.ui.model.OrderFoodDetailUIModel
 import com.ravan.foodie.order.ui.model.OrderScreenUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogUIModel
-import com.ravan.foodie.order.ui.model.SelfRowUIModel
+import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
 
 
 val orderFoodDetailUIModelSelectedFixture1 = OrderFoodDetailUIModel(
@@ -89,8 +89,8 @@ val orderScreenUIModelFixture = OrderScreenUIModel(
 
 val selfDialogUIModelFixture = SelfDialogUIModel(
     selfs = listOf(
-        SelfRowUIModel("مرکزی", 1),
-        SelfRowUIModel("مرکزی", 1),
+        SelfDialogRowUIModel("مرکزی", 1),
+        SelfDialogRowUIModel("مرکزی", 1),
     )
 )
 

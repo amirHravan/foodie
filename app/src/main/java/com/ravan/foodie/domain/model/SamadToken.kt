@@ -1,4 +1,4 @@
-package com.ravan.foodie.login.domain.model
+package com.ravan.foodie.domain.model
 
 data class SamadToken(
     val accessToken: String,

@@ -15,12 +15,12 @@ import com.ravan.foodie.domain.ui.component.FoodieDivider
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.order.ui.fixture.selfDialogUIModelFixture
 import com.ravan.foodie.order.ui.model.SelfDialogUIModel
-import com.ravan.foodie.order.ui.model.SelfRowUIModel
+import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
 
 @Composable
 fun ColumnScope.SelfDialog(
     data: SelfDialogUIModel,
-    onSelectSelf: (SelfRowUIModel) -> Unit,
+    onSelectSelf: (SelfDialogRowUIModel) -> Unit,
 ) {
     data.selfs.forEach { selfDialogItemUIModel ->
         Text(

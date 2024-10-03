@@ -9,6 +9,16 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
+enum class DaysOfWeek {
+    SATURDAY,
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY
+}
+
 fun String.toLocalDayName(): String {
     return when (this.lowercase(Locale.ROOT)) {
         "saturday" -> "شنبه"

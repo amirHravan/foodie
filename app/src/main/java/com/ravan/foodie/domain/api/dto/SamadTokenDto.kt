@@ -1,6 +1,6 @@
-package com.ravan.foodie.login.api.dto
+package com.ravan.foodie.domain.api.dto
 
-import com.ravan.foodie.login.domain.model.SamadToken
+import com.ravan.foodie.domain.model.SamadToken
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -11,22 +11,21 @@ import com.ravan.foodie.domain.network.currentConnectivityState
 import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
 import com.ravan.foodie.domain.usecase.CacheAccessTokenUseCase
 import com.ravan.foodie.domain.usecase.CheckTokenValidationUseCase
+import com.ravan.foodie.domain.usecase.LoginUseCase
+import com.ravan.foodie.domain.usecase.RefreshAccessTokenUseCase
 import com.ravan.foodie.domain.util.SharedPrefKeys
-import com.ravan.foodie.login.domain.model.SamadToken
-import com.ravan.foodie.login.domain.usecase.SamadLoginUseCase
 import kotlinx.coroutines.launch
 
 class SplashScreenViewModel(
     private val cacheAccessTokenUseCase: CacheAccessTokenUseCase,
-    private val samadLoginUseCase: SamadLoginUseCase,
-    private val checkTokenValidationUseCase: CheckTokenValidationUseCase,
+    private val samadLoginUseCase: LoginUseCase,
+    private val refreshAccessTokenUseCase: RefreshAccessTokenUseCase,
     private val preferencesManager: PreferencesManager,
 ) : FoodieViewModel() {
 
     private var username = ""
     private var password = ""
 
-    private var accessToken = ""
     private var refreshToken = ""
 
     val showNetworkError = mutableStateOf(false)
@@ -34,15 +33,11 @@ class SplashScreenViewModel(
     val navHome: NavigationEvent = NavigationEvent()
 
     init {
-        preferencesManager.getString(SharedPrefKeys.AccessToken.key, "").let {
-            accessToken = it
-        }
-
         preferencesManager.getString(SharedPrefKeys.RefreshToken.key, "").let {
             refreshToken = it
         }
 
-        Log.d("SplashScreenViewModel", "accessToken: $accessToken, refreshToken: $refreshToken")
+        Log.d("SplashScreenViewModel", "refreshToken: $refreshToken")
 
     }
 
@@ -72,16 +67,10 @@ class SplashScreenViewModel(
     }
 
     private fun checkOldAccessToken() {
-        if (accessToken.isNotEmpty()) {
+        if (refreshToken.isNotEmpty()) {
             viewModelScope.launch {
-                checkTokenValidationUseCase().fold(
-                    onSuccess = {
-                        cacheAccessTokenUseCase(
-                            token = SamadToken(
-                                accessToken = accessToken,
-                                refreshToken = refreshToken,
-                            )
-                        )
+                refreshAccessTokenUseCase().fold(
+                    onSuccess = { _ ->
                         navHome.navigate()
                     },
                     onFailure = {

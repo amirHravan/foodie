@@ -10,6 +10,8 @@ import com.ravan.foodie.domain.repository.DomainRepositoryImplementation
 import com.ravan.foodie.domain.repository.TokenProvider
 import com.ravan.foodie.domain.usecase.CacheAccessTokenUseCase
 import com.ravan.foodie.domain.usecase.CheckTokenValidationUseCase
+import com.ravan.foodie.domain.usecase.LoginUseCase
+import com.ravan.foodie.domain.usecase.RefreshAccessTokenUseCase
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -30,7 +32,7 @@ val appModule = module {
             .create(TokenApi::class.java)
     }
 
-    single { TokenProvider(get<TokenApi>()) }
+    single { TokenProvider(get<TokenApi>(), get()) }
 
     single {
         PreferencesManager(get())
@@ -58,4 +60,8 @@ val appModule = module {
     factory { CacheAccessTokenUseCase(get()) }
 
     factory { CheckTokenValidationUseCase(get()) }
+
+    factory { RefreshAccessTokenUseCase(get()) }
+
+    factory { LoginUseCase(get()) }
 }

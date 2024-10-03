@@ -28,7 +28,7 @@
     <string name="order_screen_title_bar">رزرو غذا</string>
     <string name="order_select_self_dialog_title">سلف‌های مجاز</string>
     <string name="order_order_food_detail_disabled">مهلت رزرو این غذا تمام شده</string>
-    <string name="order_increase_credit_button">افزایش اعتبار</string>
+    <string name="increase_credit_button_label">افزایش اعتبار</string>
 
     <!-- Forget Code -->
     <string name="forget_code_api_error">"در دریافت کد فراموشی غذای مورد نظر خطایی پیش اومده"</string>
@@ -63,6 +63,19 @@
     <string name="about_us_answer_2">بین این نرم‌افزار و سرور‌های سامانه samad.app هیچ واسطی نیست. همه محاسبات و داده‌ها یا سمت سرور‌های دانشگاه هست یا داخل گوشیتون. پس درواقع نه کسی رمز و داده‌های شما رو این وسط می‌بینه، نه کسی لازمه ی سرور دیگه رو مدیریت کنه و هزینه نگه‌داری الکی زیاد بشه. پس بدیهی هستش که اگر داده‌های نرم‌افزار رو پاک کنید، بخش‌هایی که قبلا پر کرده بودین و برای خود برنامه بود، پاک خواهند شد.</string>
     <string name="about_us_answer_3">تا زمانی که کد اوپن‌سورس نیست، به اعتبار من و سیبیلام اعتماد کنید. هر وقت اوپن‌سورس شد، برید کد‌ها رو بخونید.</string>
     <string name="about_us_title">درباره ما (من)</string>
+
     <string name="get_forget_code_button_label">دریافت کد فراموشی</string>
+    <string name="priority_selection_screen_title">اتنخاب اولویت‌ها</string>
+    <string name="auto_reserve_screen_title">رزرو اتوماتیک</string>
+
+    <string name="persian_day_of_week_saturday">شنبه</string>
+    <string name="persian_day_of_week_sunday">یکشنبه</string>
+    <string name="persian_day_of_week_monday">دوشنبه</string>
+    <string name="persian_day_of_week_tuesday">سه‌شنبه</string>
+    <string name="persian_day_of_week_wednesday">چهارشنبه</string>
+    <string name="persian_day_of_week_thursday">پنجشنبه</string>
+    <string name="persian_day_of_week_friday">جمعه</string>
+    <string name="auto_reserve_button_label">رزرو</string>
+
 
 </resources>

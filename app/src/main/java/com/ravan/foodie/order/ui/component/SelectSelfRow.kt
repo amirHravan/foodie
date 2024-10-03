@@ -7,12 +7,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,21 +26,30 @@ import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
 import com.ravan.foodie.domain.ui.component.FoodieDivider
 import com.ravan.foodie.domain.ui.theme.RavanTheme
+import com.ravan.foodie.order.ui.model.SelectSelfRowUIModel
+import com.ravan.foodie.order.ui.model.SelfDialogUIModel
+import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
 
 @Composable
 fun SelectSelfRow(
-    name: String,
+    selectSelfRowUIModel: SelectSelfRowUIModel,
     modifier: Modifier = Modifier,
-    isExpanded: Boolean = false,
-    onClick: () -> Unit,
-    content: @Composable ColumnScope.() -> Unit,
+    onExpandClick: () -> Unit,
+    onSelectSelfClick: (SelfDialogRowUIModel) -> Unit,
 ) {
-    val (backgroundColor, borderColor) = getColors(isExpanded)
+    val isExpanded = remember(selectSelfRowUIModel.selfDialogUIModel) {
+        mutableStateOf(selectSelfRowUIModel.selfDialogUIModel != null)
+    }
+    val (backgroundColor, borderColor) = getColors(isExpanded.value)
+
     Box(
         modifier = modifier
             .clip(RavanTheme.shapes.r8)
             .background(backgroundColor)
-            .clickable { onClick() }
+            .clickable {
+                isExpanded.value = !isExpanded.value
+                onExpandClick()
+            }
             .border(2.dp, borderColor, RavanTheme.shapes.r8)
             .padding(8.dp),
         contentAlignment = Alignment.TopStart
@@ -48,7 +58,7 @@ fun SelectSelfRow(
             painter = painterResource(id = R.drawable.ic_chevron_left),
             contentDescription = null,
             tint = borderColor,
-            modifier = Modifier.rotate(if (isExpanded) -90f else 0f)
+            modifier = Modifier.rotate(if (isExpanded.value) -90f else 0f)
         )
         Column(
             modifier = Modifier
@@ -56,15 +66,15 @@ fun SelectSelfRow(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (name.isNotBlank() and !isExpanded) {
+            if (selectSelfRowUIModel.selectedSelfName.isNotBlank() and !isExpanded.value) {
                 Text(
-                    text = name,
+                    text = selectSelfRowUIModel.selectedSelfName,
                     color = RavanTheme.colors.text.onPrimary,
                     style = RavanTheme.typography.h6,
                 )
             }
             AnimatedVisibility(
-                visible = isExpanded,
+                visible = isExpanded.value,
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -76,7 +86,18 @@ fun SelectSelfRow(
                         style = RavanTheme.typography.h6,
                     )
                     FoodieDivider(color = RavanTheme.colors.border.onSecondary)
-                    content()
+
+                    selectSelfRowUIModel.selfDialogUIModel?.let { selfDialogUIModel ->
+                        SelfDialog(
+                            data = selfDialogUIModel,
+                            onSelectSelf = {
+                                onSelectSelfClick(it)
+                                isExpanded.value = !isExpanded.value
+                            },
+                        )
+                    }
+
+
                 }
             }
         }
@@ -98,10 +119,14 @@ fun getColors(isExpanded: Boolean): Pair<Color, Color> {
 private fun SelectSelfRowPreview() {
     RavanTheme {
         SelectSelfRow(
-            name = "مرکزی",
-            isExpanded = true,
-            onClick = {},
-            content = {}
+            selectSelfRowUIModel = SelectSelfRowUIModel(
+                selectedSelfName = "سلف\u200Cهای مجاز",
+                selfDialogUIModel = SelfDialogUIModel(
+                    selfs = emptyList(),
+                )
+            ),
+            onExpandClick = {},
+            onSelectSelfClick = {},
         )
     }
 }

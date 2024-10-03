@@ -28,7 +28,7 @@ class AuthInterceptor(
             // Handle token refreshing
             synchronized(this) {
                 val newToken = runBlocking {
-                    tokenProvider.refreshAccessToken(defaultAccessToken = DEFAULT_ACCESS_TOKEN)
+                    tokenProvider.refreshAccessToken()
                         .fold(
                             onSuccess = {
                                 it

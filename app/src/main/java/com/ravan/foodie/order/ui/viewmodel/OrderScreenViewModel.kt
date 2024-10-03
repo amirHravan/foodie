@@ -17,8 +17,9 @@ import com.ravan.foodie.order.domain.usecase.GetReservableProgramUseCase
 import com.ravan.foodie.order.domain.usecase.ReserveFoodUseCase
 import com.ravan.foodie.order.ui.model.OrderFoodDetailUIModel
 import com.ravan.foodie.order.ui.model.OrderScreenUIModel
+import com.ravan.foodie.order.ui.model.SelectSelfRowUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogUIModel
-import com.ravan.foodie.order.ui.model.SelfRowUIModel
+import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
 import com.ravan.foodie.order.ui.model.toReservableScreenUIModel
 import com.ravan.foodie.order.ui.model.toSelfDialogUIModel
 import kotlinx.coroutines.delay
@@ -38,9 +39,10 @@ class OrderScreenViewModel(
 
     // selected self row
     private var selectedSelfId = -1
-    val selectedSelf = mutableStateOf("")
-    val selfDialogUIModel = mutableStateOf<LoadableData<SelfDialogUIModel>>(LoadableData.NotLoaded)
-    val shouldShowSelfDialog = mutableStateOf(false)
+
+    private var selectedSelfName: String = ""
+    private var selfDialogUIModel: SelfDialogUIModel? = null
+    val selectSelfRowUIModel = mutableStateOf(SelectSelfRowUIModel())
 
     // information box
     val showMessage = mutableStateOf(false)
@@ -102,11 +104,7 @@ class OrderScreenViewModel(
 
 
     fun onBackClick() {
-        if (selectedSelf.value.isNotEmpty() && shouldShowSelfDialog.value) {
-            shouldShowSelfDialog.value = false
-        } else {
-            navBack.navigate()
-        }
+        navBack.navigate()
     }
 
     fun onRefresh() {
@@ -124,13 +122,13 @@ class OrderScreenViewModel(
         viewModelScope.launch {
             getAvailableSelfs().fold(
                 onSuccess = {
-                    selfDialogUIModel.value = LoadableData.Loaded(it.toSelfDialogUIModel())
-                    shouldShowSelfDialog.value = true
+                    selfDialogUIModel = it.toSelfDialogUIModel()
+                    selectSelfRowUIModel.value = SelectSelfRowUIModel(
+                        selectedSelfName,
+                        selfDialogUIModel = it.toSelfDialogUIModel()
+                    )
                 },
                 onFailure = {
-                    selfDialogUIModel.value = LoadableData.Failed(
-                        it.message ?: "در گرفتن سلف های مجاز خطایی پیش آمده",
-                    )
                     informationBoxUIModel.value = FoodieInformationBoxUIModel(
                         state = FoodieInformationBoxState.FAILED,
                         message = it.message ?: "در گرفتن سلف‌های مجاز خطایی پیش آمده"
@@ -143,12 +141,20 @@ class OrderScreenViewModel(
     }
 
     fun onSelfClick(
-        data: SelfRowUIModel
+        data: SelfDialogRowUIModel
     ) {
-        selectedSelf.value = data.name
-        selectedSelfId = data.id
-        shouldShowSelfDialog.value = false
-        loadProgram()
+
+        selectedSelfName = data.name
+
+        selectSelfRowUIModel.value = SelectSelfRowUIModel(
+            selectedSelfName = selectedSelfName,
+            selfDialogUIModel = selfDialogUIModel
+        )
+
+        if (data.id != selectedSelfId){
+            selectedSelfId = data.id
+            loadProgram()
+        }
     }
 
     private fun showMessage() {

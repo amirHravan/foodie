@@ -30,7 +30,6 @@ import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.order.ui.component.OrderScreen
 import com.ravan.foodie.order.ui.component.SelectSelfRow
-import com.ravan.foodie.order.ui.component.SelfDialog
 import com.ravan.foodie.order.ui.viewmodel.OrderScreenViewModel
 
 @Composable
@@ -60,7 +59,7 @@ fun OrderScreenComposable(
                 FoodieButton(
                     data = FoodieButtonUIModel.General(
                         iconRes = R.drawable.ic_payment,
-                        title = stringResource(id = R.string.order_increase_credit_button)
+                        title = stringResource(id = R.string.increase_credit_button_label)
                     ),
                     onClick = {
                         viewModel.onIncreaseCreditClick() { url ->
@@ -72,27 +71,13 @@ fun OrderScreenComposable(
                     )
             }
             SelectSelfRow(
-                name = viewModel.selectedSelf.value,
-                isExpanded = viewModel.shouldShowSelfDialog.value,
-                onClick = { viewModel.onSelectSelfClick() },
+                selectSelfRowUIModel = viewModel.selectSelfRowUIModel.value,
+                onExpandClick = { viewModel.onSelectSelfClick() },
+                onSelectSelfClick = { viewModel.onSelfClick(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp, start = 16.dp, end = 16.dp),
-            ) {
-                when (val selfDialogData = viewModel.selfDialogUIModel.value) {
-                    is LoadableData.Loaded -> {
-                        SelfDialog(
-                            data = selfDialogData.data,
-                            onSelectSelf = { viewModel.onSelfClick(it) },
-                        )
-                    }
-
-                    is LoadableData.Failed,
-                    LoadableData.Loading,
-                    LoadableData.NotLoaded -> Unit
-                }
-
-            }
+            )
             when (orderScreenUIModel) {
                 is LoadableData.Failed -> {
                     FoodieFailCard(

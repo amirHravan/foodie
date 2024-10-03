@@ -2,35 +2,55 @@ package com.ravan.foodie.autoreserve.ui.component.selection
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ravan.foodie.R
 import com.ravan.foodie.autoreserve.ui.model.FoodPriorityScreenUIModel
 import com.ravan.foodie.autoreserve.ui.model.FoodPriorityUIModel
+import com.ravan.foodie.domain.ui.component.FoodieTitleBar
+import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 
 @Composable
 fun FoodPriorityScreen(
     data: FoodPriorityScreenUIModel,
-    onPriorityChange: (FoodPriorityUIModel, Int) -> Unit
+    onPriorityChange: (FoodPriorityUIModel, Int) -> Unit,
+    onBackClick: () -> Unit,
 ) {
 
-    LazyColumn(
+    Column(
         modifier = Modifier
+            .fillMaxSize()
             .background(RavanTheme.colors.background.primary)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(count = data.foodPriorityUIModelList.count(), key = { it }) { index ->
-            FoodRateRow(
-                data = data.foodPriorityUIModelList[index],
-                onChangePriority = onPriorityChange
-            )
-        }
+        FoodieTitleBar(
+            data = FoodieTitleBarUIModel(
+                title = stringResource(id = R.string.priority_selection_screen_title)
+            ),
+            onBackClick = onBackClick
+        )
+        LazyColumn(
+            modifier = Modifier
+                .background(RavanTheme.colors.background.primary)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(count = data.foodPriorityUIModelList.count(), key = { it }) { index ->
+                FoodRateRow(
+                    data = data.foodPriorityUIModelList[index],
+                    onChangePriority = onPriorityChange
+                )
+            }
 
+        }
     }
 }
 
@@ -67,7 +87,11 @@ private fun FoodPriorityScreenPreview() {
         )
     )
     RavanTheme {
-        FoodPriorityScreen(data = data, onPriorityChange = { _, _ -> })
+        FoodPriorityScreen(
+            data = data,
+            onPriorityChange = { _, _ -> },
+            onBackClick = {}
+        )
     }
 
 }

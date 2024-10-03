@@ -7,19 +7,19 @@ import androidx.lifecycle.viewModelScope
 import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.model.NavigationEvent
 import com.ravan.foodie.domain.model.PreferencesManager
+import com.ravan.foodie.domain.model.SamadToken
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxState
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxUIModel
 import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
+import com.ravan.foodie.domain.usecase.LoginUseCase
 import com.ravan.foodie.domain.util.SharedPrefKeys
 import com.ravan.foodie.domain.util.toEnglishNumber
 import com.ravan.foodie.domain.util.toLocalNumber
-import com.ravan.foodie.login.domain.model.SamadToken
-import com.ravan.foodie.login.domain.usecase.SamadLoginUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class LoginScreenViewModel(
-    private val samadLoginUseCase: SamadLoginUseCase,
+    private val samadLoginUseCase: LoginUseCase,
     private val preferencesManager: PreferencesManager,
 ) : FoodieViewModel() {
 

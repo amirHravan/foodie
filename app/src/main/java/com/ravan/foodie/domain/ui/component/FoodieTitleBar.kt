@@ -86,7 +86,7 @@ fun FoodieTitleBarPreview() {
                 FoodieButton(
                     data = FoodieButtonUIModel.General(
                         iconRes = R.drawable.ic_payment,
-                        title = stringResource(id = R.string.order_increase_credit_button)
+                        title = stringResource(id = R.string.increase_credit_button_label)
                     ),
                     onClick = {},
 
