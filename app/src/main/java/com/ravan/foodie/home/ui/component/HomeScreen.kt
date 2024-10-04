@@ -20,7 +20,6 @@ fun HomeScreen(
     onProfileClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onAutomaticReserveClick: () -> Unit,
-    onAboutUsClick: () -> Unit,
     onDailySaleClick: () -> Unit,
 
     ) {
@@ -37,7 +36,6 @@ fun HomeScreen(
             onProfileClick = onProfileClick,
             onSettingsClick = onSettingsClick,
             onAutomaticReserveClick = onAutomaticReserveClick,
-            onAboutUsClick = onAboutUsClick,
             onDailySaleClick = onDailySaleClick,
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -55,7 +53,6 @@ fun HomeScreenPreview() {
             onCalenderClick = {},
             onSettingsClick = {},
             onAutomaticReserveClick = {},
-            onAboutUsClick = {},
             onDailySaleClick = {},
         )
     }

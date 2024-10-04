@@ -18,7 +18,6 @@ fun HomeButtonList(
     onProfileClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onAutomaticReserveClick: () -> Unit,
-    onAboutUsClick: () -> Unit,
     onDailySaleClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -50,12 +49,12 @@ fun HomeButtonList(
             )
         }
 
-//        item {
-//            HomeButton(
-//                data = HomeButtonUIModel(R.drawable.ic_smart_toy),
-//                onClick = onAutomaticReserveClick,
-//            )
-//        }
+        item {
+            HomeButton(
+                data = HomeButtonUIModel(R.drawable.ic_smart_toy),
+                onClick = onAutomaticReserveClick,
+            )
+        }
 
         item {
             HomeButton(
@@ -71,13 +70,6 @@ fun HomeButtonList(
             )
         }
 
-//        item {
-//            HomeButton(
-//                data = HomeButtonUIModel(R.drawable.ic_info),
-//                onClick = onAboutUsClick,
-//            )
-//        }
-
         item {}
     }
 }
@@ -92,7 +84,6 @@ fun HomeButtonListPreview() {
             onProfileClick = {},
             onAutomaticReserveClick = {},
             onSettingsClick = {},
-            onAboutUsClick = {},
             onDailySaleClick = {},
             modifier = Modifier
         )

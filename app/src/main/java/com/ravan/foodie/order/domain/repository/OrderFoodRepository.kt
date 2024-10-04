@@ -9,7 +9,7 @@ interface OrderFoodRepository {
     suspend fun reserveFood(
         reserveRequestBodyData: ReserveRequestBodyData,
         programId: Int,
-    ): Result<Unit>
+    ): Result<String>
 
     suspend fun getReserveProgram(
         selfId: Int,

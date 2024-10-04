@@ -12,7 +12,7 @@ class ReserveFoodUseCase(
         mealTypeId: Int,
         programId: Int,
         selected: Boolean,
-    ): Result<Unit> {
+    ): Result<String> {
         return repository.reserveFood(
             reserveRequestBodyData = ReserveRequestBodyData(
                 foodTypeId = foodTypeId,

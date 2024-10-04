@@ -18,8 +18,8 @@ import com.ravan.foodie.order.domain.usecase.ReserveFoodUseCase
 import com.ravan.foodie.order.ui.model.OrderFoodDetailUIModel
 import com.ravan.foodie.order.ui.model.OrderScreenUIModel
 import com.ravan.foodie.order.ui.model.SelectSelfRowUIModel
-import com.ravan.foodie.order.ui.model.SelfDialogUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
+import com.ravan.foodie.order.ui.model.SelfDialogUIModel
 import com.ravan.foodie.order.ui.model.toReservableScreenUIModel
 import com.ravan.foodie.order.ui.model.toSelfDialogUIModel
 import kotlinx.coroutines.delay
@@ -78,9 +78,9 @@ class OrderScreenViewModel(
                 programId = detail.programId,
                 selected = !detail.isSelected,
             ).fold(
-                onSuccess = {
+                onSuccess = { message ->
                     informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                        message = "عملیات رزرو/حذف با موفقت انجام شد.",
+                        message = message,
                         state = FoodieInformationBoxState.SUCCESS
                     )
                     getReservableScreenUIModel(
@@ -151,7 +151,7 @@ class OrderScreenViewModel(
             selfDialogUIModel = selfDialogUIModel
         )
 
-        if (data.id != selectedSelfId){
+        if (data.id != selectedSelfId) {
             selectedSelfId = data.id
             loadProgram()
         }

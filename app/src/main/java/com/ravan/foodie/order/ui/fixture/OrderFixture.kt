@@ -4,8 +4,8 @@ import com.ravan.foodie.order.domain.model.MealType
 import com.ravan.foodie.order.ui.model.OrderCardUIModel
 import com.ravan.foodie.order.ui.model.OrderFoodDetailUIModel
 import com.ravan.foodie.order.ui.model.OrderScreenUIModel
-import com.ravan.foodie.order.ui.model.SelfDialogUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
+import com.ravan.foodie.order.ui.model.SelfDialogUIModel
 
 
 val orderFoodDetailUIModelSelectedFixture1 = OrderFoodDetailUIModel(

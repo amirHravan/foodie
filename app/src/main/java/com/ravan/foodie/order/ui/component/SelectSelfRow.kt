@@ -27,8 +27,8 @@ import com.ravan.foodie.R
 import com.ravan.foodie.domain.ui.component.FoodieDivider
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.order.ui.model.SelectSelfRowUIModel
-import com.ravan.foodie.order.ui.model.SelfDialogUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
+import com.ravan.foodie.order.ui.model.SelfDialogUIModel
 
 @Composable
 fun SelectSelfRow(

@@ -58,7 +58,8 @@ class TokenProvider(
     ): Result<SamadToken> {
         val result = tokenApi.login(username = userName, password = password)
         return if (result.isSuccessful) {
-            val newToken = result.body()?.toSamadToken() ?: return Result.failure(Exception("توکن زایید!"))
+            val newToken =
+                result.body()?.toSamadToken() ?: return Result.failure(Exception("توکن زایید!"))
             token = newToken
             sharedPrefSaveToken(newToken)
             Result.success(newToken)

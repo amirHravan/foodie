@@ -17,14 +17,14 @@ class OrderFoodRepositoryImplementation(
     override suspend fun reserveFood(
         reserveRequestBodyData: ReserveRequestBodyData,
         programId: Int
-    ): Result<Unit> {
+    ): Result<String> {
         return try {
             val response = api.reserveFood(
                 programId = programId,
                 reservableFoodDetail = reserveRequestBodyData
             )
             if (response.isSuccessful) {
-                Result.success(Unit)
+                Result.success(response.messageFa ?: "عملیات رزرو با موفقیت انجام شد")
             } else {
                 Result.failure(Throwable(response.getErrorMessage()))
             }
