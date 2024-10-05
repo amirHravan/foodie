@@ -9,14 +9,32 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
-enum class DaysOfWeek {
-    SATURDAY,
-    SUNDAY,
-    MONDAY,
-    TUESDAY,
-    WEDNESDAY,
-    THURSDAY,
-    FRIDAY
+enum class DaysOfWeek(
+    val id: Int,
+    val dayName: String
+) {
+    SATURDAY(0, "Saturday"),
+    SUNDAY(1, "Sunday"),
+    MONDAY(2, "Monday"),
+    TUESDAY(3, "Tuesday"),
+    WEDNESDAY(4, "Wednesday"),
+    THURSDAY(5, "Thursday"),
+    FRIDAY(6, "Friday");
+
+    companion object {
+        fun fromName(name: String): DaysOfWeek {
+            return when (name.lowercase(Locale.ROOT)) {
+                "saturday" -> SATURDAY
+                "sunday" -> SUNDAY
+                "monday" -> MONDAY
+                "tuesday" -> TUESDAY
+                "wednesday" -> WEDNESDAY
+                "thursday" -> THURSDAY
+                "friday" -> FRIDAY
+                else -> SATURDAY
+            }
+        }
+    }
 }
 
 fun String.toLocalDayName(): String {

@@ -9,11 +9,10 @@ enum class FoodieRoutes(
     ReservationInfoScreen("reservation_info"),
     ReservableScreen("reservable"),
     ProfileScreen("profile"),
-    ForgetCodeScreen("forget_code"),
     DailySaleScreen("daily_sale"),
     AutomaticReservationScreen("automatic_reservation"),
     SettingsScreen("settings"),
-    AboutUsScreen("about_us"),
+    FoodPriorityScreen("food_priority"),
 
 
 }

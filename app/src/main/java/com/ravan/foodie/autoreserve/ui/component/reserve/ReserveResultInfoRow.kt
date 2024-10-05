@@ -25,6 +25,7 @@ import com.ravan.foodie.R
 import com.ravan.foodie.autoreserve.ui.model.ReserveResultInfoRowUIModel
 import com.ravan.foodie.autoreserve.ui.model.ReserveStatus
 import com.ravan.foodie.domain.ui.theme.RavanTheme
+import com.ravan.foodie.order.domain.model.MealType
 
 @Composable
 fun ReserveResultInfoRow(
@@ -63,6 +64,11 @@ fun ReserveResultInfoRow(
                 contentDescription = "Status Icon",
                 tint = color
             )
+            Icon(
+                painter = painterResource(id = data.mealType.getIcon()),
+                contentDescription = "MealType Icon",
+                tint = color
+            )
             Text(
                 text = data.foodName,
                 color = color,
@@ -98,7 +104,8 @@ private fun ReserveResultInfoRowPreview() {
             data = ReserveResultInfoRowUIModel(
                 foodName = "چلو جوجه کباب",
                 status = ReserveStatus.SUCCESS,
-                message = "غذاتون با موفقیت رزرو شد جناب / سرکار"
+                message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                mealType = MealType.LUNCH
             )
         )
     }

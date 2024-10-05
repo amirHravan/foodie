@@ -9,6 +9,10 @@ import androidx.compose.animation.fadeOut
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ravan.foodie.autoreserve.ui.AutoReserveComposable
+import com.ravan.foodie.autoreserve.ui.PrioritySelectionComposable
+import com.ravan.foodie.autoreserve.ui.viewmodel.AutoReserveViewModel
+import com.ravan.foodie.autoreserve.ui.viewmodel.PrioritySelectionViewModel
 import com.ravan.foodie.dailysell.ui.DailySellComposable
 import com.ravan.foodie.dailysell.ui.viewmodel.DailySellViewModel
 import com.ravan.foodie.domain.notification.createNotificationChannel
@@ -106,6 +110,21 @@ class MainActivity : ComponentActivity() {
                             navController = navController
                         )
                     }
+                    composable(FoodieRoutes.AutomaticReservationScreen.route) {
+                        val autoReserveViewModel = getViewModel<AutoReserveViewModel>();
+                        AutoReserveComposable(
+                            viewModel = autoReserveViewModel,
+                            navController = navController
+                        )
+                    }
+                    composable(FoodieRoutes.FoodPriorityScreen.route) {
+                        val prioritySelectionViewModel = getViewModel<PrioritySelectionViewModel>();
+                        PrioritySelectionComposable(
+                            viewModel = prioritySelectionViewModel,
+                            navController = navController
+                        )
+                    }
+
                 }
             }
         }

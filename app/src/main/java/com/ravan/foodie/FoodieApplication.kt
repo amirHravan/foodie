@@ -1,6 +1,7 @@
 package com.ravan.foodie
 
 import android.app.Application
+import com.ravan.foodie.autoreserve.di.autoReserveModule
 import com.ravan.foodie.credit.di.creditModule
 import com.ravan.foodie.dailysell.di.dailySellModule
 import com.ravan.foodie.domain.di.appModule
@@ -32,7 +33,8 @@ class FoodieApplication : Application() {
                 profileModule,
                 orderModule,
                 dailySellModule,
-                settingsModule
+                settingsModule,
+                autoReserveModule,
             )
         }
     }

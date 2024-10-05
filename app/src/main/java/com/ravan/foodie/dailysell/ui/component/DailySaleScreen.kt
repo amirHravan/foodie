@@ -4,14 +4,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
+import com.ravan.foodie.dailysell.ui.model.DailySaleCardUIModel
 import com.ravan.foodie.dailysell.ui.model.DailySellScreenUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 
@@ -41,7 +44,9 @@ fun DailySaleScreen(
             }
         } else {
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -50,11 +55,39 @@ fun DailySaleScreen(
                     DailySaleCard(
                         uiModel = uiModel.dailySaleCardUIModelList[it],
                         onOrderDailySaleClick = onOrderDailySaleClick,
-                        onGetForgetCodeClick = onGetForgetCodeClick
+                        onGetForgetCodeClick = onGetForgetCodeClick,
                     )
                 }
                 item {}
             }
         }
+    }
+}
+
+@Composable
+@Preview
+fun DailySaleScreenPreview() {
+    RavanTheme {
+        DailySaleScreen(
+            uiModel = DailySellScreenUIModel(
+                dailySaleCardUIModelList = listOf(
+                    DailySaleCardUIModel(
+                        id = 1,
+                        count = "10",
+                        soldCount = "5",
+                        foodName = "نان",
+                        mealTypeName = "صبحانه",
+                        price = "1000",
+                        selfName = "خودم",
+                        startTime = "08:00",
+                        finishTime = "09:00",
+                        showOrderButton = true,
+                        userDailySaleInfo = null
+                    ),
+                )
+            ),
+            onOrderDailySaleClick = { _, _ -> },
+            onGetForgetCodeClick = { _, _ -> }
+        )
     }
 }

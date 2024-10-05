@@ -2,6 +2,7 @@ package com.ravan.foodie.settings.ui.component
 
 import android.Manifest
 import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,7 +52,7 @@ fun SettingsScreen(
             SettingsTitleToggleRow(
                 data = SettingsTitleToggleRowUIModel(title = stringResource(id = R.string.settings_notification_toggle_title)),
                 onToggleChange = {
-                    if (it && notificationPermission?.status?.isGranted == true) {
+                    if (it && notificationPermission?.status?.isGranted == false) {
                         notificationPermission.launchPermissionRequest()
                     }
                     onNotificationToggleChange(it)

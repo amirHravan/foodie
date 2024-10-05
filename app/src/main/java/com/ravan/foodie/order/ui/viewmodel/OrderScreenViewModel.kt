@@ -12,7 +12,7 @@ import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
 import com.ravan.foodie.domain.util.getNextSaturday
 import com.ravan.foodie.domain.util.getPreviousSaturday
 import com.ravan.foodie.order.domain.model.merge
-import com.ravan.foodie.order.domain.usecase.GetAvailableSelfs
+import com.ravan.foodie.order.domain.usecase.GetAvailableSelfsUseCase
 import com.ravan.foodie.order.domain.usecase.GetReservableProgramUseCase
 import com.ravan.foodie.order.domain.usecase.ReserveFoodUseCase
 import com.ravan.foodie.order.ui.model.OrderFoodDetailUIModel
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 
 class OrderScreenViewModel(
     private val getReservableProgramUseCase: GetReservableProgramUseCase,
-    private val getAvailableSelfs: GetAvailableSelfs,
+    private val getAvailableSelfsUseCase: GetAvailableSelfsUseCase,
     private val reserveFoodUseCase: ReserveFoodUseCase,
     private val getRedirectLoginAsTokenUseCase: GetRedirectLoginAsTokenUseCase,
 ) : FoodieViewModel() {
@@ -120,7 +120,7 @@ class OrderScreenViewModel(
 
     fun onSelectSelfClick() {
         viewModelScope.launch {
-            getAvailableSelfs().fold(
+            getAvailableSelfsUseCase().fold(
                 onSuccess = {
                     selfDialogUIModel = it.toSelfDialogUIModel()
                     selectSelfRowUIModel.value = SelectSelfRowUIModel(
@@ -192,16 +192,12 @@ class OrderScreenViewModel(
                 previousProgram.getOrNull().merge(nextProgram.getOrNull())
                     .toReservableScreenUIModel()
             )
-
-
         }
     }
 
     fun onIncreaseCreditClick(
         invokeIntent: (String) -> Unit,
     ) {
-        // Define the URL and add query parameters
-
         viewModelScope.launch {
 
             getRedirectLoginAsTokenUseCase().fold(

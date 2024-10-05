@@ -28,13 +28,16 @@ import com.ravan.foodie.autoreserve.ui.model.AutoReserveDaySelectionItemUIModel
 import com.ravan.foodie.autoreserve.ui.model.AutoReserveScreenUIModel
 import com.ravan.foodie.autoreserve.ui.model.ReserveResultInfoRowUIModel
 import com.ravan.foodie.autoreserve.ui.model.ReserveStatus
+import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.ui.component.FoodieButton
 import com.ravan.foodie.domain.ui.component.FoodieDivider
+import com.ravan.foodie.domain.ui.component.FoodieProgressIndicator
 import com.ravan.foodie.domain.ui.component.FoodieTitleBar
 import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.domain.util.DaysOfWeek
+import com.ravan.foodie.order.domain.model.MealType
 import com.ravan.foodie.order.ui.component.SelectSelfRow
 import com.ravan.foodie.order.ui.model.SelectSelfRowUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
@@ -42,6 +45,7 @@ import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
 @Composable
 fun AutoReserveScreen(
     data: AutoReserveScreenUIModel,
+    reserveResultInfoRowUIModelList: LoadableData<List<ReserveResultInfoRowUIModel>>,
     selectSelfRowUIModel: SelectSelfRowUIModel,
     onExpandSelfDialogClick: () -> Unit,
     onSelectSelfClick: (SelfDialogRowUIModel) -> Unit,
@@ -66,9 +70,15 @@ fun AutoReserveScreen(
         ) {
             FoodieButton(
                 data = FoodieButtonUIModel.General(
-                    iconRes = null,
-                    title = stringResource(id = R.string.priority_selection_screen_title)
-                ), onClick = onPrioritySelectionClick
+                    iconRes = R.drawable.ic_payment,
+                    title = stringResource(id = R.string.increase_credit_button_label)
+                ), onClick = {
+                    onIncreaseCreditClick { url ->
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        context.startActivity(intent)
+                    }
+                },
+                modifier = Modifier
             )
         }
         LazyColumn(
@@ -87,11 +97,14 @@ fun AutoReserveScreen(
             }
 
             item {
-                DaysOfWeekSelectionColumn(onSelectDayClick)
+                DaysOfWeekSelectionColumn(
+                    selectedDays = data.selectedDaysList,
+                    onSelectDayClick = onSelectDayClick,
+                )
             }
 
             item {
-                AnimatedVisibility(visible = data.reserveResultInfoRowUIModelList != null) {
+                AnimatedVisibility(visible = reserveResultInfoRowUIModelList !is LoadableData.NotLoaded) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -111,13 +124,34 @@ fun AutoReserveScreen(
                             color = RavanTheme.colors.border.onSecondary,
                             thickness = 1
                         )
-                        data.reserveResultInfoRowUIModelList?.forEach { reserveResultInfoRowUIModel ->
-                            ReserveResultInfoRow(
-                                data = reserveResultInfoRowUIModel,
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                color = RavanTheme.colors.text.onSecondary
-                            )
+                        when (reserveResultInfoRowUIModelList) {
+                            is LoadableData.NotLoaded -> Unit
+                            is LoadableData.Loading -> {
+                                FoodieProgressIndicator(
+                                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                    color = RavanTheme.colors.text.onSecondary,
+                                )
+                            }
+                            is LoadableData.Loaded -> {
+                                reserveResultInfoRowUIModelList.data.forEach { reserveResultInfoRowUIModel ->
+                                    ReserveResultInfoRow(
+                                        data = reserveResultInfoRowUIModel,
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        color = RavanTheme.colors.text.onSecondary
+                                    )
+                                }
+
+                            }
+
+                            is LoadableData.Failed -> {
+                                Text(
+                                    text = reserveResultInfoRowUIModelList.message,
+                                    color = RavanTheme.colors.text.onSecondary,
+                                    style = RavanTheme.typography.body1,
+                                    modifier = Modifier.padding(12.dp)
+                                )
+                            }
                         }
                     }
 
@@ -142,28 +176,26 @@ fun AutoReserveScreen(
                     .weight(1f)
                     .height(50.dp)
             )
-
             FoodieButton(
                 data = FoodieButtonUIModel.General(
-                    iconRes = R.drawable.ic_payment,
-                    title = stringResource(id = R.string.increase_credit_button_label)
-                ), onClick = {
-                    onIncreaseCreditClick { url ->
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                        context.startActivity(intent)
-                    }
-                },
+                    iconRes = R.drawable.ic_star,
+                    title = stringResource(id = R.string.priority_selection_screen_title)
+                ), onClick = onPrioritySelectionClick,
                 modifier = Modifier
                     .weight(1f)
                     .height(50.dp)
             )
+
         }
     }
 
 }
 
 @Composable
-private fun DaysOfWeekSelectionColumn(onSelectDayClick: (DaysOfWeek, Boolean) -> Unit) {
+private fun DaysOfWeekSelectionColumn(
+    selectedDays: List<DaysOfWeek>,
+    onSelectDayClick: (DaysOfWeek, Boolean) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -179,12 +211,14 @@ private fun DaysOfWeekSelectionColumn(onSelectDayClick: (DaysOfWeek, Boolean) ->
         ) {
             AutoReserveDaySelectionItem(
                 data = AutoReserveDaySelectionItemUIModel(stringResource(id = R.string.persian_day_of_week_saturday)),
-                onSelectClick = { onSelectDayClick(DaysOfWeek.SATURDAY, true) }
+                onSelectClick = { onSelectDayClick(DaysOfWeek.SATURDAY, it) },
+                isSelected = selectedDays.contains(DaysOfWeek.SATURDAY)
             )
             Spacer(modifier = Modifier.size(12.dp))
             AutoReserveDaySelectionItem(
                 data = AutoReserveDaySelectionItemUIModel(stringResource(id = R.string.persian_day_of_week_sunday)),
-                onSelectClick = { onSelectDayClick(DaysOfWeek.SUNDAY, true) }
+                onSelectClick = { onSelectDayClick(DaysOfWeek.SUNDAY, it) },
+                isSelected = selectedDays.contains(DaysOfWeek.SUNDAY)
             )
 
         }
@@ -196,12 +230,14 @@ private fun DaysOfWeekSelectionColumn(onSelectDayClick: (DaysOfWeek, Boolean) ->
         ) {
             AutoReserveDaySelectionItem(
                 data = AutoReserveDaySelectionItemUIModel(stringResource(id = R.string.persian_day_of_week_monday)),
-                onSelectClick = { onSelectDayClick(DaysOfWeek.MONDAY, true) }
+                onSelectClick = { onSelectDayClick(DaysOfWeek.MONDAY, it) },
+                isSelected = selectedDays.contains(DaysOfWeek.MONDAY)
             )
             Spacer(modifier = Modifier.size(12.dp))
             AutoReserveDaySelectionItem(
                 data = AutoReserveDaySelectionItemUIModel(stringResource(id = R.string.persian_day_of_week_tuesday)),
-                onSelectClick = { onSelectDayClick(DaysOfWeek.TUESDAY, true) }
+                onSelectClick = { onSelectDayClick(DaysOfWeek.TUESDAY, it) },
+                isSelected = selectedDays.contains(DaysOfWeek.TUESDAY)
             )
         }
         Row(
@@ -212,12 +248,14 @@ private fun DaysOfWeekSelectionColumn(onSelectDayClick: (DaysOfWeek, Boolean) ->
         ) {
             AutoReserveDaySelectionItem(
                 data = AutoReserveDaySelectionItemUIModel(stringResource(id = R.string.persian_day_of_week_wednesday)),
-                onSelectClick = { onSelectDayClick(DaysOfWeek.WEDNESDAY, true) }
+                onSelectClick = { onSelectDayClick(DaysOfWeek.WEDNESDAY, it) },
+                isSelected = selectedDays.contains(DaysOfWeek.WEDNESDAY),
             )
             Spacer(modifier = Modifier.size(12.dp))
             AutoReserveDaySelectionItem(
                 data = AutoReserveDaySelectionItemUIModel(stringResource(id = R.string.persian_day_of_week_thursday)),
-                onSelectClick = { onSelectDayClick(DaysOfWeek.THURSDAY, true) }
+                onSelectClick = { onSelectDayClick(DaysOfWeek.THURSDAY, it) },
+                isSelected = selectedDays.contains(DaysOfWeek.THURSDAY)
             )
         }
         Row(
@@ -229,7 +267,8 @@ private fun DaysOfWeekSelectionColumn(onSelectDayClick: (DaysOfWeek, Boolean) ->
 
             AutoReserveDaySelectionItem(
                 data = AutoReserveDaySelectionItemUIModel(stringResource(id = R.string.persian_day_of_week_friday)),
-                onSelectClick = { onSelectDayClick(DaysOfWeek.FRIDAY, true) }
+                onSelectClick = { onSelectDayClick(DaysOfWeek.FRIDAY, it) },
+                isSelected = selectedDays.contains(DaysOfWeek.FRIDAY)
             )
         }
     }
@@ -241,44 +280,49 @@ private fun DaysOfWeekSelectionColumn(onSelectDayClick: (DaysOfWeek, Boolean) ->
 private fun AutoReserveScreenPreview() {
     RavanTheme {
         AutoReserveScreen(
-            data = AutoReserveScreenUIModel(
-                reserveResultInfoRowUIModelList = listOf(
-                    ReserveResultInfoRowUIModel(
-                        foodName = "چلو جوجه کباب",
-                        status = ReserveStatus.SUCCESS,
-                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار"
-                    ),
-                    ReserveResultInfoRowUIModel(
-                        foodName = "چلو ماهی",
-                        status = ReserveStatus.SUCCESS,
-                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار"
-                    ),
-                    ReserveResultInfoRowUIModel(
-                        foodName = "چلو قیمه",
-                        status = ReserveStatus.SUCCESS,
-                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار"
-                    ),
-                    ReserveResultInfoRowUIModel(
-                        foodName = "چلو برگر",
-                        status = ReserveStatus.SUCCESS,
-                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار"
-                    ),
-                    ReserveResultInfoRowUIModel(
-                        foodName = "چلو کباب",
-                        status = ReserveStatus.FAILURE,
-                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار"
-                    ),
-                    ReserveResultInfoRowUIModel(
-                        foodName = "چلو قرمه سبزی",
-                        status = ReserveStatus.FAILURE,
-                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار"
-                    ),
-                )
-            ),
+            data = AutoReserveScreenUIModel(),
             selectSelfRowUIModel = SelectSelfRowUIModel(
                 selfDialogUIModel = null,
                 selectedSelfName = "خوان کرم پدر"
             ),
+            reserveResultInfoRowUIModelList = LoadableData.Loaded(listOf(
+                ReserveResultInfoRowUIModel(
+                    foodName = "چلو جوجه کباب",
+                    status = ReserveStatus.SUCCESS,
+                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                    mealType = MealType.DINNER
+                ),
+                ReserveResultInfoRowUIModel(
+                    foodName = "چلو ماهی",
+                    status = ReserveStatus.SUCCESS,
+                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                    mealType = MealType.DINNER
+                ),
+                ReserveResultInfoRowUIModel(
+                    foodName = "چلو قیمه",
+                    status = ReserveStatus.SUCCESS,
+                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                    mealType = MealType.DINNER
+                ),
+                ReserveResultInfoRowUIModel(
+                    foodName = "چلو برگر",
+                    status = ReserveStatus.SUCCESS,
+                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                    mealType = MealType.DINNER
+                ),
+                ReserveResultInfoRowUIModel(
+                    foodName = "چلو کباب",
+                    status = ReserveStatus.FAILURE,
+                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                    mealType = MealType.DINNER
+                ),
+                ReserveResultInfoRowUIModel(
+                    foodName = "چلو قرمه سبزی",
+                    status = ReserveStatus.FAILURE,
+                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                    mealType = MealType.DINNER
+                ),
+            )),
             onPrioritySelectionClick = {},
             onBackClick = {},
             onSelectSelfClick = {},

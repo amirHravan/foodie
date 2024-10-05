@@ -32,7 +32,7 @@ fun DailySellItem.toDailySaleCardUIModel(
         selfName = selfName,
         startTime = startTime?.timeStr,
         finishTime = finishTime?.timeStr,
-        showOrderButton = userDailySaleInfo != null,
+        showOrderButton = userDailySaleInfo == null,
         userDailySaleInfo = userDailySaleInfo?.toUserDailySaleCardUIModel(forgetCodeMap[userDailySaleInfo.id])
     )
 }

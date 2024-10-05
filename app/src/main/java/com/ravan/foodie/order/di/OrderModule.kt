@@ -3,7 +3,7 @@ package com.ravan.foodie.order.di
 import com.ravan.foodie.order.api.OrderApi
 import com.ravan.foodie.order.domain.repository.OrderFoodRepository
 import com.ravan.foodie.order.domain.repository.OrderFoodRepositoryImplementation
-import com.ravan.foodie.order.domain.usecase.GetAvailableSelfs
+import com.ravan.foodie.order.domain.usecase.GetAvailableSelfsUseCase
 import com.ravan.foodie.order.domain.usecase.GetReservableProgramUseCase
 import com.ravan.foodie.order.domain.usecase.ReserveFoodUseCase
 import com.ravan.foodie.order.ui.viewmodel.OrderScreenViewModel
@@ -29,7 +29,7 @@ val orderModule = module {
     }
 
     factory {
-        GetAvailableSelfs(get())
+        GetAvailableSelfsUseCase(get())
     }
 
     viewModel {

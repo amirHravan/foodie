@@ -4,7 +4,7 @@ import com.ravan.foodie.order.api.dto.self.toSelf
 import com.ravan.foodie.order.domain.model.AvailableSelfs
 import com.ravan.foodie.order.domain.repository.OrderFoodRepository
 
-class GetAvailableSelfs(
+class GetAvailableSelfsUseCase(
     val repository: OrderFoodRepository,
 ) {
     suspend operator fun invoke(

@@ -1,5 +1,7 @@
 package com.ravan.foodie.order.domain.model
 
+import com.ravan.foodie.R
+
 enum class MealType {
     SAHAR,
     BREAKFAST,
@@ -27,6 +29,17 @@ enum class MealType {
             DINNER -> "شام"
             EFTAR -> "افطار"
             OTHER -> "سایر"
+        }
+    }
+
+    fun getIcon(): Int {
+        return when (this) {
+            SAHAR -> R.drawable.ic_twilight
+            BREAKFAST -> R.drawable.ic_twilight
+            LUNCH -> R.drawable.ic_sun
+            DINNER -> R.drawable.ic_moon
+            EFTAR -> R.drawable.ic_moon
+            OTHER -> R.drawable.ic_sun
         }
     }
 

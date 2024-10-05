@@ -30,21 +30,22 @@ import com.ravan.foodie.domain.ui.theme.RavanTheme
 fun AutoReserveDaySelectionItem(
     data: AutoReserveDaySelectionItemUIModel,
     onSelectClick: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false,
 ) {
-    val isSelected = remember {
-        mutableStateOf(false)
+    val _isSelected = remember {
+        mutableStateOf(isSelected)
     }
-    val backgroundColor = getBackgroundColor(isSelected.value)
-    val textColor = getTextColor(isSelected = isSelected.value)
+    val backgroundColor = getBackgroundColor(_isSelected.value)
+    val textColor = getTextColor(isSelected = _isSelected.value)
 
     Row(
         modifier = modifier
             .clip(RavanTheme.shapes.r16)
             .width(150.dp)
             .clickable {
-                isSelected.value = !isSelected.value
-                onSelectClick(isSelected.value)
+                _isSelected.value = !_isSelected.value
+                onSelectClick(_isSelected.value)
             }
             .background(backgroundColor)
             .border(1.dp, RavanTheme.colors.border.onPrimary, RavanTheme.shapes.r16)
@@ -53,7 +54,7 @@ fun AutoReserveDaySelectionItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = getIconResource(isSelected.value)),
+            painter = painterResource(id = getIconResource(_isSelected.value)),
             contentDescription = "selection_help_icon",
             tint = textColor,
             modifier = Modifier.size(18.dp)

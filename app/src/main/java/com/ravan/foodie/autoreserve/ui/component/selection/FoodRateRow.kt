@@ -22,12 +22,9 @@ import com.ravan.foodie.domain.ui.theme.RavanTheme
 @Composable
 fun FoodRateRow(
     data: FoodPriorityUIModel,
-    onChangePriority: (FoodPriorityUIModel, Int) -> Unit,
+    onChangePriority: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val selectedPriority = remember {
-        mutableIntStateOf(data.priority)
-    }
 
     Column(
         modifier = modifier
@@ -45,17 +42,13 @@ fun FoodRateRow(
             color = RavanTheme.colors.text.onSecondary
         )
         FoodLikelySelectionStarsRow(
-            data = FoodPrioritySelectionStarsRowUIModel(selected = selectedPriority.intValue),
+            data = FoodPrioritySelectionStarsRowUIModel(selected = data.priority),
             onSelectLikely = {
-                selectedPriority.intValue = it
+                if (it != data.priority) {
+                    onChangePriority(it)
+                }
             }
         )
-
-        LaunchedEffect(selectedPriority) {
-            if (selectedPriority.intValue != data.priority) {
-                onChangePriority(data, selectedPriority.intValue)
-            }
-        }
     }
 }
 
@@ -69,7 +62,7 @@ private fun FoodRateRowPreview() {
                 priority = 3,
                 id = 0,
             ),
-            onChangePriority = { _, _ -> }
+            onChangePriority = { _-> }
         )
     }
 

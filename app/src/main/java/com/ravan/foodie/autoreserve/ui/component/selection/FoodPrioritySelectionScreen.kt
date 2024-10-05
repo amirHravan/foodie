@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
-import com.ravan.foodie.autoreserve.ui.model.FoodPriorityScreenUIModel
+import com.ravan.foodie.autoreserve.ui.model.AutoReservePriorityScreenUIModel
 import com.ravan.foodie.autoreserve.ui.model.FoodPriorityUIModel
 import com.ravan.foodie.domain.ui.component.FoodieTitleBar
 import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
@@ -20,8 +20,8 @@ import com.ravan.foodie.domain.ui.theme.RavanTheme
 
 @Composable
 fun FoodPriorityScreen(
-    data: FoodPriorityScreenUIModel,
-    onPriorityChange: (FoodPriorityUIModel, Int) -> Unit,
+    data: AutoReservePriorityScreenUIModel,
+    onPriorityChange: (Int, Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
 
@@ -45,7 +45,9 @@ fun FoodPriorityScreen(
             items(count = data.foodPriorityUIModelList.count(), key = { it }) { index ->
                 FoodRateRow(
                     data = data.foodPriorityUIModelList[index],
-                    onChangePriority = onPriorityChange
+                    onChangePriority = { newPriority ->
+                        onPriorityChange(data.foodPriorityUIModelList[index].id, newPriority)
+                    }
                 )
             }
 
@@ -56,7 +58,7 @@ fun FoodPriorityScreen(
 @Preview
 @Composable
 private fun FoodPriorityScreenPreview() {
-    val data = FoodPriorityScreenUIModel(
+    val data = AutoReservePriorityScreenUIModel(
         foodPriorityUIModelList = listOf(
             FoodPriorityUIModel(
                 name = "قورمه سبزی",
