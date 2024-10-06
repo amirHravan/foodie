@@ -17,6 +17,7 @@ import com.ravan.foodie.R
 import com.ravan.foodie.dailysell.ui.model.DailySaleCardUIModel
 import com.ravan.foodie.dailysell.ui.model.DailySellScreenUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun DailySaleScreen(
@@ -84,7 +85,7 @@ fun DailySaleScreenPreview() {
                         showOrderButton = true,
                         userDailySaleInfo = null
                     ),
-                )
+                ).toImmutableList()
             ),
             onOrderDailySaleClick = { _, _ -> },
             onGetForgetCodeClick = { _, _ -> }

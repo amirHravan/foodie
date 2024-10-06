@@ -30,7 +30,7 @@ fun Result<String>.toReserveResultInfoRowUIModel(
             ReserveResultInfoRowUIModel(
                 foodName = foodName,
                 status = ReserveStatus.FAILURE,
-                message = it.message ?: "Unknown error",
+                message = it.message ?: "عامممم ارورش معلوم نیست.\u200D",
                 mealType = mealType
             )
         }

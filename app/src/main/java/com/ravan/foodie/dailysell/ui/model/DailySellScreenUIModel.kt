@@ -2,9 +2,11 @@ package com.ravan.foodie.dailysell.ui.model
 
 import com.ravan.foodie.dailysell.domain.model.DailySellProgram
 import com.ravan.foodie.dailysell.domain.model.UserDailySales
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 data class DailySellScreenUIModel(
-    val dailySaleCardUIModelList: List<DailySaleCardUIModel>,
+    val dailySaleCardUIModelList: ImmutableList<DailySaleCardUIModel>,
 )
 
 fun DailySellProgram.toDailySellScreenUIModel(
@@ -17,6 +19,6 @@ fun DailySellProgram.toDailySellScreenUIModel(
                 forgetCodeMap = forgetCodeMap,
                 userDailySaleInfo = userDailySales?.dailySaleInfoList?.find { userDailySaleInfo -> userDailySaleInfo.dailySellProgramId == dailySellItem.id },
             )
-        }
+        }.toImmutableList()
     )
 }

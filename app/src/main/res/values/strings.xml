@@ -77,6 +77,7 @@
     <string name="persian_day_of_week_friday">جمعه</string>
     <string name="auto_reserve_button_label">رزرو</string>
     <string name="reserve_result_info_title">نتیجه رزرو‌ها</string>
+    <string name="settings_button_title">تنظیمات</string>
 
 
 </resources>

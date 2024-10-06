@@ -16,7 +16,6 @@ fun HomeButtonList(
     onLunchClick: () -> Unit,
     onCalenderClick: () -> Unit,
     onProfileClick: () -> Unit,
-    onSettingsClick: () -> Unit,
     onAutomaticReserveClick: () -> Unit,
     onDailySaleClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -63,13 +62,6 @@ fun HomeButtonList(
             )
         }
 
-        item {
-            HomeButton(
-                data = HomeButtonUIModel(R.drawable.ic_tune),
-                onClick = onSettingsClick,
-            )
-        }
-
         item {}
     }
 }
@@ -83,7 +75,6 @@ fun HomeButtonListPreview() {
             onCalenderClick = {},
             onProfileClick = {},
             onAutomaticReserveClick = {},
-            onSettingsClick = {},
             onDailySaleClick = {},
             modifier = Modifier
         )

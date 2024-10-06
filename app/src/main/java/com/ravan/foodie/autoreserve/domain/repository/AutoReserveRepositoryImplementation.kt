@@ -26,5 +26,3 @@ class AutoReserveRepositoryImplementation(
         return autoReserveDao.upsertReserveDays(autoReserveDaysEntity)
     }
 }
-
-//implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8")

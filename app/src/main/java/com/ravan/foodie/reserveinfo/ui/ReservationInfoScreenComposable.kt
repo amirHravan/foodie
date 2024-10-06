@@ -16,13 +16,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ravan.foodie.R
 import com.ravan.foodie.domain.model.LoadableData
+import com.ravan.foodie.domain.ui.component.FoodieButton
 import com.ravan.foodie.domain.ui.component.FoodieFailCard
 import com.ravan.foodie.domain.ui.component.FoodieInformationBox
 import com.ravan.foodie.domain.ui.component.FoodieProgressIndicator
 import com.ravan.foodie.domain.ui.component.FoodieTitleBar
+import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.model.FoodieFailCardUIModel
 import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
+import com.ravan.foodie.domain.util.FoodieRoutes
 import com.ravan.foodie.reserveinfo.ui.component.ReservationInfoScreen
 import com.ravan.foodie.reserveinfo.ui.viewmodel.ReservationInfoViewModel
 
@@ -49,7 +52,15 @@ fun ReservationInfoScreenComposable(
                 data = FoodieTitleBarUIModel(
                     title = stringResource(id = R.string.reservation_info_screen_title),
                 ), onBackClick = { viewModel.onBackClick() }
-            )
+            ) {
+                FoodieButton(
+                    data = FoodieButtonUIModel.General(
+                        iconRes = R.drawable.ic_tune,
+                        title = stringResource(id = R.string.settings_button_title),
+                    ),
+                    onClick = { viewModel.onSettingsClick() },
+                )
+            }
             when (reservationInfoUIModel) {
                 is LoadableData.Failed -> {
                     FoodieFailCard(
@@ -104,6 +115,10 @@ fun ReservationInfoScreenComposable(
     LaunchedEffect(reservationInfoUIModel) {
         viewModel.navBack.setNavigateAction {
             navController.popBackStack()
+        }
+
+        viewModel.navSettings.setNavigateAction {
+            navController.navigate(FoodieRoutes.SettingsScreen.route)
         }
     }
 

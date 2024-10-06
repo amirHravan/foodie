@@ -1,5 +1,7 @@
 package com.ravan.foodie.autoreserve.ui.model
 
+import kotlinx.collections.immutable.ImmutableList
+
 data class AutoReservePriorityScreenUIModel(
-    val foodPriorityUIModelList: List<FoodPriorityUIModel>,
+    val foodPriorityUIModelList: ImmutableList<FoodPriorityUIModel>,
 )

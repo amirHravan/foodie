@@ -29,6 +29,7 @@ import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.order.ui.model.SelectSelfRowUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogUIModel
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun SelectSelfRow(
@@ -122,7 +123,7 @@ private fun SelectSelfRowPreview() {
             selectSelfRowUIModel = SelectSelfRowUIModel(
                 selectedSelfName = "سلف\u200Cهای مجاز",
                 selfDialogUIModel = SelfDialogUIModel(
-                    selfs = emptyList(),
+                    selfs = emptyList<SelfDialogRowUIModel>().toImmutableList(),
                 )
             ),
             onExpandClick = {},

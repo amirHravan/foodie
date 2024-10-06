@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
@@ -46,26 +47,26 @@ fun ReservationInfoScreen(
                 )
             }
         } else {
-            LazyRow(
+            LazyColumn(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 item {
                     Spacer(modifier = Modifier)
                 }
                 items(
                     data.reservationInfoCardUIModelList,
-                    key = { it.farsiDate }) { reservationInfoCardUIModel ->
+                    key = { it.farsiDate }
+                ) { reservationInfoCardUIModel ->
                     ReservationInfoCard(
                         data = reservationInfoCardUIModel,
                         onGetForgetCodeClick = onGetForgetCodeClick,
                         modifier = Modifier
-                            .width(320.dp)
-                            .fillParentMaxHeight(0.97f)
+                            .padding(horizontal = 16.dp)
                             .clip(RavanTheme.shapes.r8)
 
                     )

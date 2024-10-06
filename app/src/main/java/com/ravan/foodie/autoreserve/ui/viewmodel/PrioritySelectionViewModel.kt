@@ -11,6 +11,7 @@ import com.ravan.foodie.autoreserve.ui.model.toFoodPriorityUIModel
 import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.model.NavigationEvent
 import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,7 +39,7 @@ class PrioritySelectionViewModel(
                     foodPriorityList = foods
                     priorityScreenUIModel.value = LoadableData.Loaded(
                         AutoReservePriorityScreenUIModel(
-                            foodPriorityUIModelList = foods.map { it.toFoodPriorityUIModel() }
+                            foodPriorityUIModelList = foods.map { it.toFoodPriorityUIModel() }.sortedBy { it.priority }.reversed().toImmutableList()
                         )
                     )
                 },

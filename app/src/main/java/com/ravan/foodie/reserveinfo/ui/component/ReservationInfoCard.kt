@@ -38,7 +38,8 @@ fun ReservationInfoCard(
             MealRow(
                 data = mealRowUIModel,
                 onGetForgetCodeClick = onGetForgetCodeClick,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .padding(vertical = 28.dp)
             )
         }
     }

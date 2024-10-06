@@ -32,6 +32,7 @@ class ReservationInfoViewModel(
     val showMessage = mutableStateOf(false)
 
     val navBack = NavigationEvent()
+    val navSettings = NavigationEvent()
 
     fun onLaunch() {
         viewModelScope.launch {
@@ -59,6 +60,10 @@ class ReservationInfoViewModel(
                 )
             }
         }
+    }
+
+    fun onSettingsClick() {
+        navSettings.navigate()
     }
 
     fun onBackClick() {

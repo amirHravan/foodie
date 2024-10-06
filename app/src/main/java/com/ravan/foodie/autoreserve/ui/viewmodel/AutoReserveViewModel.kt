@@ -35,6 +35,7 @@ import com.ravan.foodie.order.ui.model.SelectSelfRowUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogUIModel
 import com.ravan.foodie.order.ui.model.toSelfDialogUIModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -107,7 +108,7 @@ class AutoReserveViewModel(
                     selectedDays = it
                     autoReserveScreenUIModel.value = LoadableData.Loaded(
                         AutoReserveScreenUIModel(
-                            selectedDaysList = it.days.toList()
+                            selectedDaysList = it.days.toImmutableList()
                         )
                     )
                 },

@@ -17,6 +17,7 @@ import com.ravan.foodie.autoreserve.ui.model.FoodPriorityUIModel
 import com.ravan.foodie.domain.ui.component.FoodieTitleBar
 import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun FoodPriorityScreen(
@@ -85,7 +86,7 @@ private fun FoodPriorityScreenPreview() {
                 priority = 5,
                 id = 0,
             )
-        )
+        ).toImmutableList()
     )
     RavanTheme {
         FoodPriorityScreen(

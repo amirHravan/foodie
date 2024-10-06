@@ -3,6 +3,7 @@ package com.ravan.foodie.reserveinfo.ui.fixture
 import com.ravan.foodie.reserveinfo.ui.model.MealRowUIModel
 import com.ravan.foodie.reserveinfo.ui.model.ReservationInfoCardUIModel
 import com.ravan.foodie.reserveinfo.ui.model.ReservationInfoScreenUIModel
+import kotlinx.collections.immutable.toImmutableList
 
 val reserveInfoMealRowUIModelFixture1 = MealRowUIModel(
     mealName = "ناهار",
@@ -38,7 +39,7 @@ val reserveInfoCardUIModelFixture = ReservationInfoCardUIModel(
         reserveInfoMealRowUIModelFixture2,
         reserveInfoMealRowUIModelFixture3,
         reserveInfoMealRowUIModelFixture4,
-    )
+    ).toImmutableList()
 )
 
 val reserveInfoScreenUIModelFixture = ReservationInfoScreenUIModel(
@@ -48,5 +49,5 @@ val reserveInfoScreenUIModelFixture = ReservationInfoScreenUIModel(
         reserveInfoCardUIModelFixture,
         reserveInfoCardUIModelFixture,
         reserveInfoCardUIModelFixture,
-    )
+    ).toImmutableList()
 )

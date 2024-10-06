@@ -73,7 +73,6 @@ fun MealRow(
             color = RavanTheme.colors.text.onSecondary,
             textStyle = RavanTheme.typography.body2,
         )
-        Spacer(modifier = Modifier.size(8.dp))
         AnimatedVisibility(visible = data.forgetCode != null) {
             FoodieTextIconRow(
                 data = FoodieTextIconRowUIModel(
@@ -99,6 +98,8 @@ fun MealRow(
                         buttonState.value = FoodieButtonState.Enabled
                     }
                 },
+                modifier = Modifier
+                    .padding(top = 8.dp),
                 shape = RavanTheme.shapes.r8,
                 state = buttonState.value,
 

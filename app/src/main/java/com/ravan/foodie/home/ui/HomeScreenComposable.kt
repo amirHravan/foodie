@@ -22,7 +22,6 @@ fun HomeScreenComposable(
         onLunchClick = { navController.navigate(FoodieRoutes.ReservableScreen.route) },
         onCalenderClick = { navController.navigate(FoodieRoutes.ReservationInfoScreen.route) },
         onProfileClick = { navController.navigate(FoodieRoutes.ProfileScreen.route) },
-        onSettingsClick = { navController.navigate(FoodieRoutes.SettingsScreen.route) },
         onAutomaticReserveClick = { navController.navigate(FoodieRoutes.AutomaticReservationScreen.route) },
         onDailySaleClick = { navController.navigate(FoodieRoutes.DailySaleScreen.route) },
     )
