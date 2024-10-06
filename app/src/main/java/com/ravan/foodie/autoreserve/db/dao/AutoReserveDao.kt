@@ -5,25 +5,25 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.ravan.foodie.autoreserve.db.dao.model.AutoReserveDaysDao
-import com.ravan.foodie.autoreserve.db.dao.model.AutoReserveFoodDao
+import com.ravan.foodie.autoreserve.db.model.AutoReserveDaysEntity
+import com.ravan.foodie.autoreserve.db.model.AutoReserveFoodEntity
 
 @Dao
 interface AutoReserveDao {
     @Query("SELECT * FROM food_priority")
-    suspend fun getAllFoods(): List<AutoReserveFoodDao>
+    suspend fun getAllFoods(): List<AutoReserveFoodEntity>
 
     @Update
-    suspend fun updateFood(food: AutoReserveFoodDao)
+    suspend fun updateFood(food: AutoReserveFoodEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllFoods(foods: List<AutoReserveFoodDao>)
+    suspend fun insertAllFoods(foods: List<AutoReserveFoodEntity>)
 
     @Query("SELECT * FROM auto_reserve_days WHERE id = 0 LIMIT 1")
-    suspend fun getAutoReserveDays(): AutoReserveDaysDao?
+    suspend fun getAutoReserveDays(): AutoReserveDaysEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertReserveDays(autoReserveDays: AutoReserveDaysDao)
+    suspend fun upsertReserveDays(autoReserveDays: AutoReserveDaysEntity)
 
     @Query("DELETE FROM auto_reserve_days")
     suspend fun clearAutoReserveDays()

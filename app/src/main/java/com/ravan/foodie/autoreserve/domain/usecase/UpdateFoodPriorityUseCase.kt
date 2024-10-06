@@ -1,6 +1,5 @@
 package com.ravan.foodie.autoreserve.domain.usecase
 
-import com.ravan.foodie.autoreserve.db.dao.model.AutoReserveFoodDao
 import com.ravan.foodie.autoreserve.domain.model.AutoReserveFoodPriority
 import com.ravan.foodie.autoreserve.domain.model.toAutoReserveFoodDao
 import com.ravan.foodie.autoreserve.domain.repository.AutoReserveRepository

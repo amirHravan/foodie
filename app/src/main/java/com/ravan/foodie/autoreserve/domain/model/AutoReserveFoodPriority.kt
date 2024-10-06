@@ -1,6 +1,6 @@
 package com.ravan.foodie.autoreserve.domain.model
 
-import com.ravan.foodie.autoreserve.db.dao.model.AutoReserveFoodDao
+import com.ravan.foodie.autoreserve.db.model.AutoReserveFoodEntity
 
 data class AutoReserveFoodPriority(
     val id: Int,
@@ -10,8 +10,8 @@ data class AutoReserveFoodPriority(
 
 fun AutoReserveFoodPriority.toAutoReserveFoodDao(
     newPriority: Int = priority
-): AutoReserveFoodDao {
-    return AutoReserveFoodDao(
+): AutoReserveFoodEntity {
+    return AutoReserveFoodEntity(
         id = id,
         name = name,
         priority = newPriority,

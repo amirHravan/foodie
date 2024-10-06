@@ -1,15 +1,15 @@
 package com.ravan.foodie.autoreserve.domain.repository
 
-import com.ravan.foodie.autoreserve.db.dao.model.AutoReserveDaysDao
-import com.ravan.foodie.autoreserve.db.dao.model.AutoReserveFoodDao
+import com.ravan.foodie.autoreserve.db.model.AutoReserveDaysEntity
+import com.ravan.foodie.autoreserve.db.model.AutoReserveFoodEntity
 
 interface AutoReserveRepository {
 
-    suspend fun getAllFoodPriorities(): List<AutoReserveFoodDao>
+    suspend fun getAllFoodPriorities(): List<AutoReserveFoodEntity>
 
-    suspend fun updateFoodPriority(autoReserveFoodDao: AutoReserveFoodDao)
+    suspend fun updateFoodPriority(autoReserveFoodEntity: AutoReserveFoodEntity)
 
-    suspend fun getAllReserveDays(): AutoReserveDaysDao?
+    suspend fun getAllReserveDays(): AutoReserveDaysEntity?
 
-    suspend fun updateReserveDays(autoReserveDaysDao: AutoReserveDaysDao)
+    suspend fun updateReserveDays(autoReserveDaysEntity: AutoReserveDaysEntity)
 }

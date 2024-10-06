@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ForgetCodeDto(
     @SerialName("forgotCardCode") val forgotCardCode: String = "",
-//    @SerialName("valid") val valid: Boolean = true,
+    @SerialName("valid") val valid: Boolean = true,
 //    @SerialName("remainCount") val remainCount: Int = 0,
 //    @SerialName("self") val self: String = "",
 //    @SerialName("foodName") val foodName: String = "",
@@ -19,6 +19,7 @@ data class ForgetCodeDto(
 fun ForgetCodeDto.toForgetCode(foodId: Int): ForgetCode {
     return ForgetCode(
         reserveId = foodId,
-        code = forgotCardCode
+        code = forgotCardCode,
+        isValid = valid,
     )
 }

@@ -5,10 +5,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.ravan.foodie.autoreserve.db.converter.DaysConverter
 import com.ravan.foodie.autoreserve.db.dao.AutoReserveDao
-import com.ravan.foodie.autoreserve.db.dao.model.AutoReserveDaysDao
-import com.ravan.foodie.autoreserve.db.dao.model.AutoReserveFoodDao
+import com.ravan.foodie.autoreserve.db.model.AutoReserveDaysEntity
+import com.ravan.foodie.autoreserve.db.model.AutoReserveFoodEntity
 
-@Database(entities = [AutoReserveFoodDao::class, AutoReserveDaysDao::class], version = 1)
+@Database(entities = [AutoReserveFoodEntity::class, AutoReserveDaysEntity::class], version = 1)
 @TypeConverters(DaysConverter::class)
 abstract class AutoReserveDataBase : RoomDatabase() {
     companion object {

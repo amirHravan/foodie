@@ -1,11 +1,15 @@
 package com.ravan.foodie.reserveinfo.domain.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.ravan.foodie.reserveinfo.db.ForgetCodeDatabase
+import com.ravan.foodie.reserveinfo.db.model.ForgetCodeEntity
 
-@Entity(tableName = ForgetCodeDatabase.Companion.DATABASE_TABLE_NAME)
 data class ForgetCode(
-    @PrimaryKey val reserveId: Int,
+    val reserveId: Int,
     val code: String,
+    val isValid: Boolean,
+)
+
+fun ForgetCode.toForgetCodeEntity() = ForgetCodeEntity(
+    reserveId = reserveId,
+    code = code,
+    isValid = isValid,
 )

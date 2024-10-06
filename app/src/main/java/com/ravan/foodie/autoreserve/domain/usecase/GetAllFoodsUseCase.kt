@@ -1,6 +1,6 @@
 package com.ravan.foodie.autoreserve.domain.usecase
 
-import com.ravan.foodie.autoreserve.db.dao.model.toAutoReserveFoodPriority
+import com.ravan.foodie.autoreserve.db.model.toAutoReserveFoodPriority
 import com.ravan.foodie.autoreserve.domain.model.AutoReserveFoodPriority
 import com.ravan.foodie.autoreserve.domain.repository.AutoReserveRepository
 

@@ -277,7 +277,8 @@ class AutoReserveViewModel(
 
         foodPriorityList?.let {
             reservableFoodDetails.forEach { foodDetail ->
-                val priority = it.find { it.id == foodDetail.foodTypeId }?.priority ?: 0
+                // TODO Fix IDs
+                val priority = it.find { it.name == foodDetail.foodName }?.priority ?: 0
                 if (priority > highestPriority) {
                     highestPriority = priority
                     foodTypeId = foodDetail.foodTypeId

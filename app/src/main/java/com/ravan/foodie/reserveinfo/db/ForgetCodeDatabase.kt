@@ -3,9 +3,9 @@ package com.ravan.foodie.reserveinfo.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.ravan.foodie.reserveinfo.db.dao.ForgetCodeDao
-import com.ravan.foodie.reserveinfo.domain.model.ForgetCode
+import com.ravan.foodie.reserveinfo.db.model.ForgetCodeEntity
 
-@Database(entities = [ForgetCode::class], version = ForgetCodeDatabase.DATABASE_VERSION)
+@Database(entities = [ForgetCodeEntity::class], version = ForgetCodeDatabase.DATABASE_VERSION)
 abstract class ForgetCodeDatabase : RoomDatabase() {
 
     companion object {
