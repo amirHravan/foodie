@@ -12,11 +12,13 @@ data class ReserveResultInfoRowUIModel(
     val status: ReserveStatus,
     val message: String,
     val mealType: MealType,
+    val dayName: String,
 )
 
 fun Result<String>.toReserveResultInfoRowUIModel(
     mealType: MealType,
     foodName: String,
+    dayName: String,
 ): ReserveResultInfoRowUIModel {
     return this.fold(
         onSuccess = {
@@ -24,14 +26,16 @@ fun Result<String>.toReserveResultInfoRowUIModel(
                 foodName = foodName,
                 status = ReserveStatus.SUCCESS,
                 message = it,
-                mealType = mealType
+                mealType = mealType,
+                dayName = dayName,
             )
         }, onFailure = {
             ReserveResultInfoRowUIModel(
                 foodName = foodName,
                 status = ReserveStatus.FAILURE,
                 message = it.message ?: "عامممم ارورش معلوم نیست.\u200D",
-                mealType = mealType
+                mealType = mealType,
+                dayName = dayName,
             )
         }
     )

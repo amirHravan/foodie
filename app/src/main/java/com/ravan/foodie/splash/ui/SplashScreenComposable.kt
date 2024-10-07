@@ -35,9 +35,10 @@ fun SplashScreenComposable(
         viewModel.navLogin.setNavigateAction {
             navController.navigate(FoodieRoutes.LoginScreen.route)
         }
-        viewModel.navHome.setNavigateAction {
-            navController.navigate(FoodieRoutes.HomeScreen.route)
+        viewModel.navReserveInfo.setNavigateAction {
+            navController.navigate(FoodieRoutes.ReservationInfoScreen.route)
         }
+
         viewModel.onLaunch(context)
     }
 

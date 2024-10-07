@@ -53,6 +53,7 @@ class OrderScreenViewModel(
 
 
     fun onLaunch() {
+        selectedSelfId = -1
         onSelectSelfClick()
     }
 
@@ -104,6 +105,7 @@ class OrderScreenViewModel(
 
 
     fun onBackClick() {
+        selectedSelfId = -1
         navBack.navigate()
     }
 
@@ -150,7 +152,6 @@ class OrderScreenViewModel(
             selectedSelfName = selectedSelfName,
             selfDialogUIModel = selfDialogUIModel
         )
-
         if (data.id != selectedSelfId) {
             selectedSelfId = data.id
             loadProgram()

@@ -28,7 +28,7 @@ import com.ravan.foodie.domain.ui.theme.RavanTheme
 @Composable
 fun FoodieTitleBar(
     data: FoodieTitleBarUIModel,
-    onBackClick: () -> Unit,
+    onBackClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
     tint: Color = RavanTheme.colors.icon.onPrimary,
     content: (@Composable () -> Unit)? = null
@@ -55,22 +55,24 @@ fun FoodieTitleBar(
 private fun RowScope.TitleBackComponent(
     title: String,
     tint: Color,
-    onBackClick: () -> Unit
+    onBackClick: (() -> Unit)?
 ) {
     Row(
         modifier = Modifier.weight(1f),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_back),
-            contentDescription = null,
-            tint = tint,
-            modifier = Modifier
-                .clip(RavanTheme.shapes.pill)
-                .clickable { onBackClick() }
-        )
-        Spacer(modifier = Modifier.size(16.dp))
+        onBackClick?.let {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_back),
+                contentDescription = null,
+                tint = tint,
+                modifier = Modifier
+                    .clip(RavanTheme.shapes.pill)
+                    .clickable { it() }
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+        }
         Text(text = title, color = tint, style = RavanTheme.typography.h4)
     }
 }

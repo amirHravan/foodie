@@ -25,6 +25,7 @@ import com.ravan.foodie.R
 import com.ravan.foodie.autoreserve.ui.model.ReserveResultInfoRowUIModel
 import com.ravan.foodie.autoreserve.ui.model.ReserveStatus
 import com.ravan.foodie.domain.ui.theme.RavanTheme
+import com.ravan.foodie.domain.util.DaysOfWeek
 import com.ravan.foodie.order.domain.model.MealType
 
 @Composable
@@ -36,11 +37,6 @@ fun ReserveResultInfoRow(
     val backgroundColor = when (data.status) {
         ReserveStatus.SUCCESS -> RavanTheme.colors.background.success
         ReserveStatus.FAILURE -> RavanTheme.colors.background.fail
-    }
-
-    val iconResource = when (data.status) {
-        ReserveStatus.SUCCESS -> R.drawable.ic_check_rounded
-        ReserveStatus.FAILURE -> R.drawable.ic_exclamation_rounded
     }
 
     val isExpanded = remember {
@@ -60,17 +56,12 @@ fun ReserveResultInfoRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Icon(
-                painter = painterResource(id = iconResource),
-                contentDescription = "Status Icon",
-                tint = color
-            )
-            Icon(
                 painter = painterResource(id = data.mealType.getIcon()),
                 contentDescription = "MealType Icon",
                 tint = color
             )
             Text(
-                text = data.foodName,
+                text = "${data.dayName}: ${data.foodName}",
                 color = color,
                 style = RavanTheme.typography.body1,
             )
@@ -105,7 +96,8 @@ private fun ReserveResultInfoRowPreview() {
                 foodName = "چلو جوجه کباب",
                 status = ReserveStatus.SUCCESS,
                 message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                mealType = MealType.LUNCH
+                mealType = MealType.LUNCH,
+                dayName = "شنبه"
             )
         )
     }

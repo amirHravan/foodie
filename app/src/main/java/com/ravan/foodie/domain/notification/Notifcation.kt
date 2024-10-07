@@ -1,17 +1,22 @@
 package com.ravan.foodie.domain.notification
 
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.ravan.foodie.domain.util.SharedPrefKeys
 import java.util.Calendar
 
 const val NOTIFICATION_CHANNEL_ID = "FOODIE_LOCAL_CHANNEL"
 const val NOTIFICATION_CHANNEL_NAME = "LOCAL_CHANNEL"
+const val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
 
 fun createNotificationChannel(context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -24,6 +29,22 @@ fun createNotificationChannel(context: Context) {
         }
         val manager = context.getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(channel)
+        askNotificationPermission(context)
+    }
+}
+
+private fun askNotificationPermission(context: Context) {
+    if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS)
+        != PackageManager.PERMISSION_GRANTED
+    ) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                NOTIFICATION_PERMISSION_REQUEST_CODE
+            )
+        }
     }
 }
 

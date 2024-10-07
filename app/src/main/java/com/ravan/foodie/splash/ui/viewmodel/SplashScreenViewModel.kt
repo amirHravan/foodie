@@ -29,7 +29,7 @@ class SplashScreenViewModel(
 
     val showNetworkError = mutableStateOf(false)
     val navLogin: NavigationEvent = NavigationEvent()
-    val navHome: NavigationEvent = NavigationEvent()
+    val navReserveInfo: NavigationEvent = NavigationEvent()
 
     init {
         preferencesManager.getString(SharedPrefKeys.RefreshToken.key, "").let {
@@ -70,7 +70,7 @@ class SplashScreenViewModel(
             viewModelScope.launch {
                 refreshAccessTokenUseCase().fold(
                     onSuccess = { _ ->
-                        navHome.navigate()
+                        navReserveInfo.navigate()
                     },
                     onFailure = {
                         getNewAccessToken()
@@ -89,7 +89,7 @@ class SplashScreenViewModel(
                 samadLoginUseCase(username = username, password = password).fold(
                     onSuccess = { samadToken ->
                         cacheAccessTokenUseCase(samadToken)
-                        navHome.navigate()
+                        navReserveInfo.navigate()
                     },
                     onFailure = {
                         navLogin.navigate()

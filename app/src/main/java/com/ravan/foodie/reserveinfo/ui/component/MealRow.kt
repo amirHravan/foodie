@@ -1,13 +1,12 @@
 package com.ravan.foodie.reserveinfo.ui.component
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +41,7 @@ fun MealRow(
     }
 
     val clipBoardManager = LocalClipboardManager.current
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -74,15 +75,18 @@ fun MealRow(
             textStyle = RavanTheme.typography.body2,
         )
         AnimatedVisibility(visible = data.forgetCode != null) {
-            FoodieTextIconRow(
-                data = FoodieTextIconRowUIModel(
-                    iconRes = R.drawable.ic_code,
-                    text = data.forgetCode?.toLocalNumber() ?: "کد فراموشی نداریم!",
+            FoodieButton(
+                data = FoodieButtonUIModel.General(
+                    title = data.forgetCode?.toLocalNumber() ?: "کد فراموشی نداریم!",
+                    iconRes = R.drawable.ic_content_copy,
                 ),
-                color = RavanTheme.colors.text.onSecondary,
-                textStyle = RavanTheme.typography.body2,
-                modifier = Modifier.clickable {
-                    clipBoardManager.setText(AnnotatedString(text = data.forgetCode ?: ""))
+                onClick = {
+                    clipBoardManager.setText(
+                        AnnotatedString(
+                            text = data.forgetCode ?: ""
+                        )
+                    )
+                    Toast.makeText(context, "کد فراموشی کپی شد", Toast.LENGTH_SHORT).show()
                 }
             )
         }

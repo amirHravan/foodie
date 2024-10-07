@@ -241,7 +241,11 @@ class AutoReserveViewModel(
 
                         dayProgram.reserveInfoList.forEach { (mealType, reservableFoodDetails) ->
                             val reserveData = selectFoodBasedOnPriority(reservableFoodDetails)
-                            reserveFood(reserveData, mealType)
+                            reserveFood(
+                                requestData = reserveData,
+                                mealType = mealType,
+                                dayName = dayProgram.farsiDayName
+                            )
                         }
                         delay(500)
                     }
@@ -252,7 +256,11 @@ class AutoReserveViewModel(
         }
     }
 
-    private suspend fun reserveFood(requestData: AutoReserveRequestData, mealType: MealType) {
+    private suspend fun reserveFood(
+        requestData: AutoReserveRequestData,
+        mealType: MealType,
+        dayName: String,
+    ) {
         reserveFoodUseCase(
             requestData.foodTypeId,
             requestData.mealTypeId,
@@ -262,12 +270,13 @@ class AutoReserveViewModel(
             reserveLogs.add(
                 it.toReserveResultInfoRowUIModel(
                     mealType,
-                    requestData.foodName
+                    requestData.foodName,
+                    dayName
                 )
             )
         }
         reserveResponseLog.value =
-            LoadableData.Loaded(reserveLogs)
+            LoadableData.Loaded(reserveLogs.filter { it.foodName.isNotBlank() })
 
     }
 

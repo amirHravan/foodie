@@ -30,10 +30,15 @@ class TokenProvider(
     }
 
     suspend fun refreshAccessToken(): Result<SamadToken> {
-        val refreshToken = token?.refreshToken ?: return Result.failure(Exception("توکن زایید!"))
-        val response = tokenApi.refreshAccessToken(
-            refreshToken = refreshToken,
-        )
+        val refreshToken = token?.refreshToken ?: return Result.failure(Exception("اوضاع خیطه! اپ رو می‌شه ببندی دوباره باز کنی؟"))
+        val response = try {
+            tokenApi.refreshAccessToken(
+                refreshToken = refreshToken,
+            )
+        } catch (e: Exception) {
+            Log.e("TokenProvider", "refreshAccessToken: ${e.message}")
+            return Result.failure(Exception("به سرور وصل نمی\u200Cتونیم بشیم. اینترنتت اوکیه؟"))
+        }
         return if (response.isSuccessful) {
             val newToken =
                 response.body()?.toSamadToken() ?: return Result.failure(Exception("توکن زایید!"))
@@ -43,7 +48,7 @@ class TokenProvider(
 
             Result.success(newToken)
         } else {
-            Result.failure(Exception("توکن زایید!"))
+            Result.failure(Exception("${response.errorBody() ?: "سرور سماد ناراحته از دستتون!"}"))
         }
     }
 
@@ -56,7 +61,12 @@ class TokenProvider(
         userName: String,
         password: String
     ): Result<SamadToken> {
-        val result = tokenApi.login(username = userName, password = password)
+        val result = try {
+            tokenApi.login(username = userName, password = password)
+        } catch (e: Exception) {
+            Log.e("LoginRepository", "login: ${e.message}")
+            return Result.failure(Exception("به سرور وصل نمی\u200Cتونیم بشیم. اینترنتت اوکیه؟"))
+        }
         return if (result.isSuccessful) {
             val newToken =
                 result.body()?.toSamadToken() ?: return Result.failure(Exception("توکن زایید!"))
@@ -65,7 +75,7 @@ class TokenProvider(
             Result.success(newToken)
         } else {
             Log.e("LoginRepository", "Error: ${result.errorBody()?.string()}")
-            Result.failure(Exception("Error: ${result.errorBody()}"))
+            Result.failure(Exception("${result.errorBody() ?: "سرور سماد ناراحته از دستتون!"}"))
         }
     }
 

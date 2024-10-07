@@ -1,16 +1,21 @@
 package com.ravan.foodie.reserveinfo.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -33,6 +38,7 @@ import com.ravan.foodie.reserveinfo.ui.viewmodel.ReservationInfoViewModel
 fun ReservationInfoScreenComposable(
     viewModel: ReservationInfoViewModel,
     navController: NavController,
+    finish: () -> Unit,
 ) {
 
     val reservationInfoUIModel = remember(
@@ -51,14 +57,15 @@ fun ReservationInfoScreenComposable(
             FoodieTitleBar(
                 data = FoodieTitleBarUIModel(
                     title = stringResource(id = R.string.reservation_info_screen_title),
-                ), onBackClick = { viewModel.onBackClick() }
+                ), onBackClick = null
             ) {
-                FoodieButton(
-                    data = FoodieButtonUIModel.General(
-                        iconRes = R.drawable.ic_tune,
-                        title = stringResource(id = R.string.settings_button_title),
-                    ),
-                    onClick = { viewModel.onSettingsClick() },
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_tune),
+                    contentDescription = "SettingsIcon",
+                    tint = RavanTheme.colors.icon.onPrimary,
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable { viewModel.onSettingsClick() }
                 )
             }
             when (reservationInfoUIModel) {
@@ -108,13 +115,17 @@ fun ReservationInfoScreenComposable(
         }
     }
 
+    BackHandler {
+        viewModel.onBackClick()
+    }
+
     LaunchedEffect(true) {
         viewModel.onLaunch()
     }
 
     LaunchedEffect(reservationInfoUIModel) {
         viewModel.navBack.setNavigateAction {
-            navController.popBackStack()
+            finish()
         }
 
         viewModel.navSettings.setNavigateAction {

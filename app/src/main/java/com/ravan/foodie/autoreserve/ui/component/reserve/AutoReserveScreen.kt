@@ -169,7 +169,7 @@ fun AutoReserveScreen(
         ) {
             FoodieButton(
                 data = FoodieButtonUIModel.General(
-                    iconRes = R.drawable.ic_smart_toy,
+                    iconRes = R.drawable.ic_robot,
                     title = stringResource(id = R.string.auto_reserve_button_label)
                 ), onClick = onAutoReserveClick,
                 modifier = Modifier
@@ -290,37 +290,43 @@ private fun AutoReserveScreenPreview() {
                     foodName = "چلو جوجه کباب",
                     status = ReserveStatus.SUCCESS,
                     message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER
+                    mealType = MealType.DINNER,
+                    dayName = "شنبه"
                 ),
                 ReserveResultInfoRowUIModel(
                     foodName = "چلو ماهی",
                     status = ReserveStatus.SUCCESS,
                     message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER
+                    mealType = MealType.DINNER,
+                    dayName = "شنبه"
                 ),
                 ReserveResultInfoRowUIModel(
                     foodName = "چلو قیمه",
                     status = ReserveStatus.SUCCESS,
                     message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER
+                    mealType = MealType.DINNER,
+                    dayName = "شنبه"
                 ),
                 ReserveResultInfoRowUIModel(
                     foodName = "چلو برگر",
                     status = ReserveStatus.SUCCESS,
                     message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER
+                    mealType = MealType.DINNER,
+                    dayName = "شنبه"
                 ),
                 ReserveResultInfoRowUIModel(
                     foodName = "چلو کباب",
                     status = ReserveStatus.FAILURE,
                     message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER
+                    mealType = MealType.DINNER,
+                    dayName = "شنبه"
                 ),
                 ReserveResultInfoRowUIModel(
                     foodName = "چلو قرمه سبزی",
                     status = ReserveStatus.FAILURE,
                     message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER
+                    mealType = MealType.DINNER,
+                    dayName = "شنبه"
                 ),
             )),
             onPrioritySelectionClick = {},
