@@ -24,9 +24,7 @@ import com.ravan.foodie.domain.notification.createNotificationChannel
 import com.ravan.foodie.domain.notification.setAlarmsBasedOnPreference
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.domain.util.FoodieRoutes
-import com.ravan.foodie.home.ui.HomeScreenComposable
 import com.ravan.foodie.home.ui.component.BottomNavigationBar
-import com.ravan.foodie.home.ui.viewmodel.HomeScreenViewModel
 import com.ravan.foodie.login.ui.LoginScreenComposable
 import com.ravan.foodie.login.ui.viewmodel.LoginScreenViewModel
 import com.ravan.foodie.order.ui.OrderScreenComposable
@@ -56,7 +54,7 @@ class MainActivity : ComponentActivity() {
                         containerColor = RavanTheme.colors.background.primary,
                     ) { paddingValues ->
 
-                        val padding = remember(true) {
+                        val bottomPadding = remember(paddingValues) {
                             paddingValues.calculateBottomPadding()
                         }
 
@@ -68,7 +66,7 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = { fadeIn(animationSpec = tween(700)) },
                             popExitTransition = { fadeOut(animationSpec = tween(700)) },
                             modifier = Modifier
-                                .padding(bottom = padding)
+                                .padding(bottom = bottomPadding)
                         ) {
                             composable(FoodieRoutes.SplashScreen.route) {
                                 val splashScreenViewModel = getViewModel<SplashScreenViewModel>();

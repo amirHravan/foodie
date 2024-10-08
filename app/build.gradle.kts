@@ -52,7 +52,7 @@ android {
 }
 
 dependencies {
-    
+
     // Android Core
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.activity:activity-compose:1.9.0")

@@ -14,5 +14,6 @@ abstract class AutoReserveDataBase : RoomDatabase() {
     companion object {
         const val DATABASE_NAME = "auto_reserve_db"
     }
+
     abstract fun foodDao(): AutoReserveDao
 }

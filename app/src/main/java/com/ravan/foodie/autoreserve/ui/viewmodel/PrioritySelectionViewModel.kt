@@ -1,6 +1,5 @@
 package com.ravan.foodie.autoreserve.ui.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.ravan.foodie.autoreserve.domain.model.AutoReserveFoodPriority
@@ -39,12 +38,14 @@ class PrioritySelectionViewModel(
                     foodPriorityList = foods
                     priorityScreenUIModel.value = LoadableData.Loaded(
                         AutoReservePriorityScreenUIModel(
-                            foodPriorityUIModelList = foods.map { it.toFoodPriorityUIModel() }.sortedBy { it.priority }.reversed().toImmutableList()
+                            foodPriorityUIModelList = foods.map { it.toFoodPriorityUIModel() }
+                                .sortedBy { it.priority }.reversed().toImmutableList()
                         )
                     )
                 },
                 onFailure = { error ->
-                    priorityScreenUIModel.value = LoadableData.Failed(error.message ?: "Unknown error")
+                    priorityScreenUIModel.value =
+                        LoadableData.Failed(error.message ?: "Unknown error")
                 }
             )
         }

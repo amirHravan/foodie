@@ -4,9 +4,9 @@ import com.ravan.foodie.autoreserve.db.model.toAutoReserveFoodPriority
 import com.ravan.foodie.autoreserve.domain.model.AutoReserveFoodPriority
 import com.ravan.foodie.autoreserve.domain.repository.AutoReserveRepository
 
-class GetAllFoodsUseCase (
+class GetAllFoodsUseCase(
     private val repository: AutoReserveRepository
-){
+) {
     suspend operator fun invoke(
     ): Result<List<AutoReserveFoodPriority>> {
         return try {

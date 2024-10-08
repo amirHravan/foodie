@@ -1,13 +1,11 @@
 package com.ravan.foodie.home.ui.component
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -28,15 +26,18 @@ private val BOTTOM_NAV_ITEMS = listOf(
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    BottomNavigation (
+    BottomNavigation(
         backgroundColor = RavanTheme.colors.background.primary,
         contentColor = RavanTheme.colors.text.onPrimary,
         elevation = 8.dp,
-    ){
+    ) {
+        val whiteList = remember(true) {
+            BOTTOM_NAV_ITEMS.map { it.route }.toImmutableList()
+        }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        if (currentRoute != FoodieRoutes.LoginScreen.route && currentRoute != FoodieRoutes.SplashScreen.route) {
+        if (currentRoute in whiteList) {
             BOTTOM_NAV_ITEMS.forEach { item ->
                 BottomNavigationItem(
                     selected = currentRoute == item.route,

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ravan.foodie.autoreserve.ui.component.reserve.AutoReserveScreen
@@ -41,20 +40,31 @@ fun AutoReserveComposable(
                     modifier = Modifier.fillMaxSize(),
                 )
             }
+
             is LoadableData.Loaded -> {
                 AutoReserveScreen(
                     data = data.data,
                     reserveResultInfoRowUIModelList = viewModel.reserveResponseLog.value,
                     selectSelfRowUIModel = viewModel.selectSelfRowUIModel.value,
                     onExpandSelfDialogClick = { viewModel.onSelectSelfClick() },
-                    onSelectSelfClick = { selfDialogRowUIModel -> viewModel.onSelfClick(selfDialogRowUIModel) },
+                    onSelectSelfClick = { selfDialogRowUIModel ->
+                        viewModel.onSelfClick(
+                            selfDialogRowUIModel
+                        )
+                    },
                     onPrioritySelectionClick = { viewModel.onPrioritySelectionClick() },
-                    onSelectDayClick = { daysOfWeek, selected -> viewModel.onSelectDayClick(day = daysOfWeek, isSelected = selected) },
+                    onSelectDayClick = { daysOfWeek, selected ->
+                        viewModel.onSelectDayClick(
+                            day = daysOfWeek,
+                            isSelected = selected
+                        )
+                    },
                     onAutoReserveClick = { viewModel.onReserveClick() },
                     onIncreaseCreditClick = { viewModel.onIncreaseCreditClick(it) },
                     onBackClick = { viewModel.onBackClick() },
                 )
             }
+
             is LoadableData.Failed -> {
                 FoodieFailCard(
                     data = FoodieFailCardUIModel(

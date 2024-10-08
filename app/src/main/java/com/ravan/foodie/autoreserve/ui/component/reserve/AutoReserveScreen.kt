@@ -128,10 +128,13 @@ fun AutoReserveScreen(
                             is LoadableData.NotLoaded -> Unit
                             is LoadableData.Loading -> {
                                 FoodieProgressIndicator(
-                                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
                                     color = RavanTheme.colors.text.onSecondary,
                                 )
                             }
+
                             is LoadableData.Loaded -> {
                                 reserveResultInfoRowUIModelList.data.forEach { reserveResultInfoRowUIModel ->
                                     ReserveResultInfoRow(
@@ -285,50 +288,52 @@ private fun AutoReserveScreenPreview() {
                 selfDialogUIModel = null,
                 selectedSelfName = "خوان کرم پدر"
             ),
-            reserveResultInfoRowUIModelList = LoadableData.Loaded(listOf(
-                ReserveResultInfoRowUIModel(
-                    foodName = "چلو جوجه کباب",
-                    status = ReserveStatus.SUCCESS,
-                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER,
-                    dayName = "شنبه"
-                ),
-                ReserveResultInfoRowUIModel(
-                    foodName = "چلو ماهی",
-                    status = ReserveStatus.SUCCESS,
-                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER,
-                    dayName = "شنبه"
-                ),
-                ReserveResultInfoRowUIModel(
-                    foodName = "چلو قیمه",
-                    status = ReserveStatus.SUCCESS,
-                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER,
-                    dayName = "شنبه"
-                ),
-                ReserveResultInfoRowUIModel(
-                    foodName = "چلو برگر",
-                    status = ReserveStatus.SUCCESS,
-                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER,
-                    dayName = "شنبه"
-                ),
-                ReserveResultInfoRowUIModel(
-                    foodName = "چلو کباب",
-                    status = ReserveStatus.FAILURE,
-                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER,
-                    dayName = "شنبه"
-                ),
-                ReserveResultInfoRowUIModel(
-                    foodName = "چلو قرمه سبزی",
-                    status = ReserveStatus.FAILURE,
-                    message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
-                    mealType = MealType.DINNER,
-                    dayName = "شنبه"
-                ),
-            )),
+            reserveResultInfoRowUIModelList = LoadableData.Loaded(
+                listOf(
+                    ReserveResultInfoRowUIModel(
+                        foodName = "چلو جوجه کباب",
+                        status = ReserveStatus.SUCCESS,
+                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                        mealType = MealType.DINNER,
+                        dayName = "شنبه"
+                    ),
+                    ReserveResultInfoRowUIModel(
+                        foodName = "چلو ماهی",
+                        status = ReserveStatus.SUCCESS,
+                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                        mealType = MealType.DINNER,
+                        dayName = "شنبه"
+                    ),
+                    ReserveResultInfoRowUIModel(
+                        foodName = "چلو قیمه",
+                        status = ReserveStatus.SUCCESS,
+                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                        mealType = MealType.DINNER,
+                        dayName = "شنبه"
+                    ),
+                    ReserveResultInfoRowUIModel(
+                        foodName = "چلو برگر",
+                        status = ReserveStatus.SUCCESS,
+                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                        mealType = MealType.DINNER,
+                        dayName = "شنبه"
+                    ),
+                    ReserveResultInfoRowUIModel(
+                        foodName = "چلو کباب",
+                        status = ReserveStatus.FAILURE,
+                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                        mealType = MealType.DINNER,
+                        dayName = "شنبه"
+                    ),
+                    ReserveResultInfoRowUIModel(
+                        foodName = "چلو قرمه سبزی",
+                        status = ReserveStatus.FAILURE,
+                        message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
+                        mealType = MealType.DINNER,
+                        dayName = "شنبه"
+                    ),
+                )
+            ),
             onPrioritySelectionClick = {},
             onBackClick = {},
             onSelectSelfClick = {},

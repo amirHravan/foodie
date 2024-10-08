@@ -2,7 +2,6 @@ package com.ravan.foodie.reserveinfo.ui.component
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -87,14 +86,16 @@ fun MealRow(
                         )
                     )
                     Toast.makeText(context, "کد فراموشی کپی شد", Toast.LENGTH_SHORT).show()
-                }
+                },
+                modifier = Modifier
+                    .padding(top = 8.dp),
             )
         }
         AnimatedVisibility(visible = data.forgetCode == null) {
             FoodieButton(
                 data = FoodieButtonUIModel.General(
                     title = stringResource(R.string.get_forget_code_button_label),
-                    iconRes = null
+                    iconRes = R.drawable.ic_code,
                 ),
                 onClick = {
                     buttonState.value = FoodieButtonState.Loading

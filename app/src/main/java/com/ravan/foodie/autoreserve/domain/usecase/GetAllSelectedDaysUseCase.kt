@@ -15,9 +15,11 @@ class GetAllSelectedDaysUseCase(
 //        } catch (e: Exception) {
 //            Result.failure(e)
 //        }
-        return Result.success(repository.getAllReserveDays()?.toAutoReserveDays() ?: AutoReserveDays(
+        return Result.success(
+            repository.getAllReserveDays()?.toAutoReserveDays() ?: AutoReserveDays(
                 days = mutableListOf()
-            ))
+            )
+        )
     }
 
 

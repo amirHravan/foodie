@@ -30,7 +30,8 @@ class TokenProvider(
     }
 
     suspend fun refreshAccessToken(): Result<SamadToken> {
-        val refreshToken = token?.refreshToken ?: return Result.failure(Exception("اوضاع خیطه! اپ رو می‌شه ببندی دوباره باز کنی؟"))
+        val refreshToken = token?.refreshToken
+            ?: return Result.failure(Exception("اوضاع خیطه! اپ رو می‌شه ببندی دوباره باز کنی؟"))
         val response = try {
             tokenApi.refreshAccessToken(
                 refreshToken = refreshToken,

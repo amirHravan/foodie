@@ -2,7 +2,6 @@ package com.ravan.foodie.settings.ui.component
 
 import android.Manifest
 import android.os.Build
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize

@@ -25,7 +25,6 @@ import com.ravan.foodie.R
 import com.ravan.foodie.autoreserve.ui.model.ReserveResultInfoRowUIModel
 import com.ravan.foodie.autoreserve.ui.model.ReserveStatus
 import com.ravan.foodie.domain.ui.theme.RavanTheme
-import com.ravan.foodie.domain.util.DaysOfWeek
 import com.ravan.foodie.order.domain.model.MealType
 
 @Composable

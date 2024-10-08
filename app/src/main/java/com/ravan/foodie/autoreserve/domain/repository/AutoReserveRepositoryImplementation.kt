@@ -8,7 +8,7 @@ import com.ravan.foodie.autoreserve.db.model.AutoReserveFoodEntity
 class AutoReserveRepositoryImplementation(
     private val autoReserveDao: AutoReserveDao,
     private val autoReserveApi: AutoReserveApi,
-): AutoReserveRepository{
+) : AutoReserveRepository {
 
     override suspend fun getAllFoodPriorities(): List<AutoReserveFoodEntity> {
         return autoReserveDao.getAllFoods()
