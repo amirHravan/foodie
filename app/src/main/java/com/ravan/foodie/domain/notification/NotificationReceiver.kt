@@ -16,7 +16,7 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
         val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_restaurant)
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(getRandomNotificationText(context))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
