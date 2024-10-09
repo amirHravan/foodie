@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -62,10 +63,11 @@ fun LoginScreen(
                 title = null,
                 value = data.username,
             ),
-            onValueChange = onUserNameChange,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next,
             ),
+            onValueChange = onUserNameChange,
         )
         Spacer(modifier = Modifier.size(16.dp))
         LoginTextField(
@@ -75,6 +77,11 @@ fun LoginScreen(
                 ),
                 title = null,
                 value = data.password,
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done,
+                autoCorrect = false,
             ),
             isPassword = true,
             onValueChange = onPasswordChange,

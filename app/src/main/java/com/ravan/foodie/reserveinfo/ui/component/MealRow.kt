@@ -91,7 +91,7 @@ fun MealRow(
                     .padding(top = 8.dp),
             )
         }
-        AnimatedVisibility(visible = data.forgetCode == null) {
+        AnimatedVisibility(visible = data.forgetCode == null && !data.consumed) {
             FoodieButton(
                 data = FoodieButtonUIModel.General(
                     title = stringResource(R.string.get_forget_code_button_label),

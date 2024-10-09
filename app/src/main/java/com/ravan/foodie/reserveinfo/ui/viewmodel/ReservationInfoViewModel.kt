@@ -81,10 +81,8 @@ class ReservationInfoViewModel(
 
         viewModelScope.launch {
             getForgetCodeUseCase(reserveId = reserveId).fold(
-                onSuccess = { forgetCode ->
+                onSuccess = { _ ->
                     val forgetCodeMap = getForgetCodeMapCache()
-                    Log.d("temp", forgetCodeMap.toString())
-                    Log.d("temp", forgetCode.code)
                     reservationInfoUIModel.value = LoadableData.Loaded(
                         reservationInfo?.toReservationInfoScreenUIModel(forgetCodeMap)
                     )

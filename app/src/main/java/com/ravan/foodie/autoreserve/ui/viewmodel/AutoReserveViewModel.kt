@@ -231,8 +231,9 @@ class AutoReserveViewModel(
             getReservableProgram { program ->
                 viewModelScope.launch {
                     program.forEach { dayProgram ->
-                        if (dayProgram.dayName.toLowerCase(Locale.ROOT) !in (selectedDays?.days?.map {
-                                it.dayName.toLowerCase(
+
+                        if (dayProgram.dayName.lowercase(Locale.ROOT) !in (selectedDays?.days?.map {
+                                it.dayName.lowercase(
                                     Locale.ROOT
                                 )
                             } ?: emptyList())) {
@@ -244,10 +245,11 @@ class AutoReserveViewModel(
                             reserveFood(
                                 requestData = reserveData,
                                 mealType = mealType,
-                                dayName = dayProgram.farsiDayName
+                                dayName = dayProgram.farsiDayName,
+                                allChoices = reservableFoodDetails.map { it.foodName }
                             )
                         }
-                        delay(500)
+                        delay(300)
                     }
                 }
             }
@@ -260,6 +262,7 @@ class AutoReserveViewModel(
         requestData: AutoReserveRequestData,
         mealType: MealType,
         dayName: String,
+        allChoices: List<String>
     ) {
         reserveFoodUseCase(
             requestData.foodTypeId,
@@ -271,7 +274,8 @@ class AutoReserveViewModel(
                 it.toReserveResultInfoRowUIModel(
                     mealType,
                     requestData.foodName,
-                    dayName
+                    dayName,
+                    choices = allChoices
                 )
             )
         }

@@ -24,8 +24,11 @@ import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
 import com.ravan.foodie.autoreserve.ui.model.ReserveResultInfoRowUIModel
 import com.ravan.foodie.autoreserve.ui.model.ReserveStatus
+import com.ravan.foodie.domain.ui.component.FoodieTextIconRow
+import com.ravan.foodie.domain.ui.model.FoodieTextIconRowUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.order.domain.model.MealType
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ReserveResultInfoRow(
@@ -39,7 +42,7 @@ fun ReserveResultInfoRow(
     }
 
     val isExpanded = remember {
-        mutableStateOf(false)
+        mutableStateOf(data.status == ReserveStatus.FAILURE)
     }
 
     Column(
@@ -74,12 +77,33 @@ fun ReserveResultInfoRow(
             )
         }
         AnimatedVisibility(visible = isExpanded.value) {
-            Text(
-                text = data.message,
-                color = color,
-                style = RavanTheme.typography.body2,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 8.dp, bottom = 8.dp),
-            )
+            Column {
+                Text(
+                    text = data.message,
+                    color = color,
+                    style = RavanTheme.typography.body2,
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        top = 16.dp,
+                        end = 8.dp,
+                        bottom = 8.dp
+                    ),
+                )
+
+                if (data.status == ReserveStatus.SUCCESS) {
+                    data.choices.forEach {
+                        FoodieTextIconRow(
+                            data = FoodieTextIconRowUIModel(
+                                iconRes = if (it == data.foodName) R.drawable.ic_check else R.drawable.ic_close,
+                                text = it,
+                            ),
+                            modifier = Modifier.padding(start = 24.dp),
+                            color = color
+                        )
+
+                    }
+                }
+            }
 
         }
     }
@@ -96,7 +120,8 @@ private fun ReserveResultInfoRowPreview() {
                 status = ReserveStatus.SUCCESS,
                 message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
                 mealType = MealType.LUNCH,
-                dayName = "شنبه"
+                dayName = "شنبه",
+                choices = listOf("چلو جوجه کباب", "چلو مرغ کباب", "چلو قرمه سبزی").toImmutableList()
             )
         )
     }

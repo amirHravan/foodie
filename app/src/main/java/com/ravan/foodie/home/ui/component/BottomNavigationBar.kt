@@ -32,7 +32,15 @@ fun BottomNavigationBar(navController: NavController) {
         elevation = 8.dp,
     ) {
         val whiteList = remember(true) {
-            BOTTOM_NAV_ITEMS.map { it.route }.toImmutableList()
+            listOf(
+                FoodieRoutes.AutomaticReservationScreen.route,
+                FoodieRoutes.FoodPriorityScreen.route,
+                FoodieRoutes.ReservationInfoScreen.route,
+                FoodieRoutes.DailySaleScreen.route,
+                FoodieRoutes.ProfileScreen.route,
+                FoodieRoutes.ReservableScreen.route,
+                FoodieRoutes.SettingsScreen.route,
+            ).toImmutableList()
         }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route

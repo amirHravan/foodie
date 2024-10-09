@@ -26,7 +26,7 @@
 
     <!-- Order -->
     <string name="order_screen_title_bar">رزرو غذا</string>
-    <string name="order_select_self_dialog_title">سلف‌های مجاز</string>
+    <string name="order_select_self_dialog_title">سلف مورد نظر را انتخاب کنید:</string>
     <string name="order_order_food_detail_disabled">مهلت رزرو این غذا تمام شده</string>
     <string name="increase_credit_button_label">افزایش اعتبار</string>
 
@@ -78,6 +78,12 @@
     <string name="auto_reserve_button_label">رزرو</string>
     <string name="reserve_result_info_title">نتیجه رزرو‌ها</string>
     <string name="settings_button_title">تنظیمات</string>
+    <string name="order_order_food_detail_selected">رزرو شده</string>
+    <string name="order_order_food_detail_not_selected">قابل رزرو</string>
+    <string name="order_order_food_detail_cancel">حذف رزرو</string>
+    <string name="order_order_food_detail_reserve">رزرو غذا</string>
+    <string name="settings_logout_button_label">خروج از حساب کاربری</string>
+    <string name="about_us_send_feedback">ارسال انتقاد/پیشنهاد</string>
 
 
 </resources>

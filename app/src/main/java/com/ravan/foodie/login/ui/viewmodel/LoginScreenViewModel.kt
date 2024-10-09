@@ -1,6 +1,5 @@
 package com.ravan.foodie.login.ui.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -28,7 +27,7 @@ class LoginScreenViewModel(
     val loginToken: MutableState<LoadableData<String>> = mutableStateOf(LoadableData.NotLoaded)
     val informationBoxData: MutableState<FoodieInformationBoxUIModel?> = mutableStateOf(null)
 
-    val navHome: NavigationEvent = NavigationEvent()
+    val navReservationInfo: NavigationEvent = NavigationEvent()
 
     fun onLaunch() {
         preferencesManager.getString(SharedPrefKeys.Username.key, "").let {
@@ -37,7 +36,6 @@ class LoginScreenViewModel(
         preferencesManager.getString(SharedPrefKeys.Password.key, "").let {
             password.value = it.toLocalNumber()
         }
-        Log.d("LoginScreenViewModel", "onLaunch: ${username.value}, ${password.value}")
         if (username.value.isEmpty() || password.value.isEmpty()) {
             return
         }
@@ -59,13 +57,12 @@ class LoginScreenViewModel(
                 onSuccess = {
                     saveData(it)
                     loginToken.value = LoadableData.Loaded(it.accessToken)
-                    navHome.navigate()
+                    navReservationInfo.navigate()
                 },
                 onFailure = {
-                    Log.d("LoginScreenViewModel", "onLaunch: $it")
-                    loginToken.value = LoadableData.Failed("رمزعبور/نام‌کاربری اشتباه است.")
+                    loginToken.value = LoadableData.Failed(it.message ?: "خطای ناشناخته")
                     showInformationBox(
-                        message = "رمزعبور/نام‌کاربری اشتباه است.",
+                        message = it.message ?: "خطای ناشناخته",
                         state = FoodieInformationBoxState.FAILED
                     )
                 }

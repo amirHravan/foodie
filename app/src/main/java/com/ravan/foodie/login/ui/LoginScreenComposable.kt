@@ -3,6 +3,7 @@ package com.ravan.foodie.login.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import com.ravan.foodie.domain.model.LoadableData
@@ -18,14 +19,16 @@ fun LoginScreenComposable(
     viewModel: LoginScreenViewModel,
     finish: () -> Unit,
 ) {
-    val buttonState = remember(viewModel.loginToken) {
-        when (viewModel.loginToken.value) {
-            LoadableData.NotLoaded,
-            is LoadableData.Failed,
-            is LoadableData.Loaded -> LoginButtonState.Enable
+    val buttonState = remember(viewModel.loginToken.value) {
+        mutableStateOf(
+            when (viewModel.loginToken.value) {
+                LoadableData.NotLoaded,
+                is LoadableData.Failed,
+                is LoadableData.Loaded -> LoginButtonState.Enable
 
-            LoadableData.Loading -> LoginButtonState.Loading
-        }
+                LoadableData.Loading -> LoginButtonState.Loading
+            }
+        )
     }
 
     LoginScreen(
@@ -37,7 +40,7 @@ fun LoginScreenComposable(
         onPasswordChange = { password -> viewModel.onPasswordChange(password) },
         loginStatus = viewModel.informationBoxData.value,
         onLoginClick = { viewModel.onLoginClick() },
-        buttonState = buttonState
+        buttonState = buttonState.value
     )
 
     LaunchedEffect(true) {
@@ -45,8 +48,8 @@ fun LoginScreenComposable(
     }
 
     LaunchedEffect(viewModel.loginToken.value) {
-        viewModel.navHome.setNavigateAction {
-            navController.navigate(FoodieRoutes.HomeScreen.route)
+        viewModel.navReservationInfo.setNavigateAction {
+            navController.navigate(FoodieRoutes.ReservationInfoScreen.route)
         }
     }
 

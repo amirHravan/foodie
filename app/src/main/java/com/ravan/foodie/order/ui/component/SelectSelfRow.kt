@@ -39,7 +39,7 @@ fun SelectSelfRow(
     onSelectSelfClick: (SelfDialogRowUIModel) -> Unit,
 ) {
     val isExpanded = remember(selectSelfRowUIModel.selfDialogUIModel) {
-        mutableStateOf(selectSelfRowUIModel.selfDialogUIModel != null)
+        mutableStateOf(selectSelfRowUIModel.selectedSelfName.isBlank() && selectSelfRowUIModel.selfDialogUIModel != null)
     }
     val (backgroundColor, borderColor) = getColors(isExpanded.value)
 
@@ -67,7 +67,7 @@ fun SelectSelfRow(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (selectSelfRowUIModel.selectedSelfName.isNotBlank() and !isExpanded.value) {
+            if (!isExpanded.value) {
                 Text(
                     text = selectSelfRowUIModel.selectedSelfName,
                     color = RavanTheme.colors.text.onPrimary,
@@ -121,7 +121,7 @@ private fun SelectSelfRowPreview() {
     RavanTheme {
         SelectSelfRow(
             selectSelfRowUIModel = SelectSelfRowUIModel(
-                selectedSelfName = "سلف\u200Cهای مجاز",
+                selectedSelfName = "",
                 selfDialogUIModel = SelfDialogUIModel(
                     selfs = emptyList<SelfDialogRowUIModel>().toImmutableList(),
                 )

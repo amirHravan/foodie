@@ -7,13 +7,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +36,9 @@ fun LoginTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onValueChange: (String) -> Unit,
 ) {
+    val localFocusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -61,6 +68,7 @@ fun LoginTextField(
                 textAlign = TextAlign.Left,
                 color = RavanTheme.colors.text.onPrimary
             ),
+            singleLine = true,
             decorationBox = { innerTextField ->
                 data.value.isEmpty().let {
                     Text(
@@ -74,9 +82,15 @@ fun LoginTextField(
                     innerTextField()
                 }
             },
-            singleLine = true,
             cursorBrush = SolidColor(RavanTheme.colors.text.onPrimary),
             visualTransformation = if (isPassword) PasswordVisualTransformation(mask = '\uff65') else VisualTransformation.None,
+            keyboardActions = KeyboardActions(
+                onNext = { localFocusManager.moveFocus(FocusDirection.Down) },
+                onDone = {
+                    localFocusManager.clearFocus()
+                    keyboardController?.hide()
+                }
+            ),
             keyboardOptions = keyboardOptions,
         )
     }

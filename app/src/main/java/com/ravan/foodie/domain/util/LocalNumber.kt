@@ -1,5 +1,7 @@
 package com.ravan.foodie.domain.util
 
+import android.util.Log
+
 fun String.toLocalNumber(): String {
     val copy = this.toCharArray().map {
         when (it) {
@@ -18,6 +20,11 @@ fun String.toLocalNumber(): String {
             }
         }
     }.joinToString("")
+
+    if (copy.length > 1 && copy.first() == '-') {
+        return "${copy.drop(1)}-"
+    }
+
     return copy
 }
 

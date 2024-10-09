@@ -36,7 +36,6 @@ class SplashScreenViewModel(
             refreshToken = it
         }
 
-        Log.d("SplashScreenViewModel", "refreshToken: $refreshToken")
 
     }
 
@@ -48,9 +47,6 @@ class SplashScreenViewModel(
         preferencesManager.getString(SharedPrefKeys.Password.key, "").let {
             password = it
         }
-
-        Log.d("SplashScreenViewModel", "loadUserNamePassword: $username, $password")
-
     }
 
     fun onLaunch(context: Context) {

@@ -41,6 +41,7 @@ import com.ravan.foodie.order.domain.model.MealType
 import com.ravan.foodie.order.ui.component.SelectSelfRow
 import com.ravan.foodie.order.ui.model.SelectSelfRowUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun AutoReserveScreen(
@@ -136,13 +137,22 @@ fun AutoReserveScreen(
                             }
 
                             is LoadableData.Loaded -> {
-                                reserveResultInfoRowUIModelList.data.forEach { reserveResultInfoRowUIModel ->
-                                    ReserveResultInfoRow(
-                                        data = reserveResultInfoRowUIModel,
+                                if (reserveResultInfoRowUIModelList.data.isEmpty()) {
+                                    FoodieProgressIndicator(
                                         modifier = Modifier
-                                            .fillMaxWidth(),
-                                        color = RavanTheme.colors.text.onSecondary
+                                            .fillMaxWidth()
+                                            .padding(16.dp),
+                                        color = RavanTheme.colors.text.onSecondary,
                                     )
+                                } else {
+                                    reserveResultInfoRowUIModelList.data.forEach { reserveResultInfoRowUIModel ->
+                                        ReserveResultInfoRow(
+                                            data = reserveResultInfoRowUIModel,
+                                            modifier = Modifier
+                                                .fillMaxWidth(),
+                                            color = RavanTheme.colors.text.onSecondary
+                                        )
+                                    }
                                 }
 
                             }
@@ -261,19 +271,6 @@ private fun DaysOfWeekSelectionColumn(
                 isSelected = selectedDays.contains(DaysOfWeek.THURSDAY)
             )
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-
-            AutoReserveDaySelectionItem(
-                data = AutoReserveDaySelectionItemUIModel(stringResource(id = R.string.persian_day_of_week_friday)),
-                onSelectClick = { onSelectDayClick(DaysOfWeek.FRIDAY, it) },
-                isSelected = selectedDays.contains(DaysOfWeek.FRIDAY)
-            )
-        }
     }
 }
 
@@ -295,42 +292,60 @@ private fun AutoReserveScreenPreview() {
                         status = ReserveStatus.SUCCESS,
                         message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
                         mealType = MealType.DINNER,
-                        dayName = "شنبه"
+                        dayName = "شنبه",
+                        choices = listOf(
+                            "kooft"
+                        ).toImmutableList()
                     ),
                     ReserveResultInfoRowUIModel(
                         foodName = "چلو ماهی",
                         status = ReserveStatus.SUCCESS,
                         message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
                         mealType = MealType.DINNER,
-                        dayName = "شنبه"
+                        dayName = "شنبه",
+                        choices = listOf(
+                            "kooft"
+                        ).toImmutableList()
                     ),
                     ReserveResultInfoRowUIModel(
                         foodName = "چلو قیمه",
                         status = ReserveStatus.SUCCESS,
                         message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
                         mealType = MealType.DINNER,
-                        dayName = "شنبه"
+                        dayName = "شنبه",
+                        choices = listOf(
+                            "kooft"
+                        ).toImmutableList()
                     ),
                     ReserveResultInfoRowUIModel(
                         foodName = "چلو برگر",
                         status = ReserveStatus.SUCCESS,
                         message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
                         mealType = MealType.DINNER,
-                        dayName = "شنبه"
+                        dayName = "شنبه",
+                        choices = listOf(
+                            "kooft"
+                        ).toImmutableList()
                     ),
                     ReserveResultInfoRowUIModel(
                         foodName = "چلو کباب",
                         status = ReserveStatus.FAILURE,
                         message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
                         mealType = MealType.DINNER,
-                        dayName = "شنبه"
+                        dayName = "شنبه",
+                        choices = listOf(
+                            "kooft"
+                        ).toImmutableList()
                     ),
                     ReserveResultInfoRowUIModel(
                         foodName = "چلو قرمه سبزی",
                         status = ReserveStatus.FAILURE,
                         message = "غذاتون با موفقیت رزرو شد جناب / سرکار",
                         mealType = MealType.DINNER,
-                        dayName = "شنبه"
+                        dayName = "شنبه",
+                        choices = listOf(
+                            "kooft"
+                        ).toImmutableList()
                     ),
                 )
             ),

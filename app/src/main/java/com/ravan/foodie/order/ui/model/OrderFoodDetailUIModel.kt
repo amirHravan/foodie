@@ -1,5 +1,6 @@
 package com.ravan.foodie.order.ui.model
 
+import com.ravan.foodie.order.domain.model.MealType
 import com.ravan.foodie.order.domain.model.ReservableFoodDetail
 
 data class OrderFoodDetailUIModel(
@@ -24,6 +25,6 @@ fun ReservableFoodDetail.toReserveFoodDetailUIModel(): OrderFoodDetailUIModel {
         price = price,
         isSelected = isReserved,
         isDisable = isDisabled,
-        hasPassed = hasPassed
+        hasPassed = hasPassed,
     )
 }

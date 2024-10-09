@@ -1,6 +1,9 @@
 package com.ravan.foodie.login.ui.component.body
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -36,7 +39,9 @@ fun LoginButton(
     ) {
         when (state) {
             LoginButtonState.Loading -> {
-                FoodieProgressIndicator()
+                FoodieProgressIndicator(
+                    modifier = Modifier.height(32.dp)
+                )
             }
 
             LoginButtonState.Enable,
@@ -57,6 +62,9 @@ fun LoginButton(
 @Composable
 fun LoginButtonPreview() {
     RavanTheme {
-        LoginButton(LoginButtonUIModel("ورود"), onClick = {}, state = LoginButtonState.Loading)
+        Column {
+            LoginButton(LoginButtonUIModel("ورود"), onClick = {}, state = LoginButtonState.Enable)
+            LoginButton(LoginButtonUIModel("ورود"), onClick = {}, state = LoginButtonState.Loading)
+        }
     }
 }

@@ -11,7 +11,6 @@ class UpdateAutoReserveDaysUseCase(
     suspend operator fun invoke(
         days: AutoReserveDays,
     ) {
-        Log.d("temp", "UpdateAutoReserveDaysUseCase: $days")
         repository.updateReserveDays(days.toAutoReserveDaysDao())
     }
 

@@ -31,6 +31,7 @@ import com.ravan.foodie.settings.ui.viewmodel.SettingsViewModel
 fun SettingsComposable(
     viewModel: SettingsViewModel,
     navController: NavController,
+    finish: () -> Unit
 ) {
     val showBottomSheet = remember { mutableStateOf(false) }
 
@@ -56,6 +57,11 @@ fun SettingsComposable(
             SettingsScreen(
                 onNotificationToggleChange = { newState ->
                     viewModel.onNotificationToggleChange(newState)
+                },
+                onLogoutClick = {
+                    viewModel.onLogoutClick(
+                        onFinish = finish
+                    )
                 }
             )
             if (showBottomSheet.value) {
@@ -65,7 +71,11 @@ fun SettingsComposable(
                     onDismissRequest = { showBottomSheet.value = false },
                 ) {
                     RavanTheme {
-                        SettingsBottomSheet()
+                        SettingsBottomSheet(
+                            onSendFeedbackClick = {
+                                viewModel.onSendFeedBackClick(it)
+                            }
+                        )
                     }
                 }
             }

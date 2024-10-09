@@ -95,7 +95,6 @@ private fun OrderMealTypeSection(
                     .fillMaxWidth()
             )
         } else if (reservationFoodDetailList.isNotEmpty()) {
-
             Text(
                 text = mealType.getLocalName(),
                 style = RavanTheme.typography.h6,

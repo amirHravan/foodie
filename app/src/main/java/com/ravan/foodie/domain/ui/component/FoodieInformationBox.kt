@@ -2,8 +2,11 @@ package com.ravan.foodie.domain.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,18 +31,18 @@ fun FoodieInformationBox(
     Box(
         modifier = modifier
             .clip(RavanTheme.shapes.r8)
+            .background(RavanTheme.colors.background.secondary)
             .background(backgroundColor)
-            .border(1.dp, borderColor, RavanTheme.shapes.r8)
+            .border(2.dp, borderColor, RavanTheme.shapes.r8)
             .padding(8.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = data.message,
             style = RavanTheme.typography.body2,
-            color = RavanTheme.colors.text.onPrimary,
+            color = RavanTheme.colors.text.onSecondary,
             modifier = Modifier
-                .padding(8.dp)
-                .offset(y = (-3).dp),
+                .padding(6.dp),
         )
     }
 
@@ -51,6 +54,7 @@ fun FoodieInformationBoxState.getBackgroundColor(): Color {
         FoodieInformationBoxState.SUCCESS -> RavanTheme.colors.background.success
         FoodieInformationBoxState.FAILED -> RavanTheme.colors.background.fail
     }
+//    return RavanTheme.colors.background.secondary.copy(alpha = 0.9f)
 }
 
 
@@ -66,11 +70,23 @@ fun FoodieInformationBoxState.getBorderColor(): Color {
 @Composable
 fun LoginInformationBoxPreview() {
     RavanTheme {
-        FoodieInformationBox(
-            data = FoodieInformationBoxUIModel(
-                state = FoodieInformationBoxState.SUCCESS,
-                message = "ورود موفقیت آمیز بود."
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(RavanTheme.colors.background.primary),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+        ) {
+            FoodieInformationBox(
+                data = FoodieInformationBoxUIModel(
+                    state = FoodieInformationBoxState.SUCCESS,
+                    message = "ورود موفقیت آمیز بود."
+                ),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
             )
-        )
+
+        }
     }
 }

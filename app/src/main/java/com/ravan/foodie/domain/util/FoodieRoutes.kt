@@ -4,7 +4,6 @@ enum class FoodieRoutes(
     val route: String,
 ) {
     LoginScreen("login"),
-    HomeScreen("home"),
     SplashScreen("splash_screen"),
     ReservationInfoScreen("reservation_info"),
     ReservableScreen("reservable"),

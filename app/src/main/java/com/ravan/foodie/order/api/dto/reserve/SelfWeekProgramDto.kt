@@ -45,7 +45,7 @@ fun SelfWeekProgramDto.toReservableFoodDetail(
         price = price.toLong(),
         isReserved = isSelected,
         isDisabled = reserveRuleViolated || cancelRuleViolated,
-        hasPassed = daysDifferenceWithToday < 0
+        hasPassed = daysDifferenceWithToday < 0,
     )
 }
 

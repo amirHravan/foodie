@@ -49,7 +49,7 @@ class TokenProvider(
 
             Result.success(newToken)
         } else {
-            Result.failure(Exception("${response.errorBody() ?: "سرور سماد ناراحته از دستتون!"}"))
+            Result.failure(Exception("${response.errorBody() ?: "نام\u200C کاربری / رمزعبور نادرست است"}"))
         }
     }
 
@@ -76,7 +76,7 @@ class TokenProvider(
             Result.success(newToken)
         } else {
             Log.e("LoginRepository", "Error: ${result.errorBody()?.string()}")
-            Result.failure(Exception("${result.errorBody() ?: "سرور سماد ناراحته از دستتون!"}"))
+            Result.failure(Exception("${result.errorBody() ?: "نام\u200C کاربری / رمزعبور نادرست است"}"))
         }
     }
 

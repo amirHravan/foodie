@@ -79,7 +79,6 @@ fun getPreviousSaturday(): String {
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     val date = now.format(formatter)
-    Log.d("ctime", date)
 
     return date
 }
@@ -106,6 +105,5 @@ fun getNextSaturday(): String {
     // Format the date and time to the required pattern
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     val date = now.format(formatter)
-    Log.d("time", date)
     return date
 }

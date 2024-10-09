@@ -53,7 +53,6 @@ class OrderScreenViewModel(
 
 
     fun onLaunch() {
-        selectedSelfId = -1
         onSelectSelfClick()
     }
 
@@ -105,7 +104,6 @@ class OrderScreenViewModel(
 
 
     fun onBackClick() {
-        selectedSelfId = -1
         navBack.navigate()
     }
 
@@ -122,23 +120,26 @@ class OrderScreenViewModel(
 
     fun onSelectSelfClick() {
         viewModelScope.launch {
-            getAvailableSelfsUseCase().fold(
-                onSuccess = {
-                    selfDialogUIModel = it.toSelfDialogUIModel()
-                    selectSelfRowUIModel.value = SelectSelfRowUIModel(
-                        selectedSelfName,
+            if (selectedSelfId == -1) {
+                getAvailableSelfsUseCase().fold(
+                    onSuccess = {
                         selfDialogUIModel = it.toSelfDialogUIModel()
-                    )
-                },
-                onFailure = {
-                    informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                        state = FoodieInformationBoxState.FAILED,
-                        message = it.message ?: "در گرفتن سلف‌های مجاز خطایی پیش آمده"
-                    )
-                    showMessage()
-                }
-            )
-
+                        selectSelfRowUIModel.value = SelectSelfRowUIModel(
+                            selectedSelfName,
+                            selfDialogUIModel = it.toSelfDialogUIModel()
+                        )
+                    },
+                    onFailure = {
+                        informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                            state = FoodieInformationBoxState.FAILED,
+                            message = it.message ?: "در گرفتن سلف‌های مجاز خطایی پیش آمده"
+                        )
+                        showMessage()
+                    }
+                )
+            } else {
+                loadProgram()
+            }
         }
     }
 
@@ -152,10 +153,8 @@ class OrderScreenViewModel(
             selectedSelfName = selectedSelfName,
             selfDialogUIModel = selfDialogUIModel
         )
-        if (data.id != selectedSelfId) {
-            selectedSelfId = data.id
-            loadProgram()
-        }
+        selectedSelfId = data.id
+        loadProgram()
     }
 
     private fun showMessage() {

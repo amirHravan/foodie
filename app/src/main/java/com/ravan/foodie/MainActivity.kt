@@ -118,7 +118,8 @@ class MainActivity : ComponentActivity() {
                                 val settingsViewModel = getViewModel<SettingsViewModel>();
                                 SettingsComposable(
                                     viewModel = settingsViewModel,
-                                    navController = navController
+                                    navController = navController,
+                                    finish = { finish() }
                                 )
                             }
                             composable(FoodieRoutes.AutomaticReservationScreen.route) {

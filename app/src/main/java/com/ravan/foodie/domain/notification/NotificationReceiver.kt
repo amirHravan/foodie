@@ -16,7 +16,7 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
         val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_restaurant)
+            .setSmallIcon(R.mipmap.ic_launcher_foreground)
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(getRandomNotificationText(context))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -52,7 +52,7 @@ class NotificationReceiver : BroadcastReceiver() {
             R.string.notification_remember_to_reserve_8,
             R.string.notification_remember_to_reserve_9,
         )
-        return context.getString(notificationMessages.random()) + "غذات رو رزرو کن.\n"
+        return context.getString(notificationMessages.random()) + "\n غذات رو رزرو کن. \n"
     }
 
 }
