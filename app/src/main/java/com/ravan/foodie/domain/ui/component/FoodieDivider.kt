@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 
@@ -15,10 +16,10 @@ fun FoodieDivider(
     modifier: Modifier = Modifier,
     color: Color = RavanTheme.colors.border.onPrimary,
     alpha: Float = 0.8f,
-    thickness: Int = 2,
+    thickness: Dp = 2.dp,
 ) {
     Divider(
-        thickness = thickness.dp,
+        thickness = thickness,
         color = DividerDefaults.color.copy(
             alpha = alpha,
             red = color.red,

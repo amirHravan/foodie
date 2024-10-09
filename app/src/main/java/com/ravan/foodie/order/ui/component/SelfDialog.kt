@@ -34,7 +34,7 @@ fun SelfDialog(
         if (selfDialogItemUIModel != data.selfs.last()) {
             FoodieDivider(
                 color = RavanTheme.colors.border.onSecondary,
-                thickness = 1,
+                thickness = 1.dp,
             )
         }
     }

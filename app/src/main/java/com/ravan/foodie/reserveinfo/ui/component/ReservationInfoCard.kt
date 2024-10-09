@@ -33,7 +33,7 @@ fun ReservationInfoCard(
         data.mealRowUIModelList.forEach { mealRowUIModel ->
             FoodieDivider(
                 color = RavanTheme.colors.border.onSecondary,
-                thickness = 1,
+                thickness = 1.dp,
             )
             MealRow(
                 data = mealRowUIModel,

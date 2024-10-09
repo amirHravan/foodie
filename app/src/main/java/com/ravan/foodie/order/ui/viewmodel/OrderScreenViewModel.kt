@@ -53,7 +53,11 @@ class OrderScreenViewModel(
 
 
     fun onLaunch() {
-        onSelectSelfClick()
+        if (selectedSelfId == - 1) {
+            onSelectSelfClick()
+        } else {
+            loadProgram()
+        }
     }
 
     private fun loadProgram() {
@@ -120,26 +124,23 @@ class OrderScreenViewModel(
 
     fun onSelectSelfClick() {
         viewModelScope.launch {
-            if (selectedSelfId == -1) {
-                getAvailableSelfsUseCase().fold(
-                    onSuccess = {
+            getAvailableSelfsUseCase().fold(
+                onSuccess = {
+                    selfDialogUIModel = it.toSelfDialogUIModel()
+                    selectSelfRowUIModel.value = SelectSelfRowUIModel(
+                        selectedSelfName,
                         selfDialogUIModel = it.toSelfDialogUIModel()
-                        selectSelfRowUIModel.value = SelectSelfRowUIModel(
-                            selectedSelfName,
-                            selfDialogUIModel = it.toSelfDialogUIModel()
-                        )
-                    },
-                    onFailure = {
-                        informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                            state = FoodieInformationBoxState.FAILED,
-                            message = it.message ?: "در گرفتن سلف‌های مجاز خطایی پیش آمده"
-                        )
-                        showMessage()
-                    }
-                )
-            } else {
-                loadProgram()
-            }
+                    )
+                },
+                onFailure = {
+                    informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                        state = FoodieInformationBoxState.FAILED,
+                        message = it.message ?: "در گرفتن سلف‌های مجاز خطایی پیش آمده"
+                    )
+                    showMessage()
+                }
+            )
+
         }
     }
 

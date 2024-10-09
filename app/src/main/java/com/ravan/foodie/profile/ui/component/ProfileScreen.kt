@@ -83,7 +83,7 @@ fun ProfileScreen(
                             .padding(4.dp)
                     )
                     FoodieDivider(
-                        thickness = 1,
+                        thickness = 1.dp,
                         color = RavanTheme.colors.border.onSecondary,
                         alpha = 0.2f
                     )

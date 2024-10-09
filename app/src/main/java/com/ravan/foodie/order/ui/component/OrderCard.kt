@@ -52,7 +52,6 @@ fun LazyListScope.orderCard(
             }
             FoodieDivider(
                 color = RavanTheme.colors.border.onPrimary,
-                thickness = 2,
             )
         }
         itemsIndexed(data.reserveInfoList.toList()) { _, (mealType, reservationFoodDetailList) ->
@@ -105,7 +104,7 @@ private fun OrderMealTypeSection(
             reservationFoodDetailList.forEach { reservationFoodDetail ->
                 FoodieDivider(
                     color = RavanTheme.colors.border.onSecondary,
-                    thickness = 1,
+                    thickness = 1.dp,
                 )
                 OrderFoodDetail(
                     data = reservationFoodDetail,

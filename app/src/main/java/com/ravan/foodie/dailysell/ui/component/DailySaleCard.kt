@@ -84,7 +84,7 @@ fun DailySaleCard(
         }
         FoodieDivider(
             color = RavanTheme.colors.border.onSecondary,
-            thickness = 1,
+            thickness = 1.dp,
         )
         FoodieTextIconRow(
             data = FoodieTextIconRowUIModel(

@@ -9,8 +9,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -54,8 +56,8 @@ class MainActivity : ComponentActivity() {
                         containerColor = RavanTheme.colors.background.primary,
                     ) { paddingValues ->
 
-                        val bottomPadding = remember(paddingValues) {
-                            paddingValues.calculateBottomPadding()
+                        val bottomPadding = remember(paddingValues.calculateBottomPadding()) {
+                            mutableStateOf(paddingValues.calculateBottomPadding())
                         }
 
                         NavHost(
@@ -66,7 +68,7 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = { fadeIn(animationSpec = tween(700)) },
                             popExitTransition = { fadeOut(animationSpec = tween(700)) },
                             modifier = Modifier
-                                .padding(bottom = bottomPadding)
+                                .padding(bottom = 48.dp)
                         ) {
                             composable(FoodieRoutes.SplashScreen.route) {
                                 val splashScreenViewModel = getViewModel<SplashScreenViewModel>();

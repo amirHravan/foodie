@@ -46,7 +46,7 @@ fun FoodieTitleBar(
             TitleBackComponent(tint = tint, onBackClick = onBackClick, title = data.title)
             content?.let { it() }
         }
-        FoodieDivider(color = tint, thickness = 1)
+        FoodieDivider(color = tint, thickness = 1.dp)
     }
 
 }

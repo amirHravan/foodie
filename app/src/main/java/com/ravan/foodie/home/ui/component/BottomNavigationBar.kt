@@ -1,11 +1,15 @@
 package com.ravan.foodie.home.ui.component
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -14,7 +18,6 @@ import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.domain.util.FoodieRoutes
 import com.ravan.foodie.home.ui.model.BottomNavItems
 import okhttp3.internal.toImmutableList
-
 
 private val BOTTOM_NAV_ITEMS = listOf(
     BottomNavItems.AutoReserve,
@@ -47,8 +50,9 @@ fun BottomNavigationBar(navController: NavController) {
 
         if (currentRoute in whiteList) {
             BOTTOM_NAV_ITEMS.forEach { item ->
+                val isSelected = currentRoute == item.route
                 BottomNavigationItem(
-                    selected = currentRoute == item.route,
+                    selected = isSelected,
                     onClick = {
                         navController.navigate(item.route) {
                             popUpTo(FoodieRoutes.ReservationInfoScreen.route)
@@ -56,11 +60,22 @@ fun BottomNavigationBar(navController: NavController) {
                         }
                     },
                     icon = {
-                        Icon(
-                            painter = painterResource(item.iconRes),
-                            tint = RavanTheme.colors.icon.onPrimary,
-                            contentDescription = null,
-                        )
+                        Box(
+                            modifier = Modifier,
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+                            Icon(
+                                painter = painterResource(item.iconRes),
+                                tint = if (isSelected) {
+                                    RavanTheme.colors.icon.onPrimary
+                                } else {
+                                    RavanTheme.colors.icon.onPrimary.copy(alpha = 0.5f)
+                                },
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(24.dp)
+                            )
+                        }
                     },
                     selectedContentColor = RavanTheme.colors.icon.onPrimary,
                     unselectedContentColor = RavanTheme.colors.icon.onPrimary.copy(alpha = 0.5f)

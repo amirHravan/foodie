@@ -52,7 +52,7 @@ fun SelectSelfRow(
                 onExpandClick()
             }
             .border(2.dp, borderColor, RavanTheme.shapes.r8)
-            .padding(8.dp),
+            .padding(12.dp),
         contentAlignment = Alignment.TopStart
     ) {
         Icon(
@@ -79,7 +79,7 @@ fun SelectSelfRow(
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(
                         text = stringResource(id = R.string.order_select_self_dialog_title),

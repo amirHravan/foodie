@@ -123,7 +123,7 @@ fun AutoReserveScreen(
                         )
                         FoodieDivider(
                             color = RavanTheme.colors.border.onSecondary,
-                            thickness = 1
+                            thickness = 1.dp
                         )
                         when (reserveResultInfoRowUIModelList) {
                             is LoadableData.NotLoaded -> Unit
