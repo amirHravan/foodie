@@ -84,6 +84,7 @@
     <string name="order_order_food_detail_reserve">رزرو غذا</string>
     <string name="settings_logout_button_label">خروج از حساب کاربری</string>
     <string name="about_us_send_feedback">ارسال انتقاد/پیشنهاد</string>
+    <string name="splash_screen_caption">رزرو غذای سامانه سماد</string>
 
 
 </resources>
