@@ -1,7 +1,6 @@
 package com.ravan.foodie.domain.util
 
 import android.os.Build
-import android.util.Log
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.ZoneId

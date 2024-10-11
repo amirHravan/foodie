@@ -1,6 +1,5 @@
 package com.ravan.foodie.order.ui.model
 
-import com.ravan.foodie.order.domain.model.MealType
 import com.ravan.foodie.order.domain.model.ReservableFoodDetail
 
 data class OrderFoodDetailUIModel(

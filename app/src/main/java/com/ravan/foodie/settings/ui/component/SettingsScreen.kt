@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -74,7 +72,9 @@ fun SettingsScreen(
                     title = stringResource(id = R.string.settings_logout_button_label),
                     iconRes = R.drawable.ic_logout
                 ), onClick = onLogoutClick,
-                modifier = Modifier.height(50.dp).fillMaxWidth(1f)
+                modifier = Modifier
+                    .height(50.dp)
+                    .fillMaxWidth(1f)
             )
         }
     }

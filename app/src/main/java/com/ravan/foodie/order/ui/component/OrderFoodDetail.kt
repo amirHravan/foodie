@@ -34,51 +34,52 @@ fun OrderFoodDetail(
 ) {
     val (backgroundColor, borderColor) = getBackgroundColor(data.isSelected, data.isDisable)
     val isFoodMissed = remember { mutableStateOf(!data.isSelected && data.isDisable) }
-    val tagLabelId = remember { mutableIntStateOf(getTagLabel(isFoodMissed.value, data.isSelected)) }
+    val tagLabelId =
+        remember { mutableIntStateOf(getTagLabel(isFoodMissed.value, data.isSelected)) }
     val buttonData = remember { mutableStateOf(getButtonTitleIconId(data.isSelected)) }
 
-        Column(
-            modifier = modifier
-                .background(RavanTheme.colors.background.secondary)
-                .background(backgroundColor)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = data.foodName,
-                color = RavanTheme.colors.text.onSecondary,
-                style = RavanTheme.typography.h6,
-                textDecoration = null,
-                modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+    Column(
+        modifier = modifier
+            .background(RavanTheme.colors.background.secondary)
+            .background(backgroundColor)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = data.foodName,
+            color = RavanTheme.colors.text.onSecondary,
+            style = RavanTheme.typography.h6,
+            textDecoration = null,
+            modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+        )
+        FoodieTextIconRow(
+            data = FoodieTextIconRowUIModel(
+                iconRes = R.drawable.ic_money_bag,
+                text = data.price.toString().toLocalNumber(),
+            ),
+            color = RavanTheme.colors.text.onSecondary,
+            textStyle = RavanTheme.typography.body2,
+            textDecoration = null,
+        )
+        FoodieTextIconRow(
+            data = FoodieTextIconRowUIModel(
+                iconRes = R.drawable.ic_tag,
+                text = stringResource(tagLabelId.intValue),
+            ),
+            color = RavanTheme.colors.text.onSecondary,
+            textStyle = RavanTheme.typography.body2,
+        )
+        if (!data.isDisable && showActionButton) {
+            FoodieButton(
+                data = FoodieButtonUIModel.General(
+                    iconRes = buttonData.value.second,
+                    title = stringResource(id = buttonData.value.first),
+                ), onClick = onReserveFoodDetailClick,
+                modifier = Modifier.padding(top = 8.dp, bottom = 2.dp)
             )
-            FoodieTextIconRow(
-                data = FoodieTextIconRowUIModel(
-                    iconRes = R.drawable.ic_money_bag,
-                    text = data.price.toString().toLocalNumber(),
-                ),
-                color = RavanTheme.colors.text.onSecondary,
-                textStyle = RavanTheme.typography.body2,
-                textDecoration = null,
-            )
-            FoodieTextIconRow(
-                data = FoodieTextIconRowUIModel(
-                    iconRes = R.drawable.ic_tag,
-                    text = stringResource(tagLabelId.intValue),
-                ),
-                color = RavanTheme.colors.text.onSecondary,
-                textStyle = RavanTheme.typography.body2,
-            )
-            if (!data.isDisable && showActionButton) {
-                FoodieButton(
-                    data = FoodieButtonUIModel.General(
-                        iconRes = buttonData.value.second,
-                        title = stringResource(id = buttonData.value.first),
-                    ), onClick = onReserveFoodDetailClick,
-                    modifier = Modifier.padding(top = 8.dp, bottom = 2.dp)
-                )
-            }
         }
+    }
 }
 
 fun getButtonTitleIconId(selected: Boolean): Pair<Int, Int> {

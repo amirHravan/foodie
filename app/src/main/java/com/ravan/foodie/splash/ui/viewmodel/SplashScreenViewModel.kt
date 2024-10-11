@@ -1,7 +1,6 @@
 package com.ravan.foodie.splash.ui.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.ravan.foodie.domain.model.NavigationEvent

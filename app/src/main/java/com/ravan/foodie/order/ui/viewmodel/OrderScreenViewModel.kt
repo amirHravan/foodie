@@ -53,7 +53,7 @@ class OrderScreenViewModel(
 
 
     fun onLaunch() {
-        if (selectedSelfId == - 1) {
+        if (selectedSelfId == -1) {
             onSelectSelfClick()
         } else {
             loadProgram()
