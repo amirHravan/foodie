@@ -54,9 +54,11 @@ fun BottomNavigationBar(navController: NavController) {
                 BottomNavigationItem(
                     selected = isSelected,
                     onClick = {
-                        navController.navigate(item.route) {
-                            popUpTo(FoodieRoutes.ReservationInfoScreen.route)
-                            launchSingleTop = true
+                        if (currentRoute != item.route) {
+                            navController.navigate(item.route) {
+                                popUpTo(FoodieRoutes.ReservationInfoScreen.route)
+                                launchSingleTop = true
+                            }
                         }
                     },
                     icon = {

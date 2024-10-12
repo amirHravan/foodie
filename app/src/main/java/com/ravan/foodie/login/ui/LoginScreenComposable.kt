@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import com.ravan.foodie.domain.model.LoadableData
+import com.ravan.foodie.domain.ui.component.FoodieButtonState
 import com.ravan.foodie.domain.util.FoodieRoutes
 import com.ravan.foodie.login.ui.component.LoginScreen
 import com.ravan.foodie.login.ui.component.body.LoginButtonState
@@ -24,9 +25,9 @@ fun LoginScreenComposable(
             when (viewModel.loginToken.value) {
                 LoadableData.NotLoaded,
                 is LoadableData.Failed,
-                is LoadableData.Loaded -> LoginButtonState.Enable
+                is LoadableData.Loaded -> FoodieButtonState.Enabled
 
-                LoadableData.Loading -> LoginButtonState.Loading
+                LoadableData.Loading -> FoodieButtonState.Loading
             }
         )
     }

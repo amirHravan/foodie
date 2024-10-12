@@ -70,7 +70,9 @@ fun SettingsQuestionAnswerRow(
                 text = data.answer,
                 style = RavanTheme.typography.body2,
                 color = color,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
             )
         }
 
@@ -85,7 +87,7 @@ private fun SettingsQuestionAnswerRowPreview() {
         SettingsQuestionAnswerRow(
             data = SettingsQuestionAnswerRowUIModel(
                 question = "کد این نرم افزار اوپن سورسه؟",
-                answer = "در حال حاضر نه، چون بعضی از بخش\u200Cها با متود چابک (تف\u200Cمال) آماده شده؛ لذا به زودی درستش می\u200Cکنم و اوپن سورسش می\u200Cکنم."
+                answer = "در حال حاضر نه"
             ),
             color = RavanTheme.colors.text.onPrimary
         )

@@ -23,6 +23,7 @@ import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.domain.util.sendMail
 import com.ravan.foodie.settings.ui.model.SettingsQuestionAnswerRowUIModel
+import okhttp3.internal.toImmutableList
 
 @Composable
 fun ColumnScope.SettingsBottomSheet(
@@ -33,7 +34,9 @@ fun ColumnScope.SettingsBottomSheet(
             (R.string.about_us_question_1 to R.string.about_us_answer_1),
             (R.string.about_us_question_2 to R.string.about_us_answer_2),
             (R.string.about_us_question_3 to R.string.about_us_answer_3),
-        )
+            (R.string.about_us_question_4 to R.string.about_us_answer_4),
+            (R.string.about_us_question_5 to R.string.about_us_answer_5),
+        ).toImmutableList()
     }
 
     val context = LocalContext.current
@@ -52,6 +55,7 @@ fun ColumnScope.SettingsBottomSheet(
                 style = RavanTheme.typography.h5,
                 color = RavanTheme.colors.text.onSecondary,
                 modifier = Modifier
+                    .padding(vertical = 8.dp)
             )
         }
         item {

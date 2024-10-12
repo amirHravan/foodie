@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,7 +22,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
+import com.ravan.foodie.domain.ui.component.FoodieButton
+import com.ravan.foodie.domain.ui.component.FoodieButtonState
 import com.ravan.foodie.domain.ui.component.FoodieInformationBox
+import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.login.ui.component.body.LoginButton
@@ -36,7 +40,7 @@ import com.ravan.foodie.login.ui.model.LoginTextFieldUIModel
 fun LoginScreen(
     data: LoginScreenUIModel,
     loginStatus: FoodieInformationBoxUIModel?,
-    buttonState: LoginButtonState,
+    buttonState: FoodieButtonState,
     onUserNameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
@@ -99,11 +103,14 @@ fun LoginScreen(
             }
         }
         Spacer(modifier = Modifier.size(8.dp))
-        LoginButton(
-            data = LoginButtonUIModel(title = stringResource(id = R.string.login_login_button_label)),
-            onClick = onLoginClick,
+        FoodieButton(
+            data = FoodieButtonUIModel.General(
+                title = stringResource(id = R.string.login_login_button_label),
+                iconRes = R.drawable.ic_login,
+            ), onClick = onLoginClick,
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .height(48.dp),
             state = buttonState,
         )
     }
@@ -119,7 +126,7 @@ fun LoginScreenPreview() {
             onUserNameChange = {},
             onPasswordChange = {},
             onLoginClick = {},
-            buttonState = LoginButtonState.Enable
+            buttonState = FoodieButtonState.Enabled
         )
     }
 }
