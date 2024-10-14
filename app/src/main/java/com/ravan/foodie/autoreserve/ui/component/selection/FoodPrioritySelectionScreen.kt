@@ -14,7 +14,9 @@ import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
 import com.ravan.foodie.autoreserve.ui.model.AutoReservePriorityScreenUIModel
 import com.ravan.foodie.autoreserve.ui.model.FoodPriorityUIModel
+import com.ravan.foodie.domain.ui.component.FoodieButton
 import com.ravan.foodie.domain.ui.component.FoodieTitleBar
+import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import kotlinx.collections.immutable.toImmutableList
@@ -23,6 +25,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun FoodPriorityScreen(
     data: AutoReservePriorityScreenUIModel,
     onPriorityChange: (Int, Int) -> Unit,
+    onClearPriorities: () -> Unit,
     onBackClick: () -> Unit,
 ) {
 
@@ -36,7 +39,12 @@ fun FoodPriorityScreen(
                 title = stringResource(id = R.string.priority_selection_screen_title)
             ),
             onBackClick = onBackClick
-        )
+        ) {
+            FoodieButton(data = FoodieButtonUIModel.General(
+                title = stringResource(id = R.string.clear_priorities_button_text),
+                iconRes = null,
+            ), onClick = onClearPriorities)
+        }
         LazyColumn(
             modifier = Modifier
                 .background(RavanTheme.colors.background.primary)
@@ -92,7 +100,8 @@ private fun FoodPriorityScreenPreview() {
         FoodPriorityScreen(
             data = data,
             onPriorityChange = { _, _ -> },
-            onBackClick = {}
+            onClearPriorities = {},
+            onBackClick = {},
         )
     }
 

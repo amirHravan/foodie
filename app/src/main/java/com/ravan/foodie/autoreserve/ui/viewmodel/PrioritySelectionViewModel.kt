@@ -67,4 +67,14 @@ class PrioritySelectionViewModel(
     fun onBackClick() {
         navBack.navigate()
     }
+
+    fun onClearPriorities() {
+
+        viewModelScope.launch {
+            foodPriorityList?.forEach { foodPriority ->
+                updateFoodPriorityUseCase(foodPriority, 0)
+            }
+            onLaunch(false)
+        }
+    }
 }

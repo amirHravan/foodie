@@ -84,7 +84,7 @@ fun RavanTheme(
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(
         color = colors.background.primary,
-        darkIcons = true
+        darkIcons = false,
     )
 
     ProvideRavanTheme(colors, ShapesDefault) {

@@ -35,7 +35,8 @@ fun PrioritySelectionComposable(
                             newPriority
                         )
                     },
-                    onBackClick = { viewModel.onBackClick() }
+                    onBackClick = { viewModel.onBackClick() },
+                    onClearPriorities = { viewModel.onClearPriorities() }
                 )
             }
 

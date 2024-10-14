@@ -32,7 +32,7 @@ fun OrderFoodDetail(
     modifier: Modifier = Modifier,
     showActionButton: Boolean = true
 ) {
-    val (backgroundColor, borderColor) = getBackgroundColor(data.isSelected, data.isDisable)
+    val (backgroundColor, _) = getBackgroundColor(data.isSelected, data.isDisable)
     val isFoodMissed = remember { mutableStateOf(!data.isSelected && data.isDisable) }
     val tagLabelId =
         remember { mutableIntStateOf(getTagLabel(isFoodMissed.value, data.isSelected)) }
