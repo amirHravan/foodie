@@ -40,10 +40,12 @@ fun FoodPriorityScreen(
             ),
             onBackClick = onBackClick
         ) {
-            FoodieButton(data = FoodieButtonUIModel.General(
-                title = stringResource(id = R.string.clear_priorities_button_text),
-                iconRes = null,
-            ), onClick = onClearPriorities)
+            FoodieButton(
+                data = FoodieButtonUIModel.General(
+                    title = stringResource(id = R.string.clear_priorities_button_text),
+                    iconRes = null,
+                ), onClick = onClearPriorities
+            )
         }
         LazyColumn(
             modifier = Modifier

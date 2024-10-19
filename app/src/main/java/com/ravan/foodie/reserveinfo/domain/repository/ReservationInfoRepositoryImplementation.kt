@@ -29,7 +29,7 @@ class ReservationInfoRepositoryImplementation(
     }
 
     private suspend fun cleanForgetCodeDataBase() {
-        val twoWeeksAgo = System.currentTimeMillis() - (14 * 24 * 60 * 60 * 1000L)
+        val twoWeeksAgo = System.currentTimeMillis() - (7 * 24 * 60 * 60 * 1000L)
         forgetCodeDao.deleteOldEntries(twoWeeksAgo)
         forgetCodeDao.deleteNonValidEntries()
     }

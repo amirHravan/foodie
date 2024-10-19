@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -60,7 +61,7 @@ fun ProfileScreen(
             LazyColumn(
                 modifier = Modifier
                     .padding(top = 16.dp)
-                    .clip(RavanTheme.shapes.r12)
+                    .clip(RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp))
                     .weight(1f)
                     .background(RavanTheme.colors.background.secondary)
                     .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -98,7 +99,7 @@ fun ProfileScreen(
 private fun ProfileScreenPreview() {
     RavanTheme {
         ProfileScreen(
-            data = profileNurtureProfileDto.toSamadNurtureProfile().toProfileScreenUIModel()
+            data = profileNurtureProfileDto.toSamadNurtureProfile().toProfileScreenUIModel(),
         )
     }
 }

@@ -5,8 +5,6 @@ import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -21,8 +19,6 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.ravan.foodie.R
 import com.ravan.foodie.domain.notification.setAlarmsBasedOnPreference
-import com.ravan.foodie.domain.ui.component.FoodieButton
-import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.settings.ui.component.body.SettingsTitleToggleRow
 import com.ravan.foodie.settings.ui.model.SettingsTitleToggleRowUIModel
@@ -31,7 +27,6 @@ import com.ravan.foodie.settings.ui.model.SettingsTitleToggleRowUIModel
 @Composable
 fun SettingsScreen(
     onNotificationToggleChange: (Boolean) -> Unit,
-    onLogoutClick: () -> Unit,
 ) {
 
     val notificationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -65,18 +60,6 @@ fun SettingsScreen(
                 initState = true,
             )
         }
-
-        item {
-            FoodieButton(
-                data = FoodieButtonUIModel.General(
-                    title = stringResource(id = R.string.settings_logout_button_label),
-                    iconRes = R.drawable.ic_logout
-                ), onClick = onLogoutClick,
-                modifier = Modifier
-                    .height(50.dp)
-                    .fillMaxWidth(1f)
-            )
-        }
     }
 }
 
@@ -86,7 +69,6 @@ private fun SettingsScreenPreview() {
     RavanTheme {
         SettingsScreen(
             onNotificationToggleChange = {},
-            onLogoutClick = {}
         )
 
     }

@@ -3,6 +3,7 @@ package com.ravan.foodie
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -12,7 +13,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -68,9 +68,9 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = { fadeIn(animationSpec = tween(700)) },
                             popExitTransition = { fadeOut(animationSpec = tween(700)) },
                             modifier = Modifier
-                                .padding(bottom = 48.dp)
+                                .padding(bottom = bottomPadding.value)
                         ) {
-                            composable(FoodieRoutes.SplashScreen.route) {
+                            composable(route = FoodieRoutes.SplashScreen.route) {
                                 val splashScreenViewModel = getViewModel<SplashScreenViewModel>();
                                 SplashScreenComposable(
                                     viewModel = splashScreenViewModel,
@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
                                     finish = { finish() }
                                 )
                             }
-                            composable(FoodieRoutes.LoginScreen.route) {
+                            composable(route = FoodieRoutes.LoginScreen.route) {
                                 val loginViewModel = getViewModel<LoginScreenViewModel>();
                                 LoginScreenComposable(
                                     viewModel = loginViewModel,
@@ -86,7 +86,11 @@ class MainActivity : ComponentActivity() {
                                     finish = { finish() }
                                 )
                             }
-                            composable(FoodieRoutes.ReservationInfoScreen.route) {
+                            composable(
+                                route = FoodieRoutes.ReservationInfoScreen.route,
+//                                popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
+//                                popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
+                            ) {
                                 val reservationInfoViewModel =
                                     getViewModel<ReservationInfoViewModel>();
                                 ReservationInfoScreenComposable(
@@ -95,43 +99,107 @@ class MainActivity : ComponentActivity() {
                                     finish = { finish() }
                                 )
                             }
-                            composable(FoodieRoutes.ReservableScreen.route) {
+                            composable(
+                                route = FoodieRoutes.ReservableScreen.route,
+//                                enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700)) },
+//                                exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700)) },
+                                popEnterTransition = {
+                                    slideIntoContainer(
+                                        AnimatedContentTransitionScope.SlideDirection.Start,
+                                        tween(700)
+                                    )
+                                },
+                                popExitTransition = {
+                                    slideOutOfContainer(
+                                        AnimatedContentTransitionScope.SlideDirection.Start,
+                                        tween(700)
+                                    )
+                                },
+                            ) {
                                 val reservationInfoViewModel = getViewModel<OrderScreenViewModel>();
                                 OrderScreenComposable(
                                     viewModel = reservationInfoViewModel,
                                     navController = navController
                                 )
                             }
-                            composable(FoodieRoutes.ProfileScreen.route) {
+                            composable(
+                                route = FoodieRoutes.ProfileScreen.route,
+//                                enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
+//                                exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
+                                popEnterTransition = {
+                                    slideIntoContainer(
+                                        AnimatedContentTransitionScope.SlideDirection.End,
+                                        tween(700)
+                                    )
+                                },
+                                popExitTransition = {
+                                    slideOutOfContainer(
+                                        AnimatedContentTransitionScope.SlideDirection.End,
+                                        tween(700)
+                                    )
+                                },
+                            ) {
                                 val reservationInfoViewModel = getViewModel<ProfileViewModel>();
                                 ProfileComposable(
                                     viewModel = reservationInfoViewModel,
-                                    navController = navController
+                                    navController = navController,
+                                    onFinish = { finish() }
                                 )
                             }
-                            composable(FoodieRoutes.DailySaleScreen.route) {
+                            composable(
+                                route = FoodieRoutes.DailySaleScreen.route,
+//                                enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
+//                                exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
+                                popEnterTransition = {
+                                    slideIntoContainer(
+                                        AnimatedContentTransitionScope.SlideDirection.End,
+                                        tween(700)
+                                    )
+                                },
+                                popExitTransition = {
+                                    slideOutOfContainer(
+                                        AnimatedContentTransitionScope.SlideDirection.End,
+                                        tween(700)
+                                    )
+                                },
+                            ) {
                                 val dailySellViewModel = getViewModel<DailySellViewModel>();
                                 DailySellComposable(
                                     viewModel = dailySellViewModel,
                                     navController = navController
                                 )
                             }
-                            composable(FoodieRoutes.SettingsScreen.route) {
+                            composable(route = FoodieRoutes.SettingsScreen.route) {
                                 val settingsViewModel = getViewModel<SettingsViewModel>();
                                 SettingsComposable(
                                     viewModel = settingsViewModel,
                                     navController = navController,
-                                    finish = { finish() }
                                 )
                             }
-                            composable(FoodieRoutes.AutomaticReservationScreen.route) {
+                            composable(
+                                route = FoodieRoutes.AutomaticReservationScreen.route,
+//                                enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700)) },
+//                                exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(700)) },
+                                popEnterTransition = {
+                                    slideIntoContainer(
+                                        AnimatedContentTransitionScope.SlideDirection.Start,
+                                        tween(700)
+                                    )
+                                },
+                                popExitTransition = {
+                                    slideOutOfContainer(
+                                        AnimatedContentTransitionScope.SlideDirection.Start,
+                                        tween(700)
+                                    )
+                                },
+                            ) {
                                 val autoReserveViewModel = getViewModel<AutoReserveViewModel>();
                                 AutoReserveComposable(
                                     viewModel = autoReserveViewModel,
                                     navController = navController
                                 )
                             }
-                            composable(FoodieRoutes.FoodPriorityScreen.route) {
+                            composable(route = FoodieRoutes.FoodPriorityScreen.route) {
                                 val prioritySelectionViewModel =
                                     getViewModel<PrioritySelectionViewModel>();
                                 PrioritySelectionComposable(

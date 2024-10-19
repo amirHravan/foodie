@@ -28,10 +28,7 @@ import com.ravan.foodie.domain.ui.component.FoodieInformationBox
 import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
-import com.ravan.foodie.login.ui.component.body.LoginButton
-import com.ravan.foodie.login.ui.component.body.LoginButtonState
 import com.ravan.foodie.login.ui.component.body.LoginTextField
-import com.ravan.foodie.login.ui.model.LoginButtonUIModel
 import com.ravan.foodie.login.ui.model.LoginScreenUIModel
 import com.ravan.foodie.login.ui.model.LoginTextFieldUIModel
 
@@ -107,7 +104,8 @@ fun LoginScreen(
             data = FoodieButtonUIModel.General(
                 title = stringResource(id = R.string.login_login_button_label),
                 iconRes = R.drawable.ic_login,
-            ), onClick = onLoginClick,
+            ),
+            onClick = onLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),

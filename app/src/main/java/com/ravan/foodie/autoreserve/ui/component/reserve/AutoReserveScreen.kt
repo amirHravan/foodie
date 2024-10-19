@@ -116,7 +116,7 @@ fun AutoReserveScreen(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = stringResource(id = R.string.reserve_result_info_title),
+                            text = stringResource(id = R.string.auto_reserve_result_info_title),
                             color = RavanTheme.colors.text.onSecondary,
                             style = RavanTheme.typography.h6,
                             modifier = Modifier.padding(12.dp)

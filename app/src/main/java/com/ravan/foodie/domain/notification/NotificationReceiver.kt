@@ -21,6 +21,7 @@ class NotificationReceiver : BroadcastReceiver() {
             .setContentText(getRandomNotificationText(context))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
+
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
                     context,
@@ -51,8 +52,16 @@ class NotificationReceiver : BroadcastReceiver() {
             R.string.notification_remember_to_reserve_7,
             R.string.notification_remember_to_reserve_8,
             R.string.notification_remember_to_reserve_9,
+            R.string.notification_remember_to_reserve_10,
+            R.string.notification_remember_to_reserve_11,
+            R.string.notification_remember_to_reserve_12,
+            R.string.notification_remember_to_reserve_13,
+            R.string.notification_remember_to_reserve_14,
+            R.string.notification_remember_to_reserve_15,
+            R.string.notification_remember_to_reserve_16,
+            R.string.notification_remember_to_reserve_17,
         )
-        return context.getString(notificationMessages.random()) + "\n غذات رو رزرو کن. \n"
+        return context.getString(notificationMessages.random())
     }
 
 }

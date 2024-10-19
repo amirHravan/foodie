@@ -1,5 +1,7 @@
 package com.ravan.foodie.dailysell.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -18,10 +21,12 @@ import com.ravan.foodie.R
 import com.ravan.foodie.dailysell.ui.component.DailySaleScreen
 import com.ravan.foodie.dailysell.ui.viewmodel.DailySellViewModel
 import com.ravan.foodie.domain.model.LoadableData
+import com.ravan.foodie.domain.ui.component.FoodieButton
 import com.ravan.foodie.domain.ui.component.FoodieFailCard
 import com.ravan.foodie.domain.ui.component.FoodieInformationBox
 import com.ravan.foodie.domain.ui.component.FoodieProgressIndicator
 import com.ravan.foodie.domain.ui.component.FoodieTitleBar
+import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.model.FoodieFailCardUIModel
 import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
@@ -36,6 +41,8 @@ fun DailySellComposable(
         viewModel.dailySaleScreenUIModel.value
     ) { viewModel.dailySaleScreenUIModel.value }
 
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -49,7 +56,22 @@ fun DailySellComposable(
                 data = FoodieTitleBarUIModel(
                     title = stringResource(id = R.string.daily_sell_screen_title),
                 ), onBackClick = { viewModel.onBackClick() }
-            )
+            ) {
+
+                FoodieButton(
+                    data = FoodieButtonUIModel.General(
+                        iconRes = R.drawable.ic_payment,
+                        title = stringResource(id = R.string.increase_credit_button_label)
+                    ),
+                    onClick = {
+                        viewModel.onIncreaseCreditClick() { url ->
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            context.startActivity(intent)
+                        }
+                    },
+
+                    )
+            }
             when (dailySellScreenUIModel) {
                 is LoadableData.Failed -> {
                     FoodieFailCard(

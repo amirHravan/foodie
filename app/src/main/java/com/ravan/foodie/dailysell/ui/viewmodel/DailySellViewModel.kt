@@ -1,7 +1,9 @@
 package com.ravan.foodie.dailysell.ui.viewmodel
 
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.ravan.foodie.credit.domain.usecase.GetRedirectLoginAsTokenUseCase
 import com.ravan.foodie.dailysell.domain.model.DailySellProgram
 import com.ravan.foodie.dailysell.domain.model.UserDailySales
 import com.ravan.foodie.dailysell.domain.usecase.GetDailySellProgramUseCase
@@ -24,7 +26,8 @@ class DailySellViewModel(
     private val getUserDailySalesUseCase: GetUserDailySalesUseCase,
     private val getDailySellProgramUseCase: GetDailySellProgramUseCase,
     private val getForgetCodeUseCase: GetForgetCodeUseCase,
-    private val getForgetCodeMapCacheUseCase: GetForgetCodeMapCacheUseCase
+    private val getForgetCodeMapCacheUseCase: GetForgetCodeMapCacheUseCase,
+    private val getRedirectLoginAsTokenUseCase: GetRedirectLoginAsTokenUseCase,
 ) : FoodieViewModel() {
 
     val dailySaleScreenUIModel =
@@ -68,6 +71,41 @@ class DailySellViewModel(
 
     }
 
+
+    fun onIncreaseCreditClick(
+        invokeIntent: (String) -> Unit,
+    ) {
+        viewModelScope.launch {
+
+            getRedirectLoginAsTokenUseCase().fold(
+                onSuccess = {
+                    informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                        message = "در حال انتقال به صفحه افزایش اعتبار...",
+                        state = FoodieInformationBoxState.SUCCESS
+                    )
+
+                    val url = Uri.Builder()
+                        .scheme("https")  // Protocol (https, http, etc.)
+                        .authority("setad.dining.sharif.edu")  // Base URL
+                        .appendPath("j_security_check")  // Path segment (if any)
+                        .appendQueryParameter("loginAsToken", it.loginAsToken)  // Add query params
+                        .appendQueryParameter("redirect", "/nurture/user/credit/charge/view.rose")
+                        .build()
+                        .toString()
+
+                    invokeIntent(url)
+                },
+                onFailure = {
+                    informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                        message = it.message ?: "در افزایش اعتبار خطایی پیش آمده",
+                        state = FoodieInformationBoxState.FAILED
+                    )
+                }
+            )
+            showInformationBox()
+        }
+
+    }
 
     fun onRefresh() {
         getDailySellProgram()

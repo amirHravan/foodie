@@ -64,9 +64,15 @@ val Neutral2 = Color(0x61ffffff)
 val Neutral1 = Color(0xbdffffff)
 val Neutral0 = Color(0xffffffff)
 
-val RavanBlue = Color(0xFF32012F)
-val RavanWhite = Color(0xFFFBF4FA)
-val RavanBlack = Color(0xFF0A0119)
+//val RavanBlue = Color(0xFF32012F)
+//val RavanWhite = Color(0xFFFBF4FA)
+//val RavanBlack = Color(0xFF0A0119)
+
+
+val RavanBlue = Color(0xFF025159)
+val RavanWhite = Color(0xFFFBFDFE)
+val RavanBlack = Color(0xFF01202D)
+
 
 val FunctionalRed = Color(0xffd00036)
 val FunctionalRedDark = Color(0xffea6d7e)

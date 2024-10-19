@@ -21,6 +21,6 @@ val profileModule = module {
     factory { GetNurtureProfile(get()) }
 
     viewModel {
-        ProfileViewModel(get())
+        ProfileViewModel(get(), get())
     }
 }

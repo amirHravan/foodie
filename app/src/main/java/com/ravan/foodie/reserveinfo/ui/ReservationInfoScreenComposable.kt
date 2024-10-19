@@ -3,28 +3,26 @@ package com.ravan.foodie.reserveinfo.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ravan.foodie.R
 import com.ravan.foodie.domain.model.LoadableData
+import com.ravan.foodie.domain.ui.component.FoodieButton
 import com.ravan.foodie.domain.ui.component.FoodieFailCard
 import com.ravan.foodie.domain.ui.component.FoodieInformationBox
 import com.ravan.foodie.domain.ui.component.FoodieProgressIndicator
 import com.ravan.foodie.domain.ui.component.FoodieTitleBar
+import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.model.FoodieFailCardUIModel
 import com.ravan.foodie.domain.ui.model.FoodieTitleBarUIModel
 import com.ravan.foodie.domain.ui.theme.RavanTheme
@@ -57,13 +55,12 @@ fun ReservationInfoScreenComposable(
                     title = stringResource(id = R.string.reservation_info_screen_title),
                 ), onBackClick = null
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_tune),
-                    contentDescription = "SettingsIcon",
-                    tint = RavanTheme.colors.icon.onPrimary,
+                FoodieButton(
+                    data = FoodieButtonUIModel.General(
+                        iconRes = R.drawable.ic_tune,
+                        title = stringResource(id = R.string.settings_button_label)
+                    ), onClick = { viewModel.onSettingsClick() },
                     modifier = Modifier
-                        .size(20.dp)
-                        .clickable { viewModel.onSettingsClick() }
                 )
             }
             when (reservationInfoUIModel) {

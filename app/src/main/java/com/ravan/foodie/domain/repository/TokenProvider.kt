@@ -76,7 +76,7 @@ class TokenProvider(
             Result.success(newToken)
         } else {
             Log.e("LoginRepository", "Error: ${result.errorBody()?.string()}")
-            Result.failure(Exception("${result.errorBody() ?: "نام\u200C کاربری / رمزعبور نادرست است"}"))
+            Result.failure(Exception("نام\u200C کاربری / رمزعبور نادرست است"))
         }
     }
 

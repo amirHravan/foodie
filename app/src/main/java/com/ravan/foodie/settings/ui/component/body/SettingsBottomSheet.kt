@@ -34,7 +34,6 @@ fun ColumnScope.SettingsBottomSheet(
             (R.string.about_us_question_1 to R.string.about_us_answer_1),
             (R.string.about_us_question_2 to R.string.about_us_answer_2),
             (R.string.about_us_question_3 to R.string.about_us_answer_3),
-            (R.string.about_us_question_4 to R.string.about_us_answer_4),
             (R.string.about_us_question_5 to R.string.about_us_answer_5),
         ).toImmutableList()
     }
@@ -100,6 +99,8 @@ fun ColumnScope.SettingsBottomSheet(
                 }
             )
         }
+
+        item {}
     }
 }
 

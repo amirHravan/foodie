@@ -37,16 +37,6 @@ class SettingsViewModel(
         navAboutUs.navigate()
     }
 
-    fun onLogoutClick(
-        onFinish: () -> Unit,
-    ) {
-        preferencesManager.remove(SharedPrefKeys.RefreshToken.key)
-        preferencesManager.remove(SharedPrefKeys.Username.key)
-        preferencesManager.remove(SharedPrefKeys.Password.key)
-        preferencesManager.remove(SharedPrefKeys.AccessToken.key)
-        onFinish()
-    }
-
     fun onSendFeedBackClick(onFinish: () -> Unit) {
         onFinish()
     }

@@ -10,7 +10,6 @@ import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.ui.component.FoodieButtonState
 import com.ravan.foodie.domain.util.FoodieRoutes
 import com.ravan.foodie.login.ui.component.LoginScreen
-import com.ravan.foodie.login.ui.component.body.LoginButtonState
 import com.ravan.foodie.login.ui.model.LoginScreenUIModel
 import com.ravan.foodie.login.ui.viewmodel.LoginScreenViewModel
 

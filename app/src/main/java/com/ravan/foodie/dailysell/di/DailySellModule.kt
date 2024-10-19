@@ -22,5 +22,5 @@ val dailySellModule = module {
 
     factory { GetUserDailySalesUseCase(get()) }
 
-    viewModel { DailySellViewModel(get(), get(), get(), get(), get()) }
+    viewModel { DailySellViewModel(get(), get(), get(), get(), get(), get()) }
 }
