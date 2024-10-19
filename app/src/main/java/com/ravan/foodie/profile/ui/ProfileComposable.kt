@@ -36,10 +36,6 @@ fun ProfileComposable(
     val profileUIModel = remember(viewModel.profileScreenUIModel.value) {
         viewModel.profileScreenUIModel.value
     }
-    val context = LocalContext.current
-    val packageManager: PackageManager = context.packageManager
-    val intent: Intent = packageManager.getLaunchIntentForPackage(context.packageName)!!
-    val componentName: ComponentName? = intent.component
 
     Column(
         Modifier

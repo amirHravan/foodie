@@ -92,7 +92,7 @@ class MainActivity : ComponentActivity() {
 //                                popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
                             ) {
                                 val reservationInfoViewModel =
-                                    getViewModel<ReservationInfoViewModel>();
+                                    getViewModel<ReservationInfoViewModel>()
                                 ReservationInfoScreenComposable(
                                     viewModel = reservationInfoViewModel,
                                     navController = navController,
@@ -116,7 +116,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                             ) {
-                                val reservationInfoViewModel = getViewModel<OrderScreenViewModel>();
+                                val reservationInfoViewModel = getViewModel<OrderScreenViewModel>()
                                 OrderScreenComposable(
                                     viewModel = reservationInfoViewModel,
                                     navController = navController
@@ -139,7 +139,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                             ) {
-                                val reservationInfoViewModel = getViewModel<ProfileViewModel>();
+                                val reservationInfoViewModel = getViewModel<ProfileViewModel>()
                                 ProfileComposable(
                                     viewModel = reservationInfoViewModel,
                                     navController = navController,
@@ -163,14 +163,14 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                             ) {
-                                val dailySellViewModel = getViewModel<DailySellViewModel>();
+                                val dailySellViewModel = getViewModel<DailySellViewModel>()
                                 DailySellComposable(
                                     viewModel = dailySellViewModel,
                                     navController = navController
                                 )
                             }
                             composable(route = FoodieRoutes.SettingsScreen.route) {
-                                val settingsViewModel = getViewModel<SettingsViewModel>();
+                                val settingsViewModel = getViewModel<SettingsViewModel>()
                                 SettingsComposable(
                                     viewModel = settingsViewModel,
                                     navController = navController,
@@ -193,7 +193,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                             ) {
-                                val autoReserveViewModel = getViewModel<AutoReserveViewModel>();
+                                val autoReserveViewModel = getViewModel<AutoReserveViewModel>()
                                 AutoReserveComposable(
                                     viewModel = autoReserveViewModel,
                                     navController = navController
@@ -201,7 +201,7 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(route = FoodieRoutes.FoodPriorityScreen.route) {
                                 val prioritySelectionViewModel =
-                                    getViewModel<PrioritySelectionViewModel>();
+                                    getViewModel<PrioritySelectionViewModel>()
                                 PrioritySelectionComposable(
                                     viewModel = prioritySelectionViewModel,
                                     navController = navController

@@ -26,7 +26,7 @@ import com.ravan.foodie.settings.ui.model.SettingsQuestionAnswerRowUIModel
 import okhttp3.internal.toImmutableList
 
 @Composable
-fun ColumnScope.SettingsBottomSheet(
+fun SettingsBottomSheet(
     onSendFeedbackClick: (() -> Unit) -> Unit,
 ) {
     val questionAnswerList = remember(true) {
