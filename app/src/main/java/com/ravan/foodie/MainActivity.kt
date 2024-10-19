@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(bottom = bottomPadding.value)
                         ) {
                             composable(route = FoodieRoutes.SplashScreen.route) {
-                                val splashScreenViewModel = getViewModel<SplashScreenViewModel>();
+                                val splashScreenViewModel = getViewModel<SplashScreenViewModel>()
                                 SplashScreenComposable(
                                     viewModel = splashScreenViewModel,
                                     navController = navController,
@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(route = FoodieRoutes.LoginScreen.route) {
-                                val loginViewModel = getViewModel<LoginScreenViewModel>();
+                                val loginViewModel = getViewModel<LoginScreenViewModel>()
                                 LoginScreenComposable(
                                     viewModel = loginViewModel,
                                     navController = navController,
