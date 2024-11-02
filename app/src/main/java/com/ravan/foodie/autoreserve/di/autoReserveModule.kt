@@ -7,6 +7,7 @@ import com.ravan.foodie.autoreserve.domain.repository.AutoReserveRepository
 import com.ravan.foodie.autoreserve.domain.repository.AutoReserveRepositoryImplementation
 import com.ravan.foodie.autoreserve.domain.usecase.GetAllFoodsUseCase
 import com.ravan.foodie.autoreserve.domain.usecase.GetAllSelectedDaysUseCase
+import com.ravan.foodie.autoreserve.domain.usecase.InsertFoodUseCase
 import com.ravan.foodie.autoreserve.domain.usecase.UpdateAutoReserveDaysUseCase
 import com.ravan.foodie.autoreserve.domain.usecase.UpdateFoodPriorityUseCase
 import com.ravan.foodie.autoreserve.ui.viewmodel.AutoReserveViewModel
@@ -39,11 +40,13 @@ val autoReserveModule = module {
 
     factory { GetAllFoodsUseCase(get()) }
 
+    factory { InsertFoodUseCase(get()) }
+
     factory { UpdateAutoReserveDaysUseCase(get()) }
 
     factory { UpdateFoodPriorityUseCase(get()) }
 
-    viewModel { AutoReserveViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { AutoReserveViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
 
     viewModel { PrioritySelectionViewModel(get(), get()) }
 

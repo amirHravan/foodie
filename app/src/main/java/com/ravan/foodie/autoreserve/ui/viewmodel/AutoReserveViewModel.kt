@@ -11,6 +11,7 @@ import com.ravan.foodie.autoreserve.domain.model.AutoReserveFoodPriority
 import com.ravan.foodie.autoreserve.domain.model.AutoReserveRequestData
 import com.ravan.foodie.autoreserve.domain.usecase.GetAllFoodsUseCase
 import com.ravan.foodie.autoreserve.domain.usecase.GetAllSelectedDaysUseCase
+import com.ravan.foodie.autoreserve.domain.usecase.InsertFoodUseCase
 import com.ravan.foodie.autoreserve.domain.usecase.UpdateAutoReserveDaysUseCase
 import com.ravan.foodie.autoreserve.ui.model.AutoReserveScreenUIModel
 import com.ravan.foodie.autoreserve.ui.model.ReserveResultInfoRowUIModel
@@ -50,6 +51,7 @@ class AutoReserveViewModel(
     private val getReservableProgramUseCase: GetReservableProgramUseCase,
     private val getAllFoodsUseCase: GetAllFoodsUseCase,
     private val reserveFoodUseCase: ReserveFoodUseCase,
+    private val insertFoodUseCase: InsertFoodUseCase,
 
     ) : FoodieViewModel() {
 
@@ -291,8 +293,17 @@ class AutoReserveViewModel(
 
         foodPriorityList?.let {
             reservableFoodDetails.forEach { foodDetail ->
-                // TODO Fix IDs
-                val priority = it.find { it.name == foodDetail.foodName }?.priority ?: 0
+                val priority = it.find { it.name == foodDetail.foodName }?.priority ?: run {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        insertFoodUseCase(foodDetail.foodName)
+                        informationBoxUIModel.value = FoodieInformationBoxUIModel(
+                            message = "غذای جدید اضافه شد",
+                            state = FoodieInformationBoxState.SUCCESS
+                        )
+                        showMessage()
+                    }
+                    return@run 0
+                }
                 if (priority > highestPriority) {
                     highestPriority = priority
                     foodTypeId = foodDetail.foodTypeId

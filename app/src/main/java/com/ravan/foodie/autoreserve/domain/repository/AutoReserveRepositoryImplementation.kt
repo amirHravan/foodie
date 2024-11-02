@@ -25,4 +25,8 @@ class AutoReserveRepositoryImplementation(
     override suspend fun updateReserveDays(autoReserveDaysEntity: AutoReserveDaysEntity) {
         return autoReserveDao.upsertReserveDays(autoReserveDaysEntity)
     }
+
+    override suspend fun insertFood(autoReserveFoodEntity: AutoReserveFoodEntity) {
+        return autoReserveDao.insertFood(autoReserveFoodEntity)
+    }
 }

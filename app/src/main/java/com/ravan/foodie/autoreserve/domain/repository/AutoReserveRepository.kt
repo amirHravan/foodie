@@ -12,4 +12,6 @@ interface AutoReserveRepository {
     suspend fun getAllReserveDays(): AutoReserveDaysEntity?
 
     suspend fun updateReserveDays(autoReserveDaysEntity: AutoReserveDaysEntity)
+
+    suspend fun insertFood(autoReserveFoodEntity: AutoReserveFoodEntity)
 }

@@ -1,5 +1,6 @@
 package com.ravan.foodie.autoreserve.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.ravan.foodie.autoreserve.domain.model.AutoReserveFoodPriority
@@ -42,6 +43,10 @@ class PrioritySelectionViewModel(
                                 .sortedBy { it.priority }.reversed().toImmutableList()
                         )
                     )
+                    foodPriorityList?.forEach {
+                        Log.d("temp", "onLaunch: $it")
+                    }
+                    Log.d("temp size", "onLaunch: ${foodPriorityList?.size}")
                 },
                 onFailure = { error ->
                     priorityScreenUIModel.value =

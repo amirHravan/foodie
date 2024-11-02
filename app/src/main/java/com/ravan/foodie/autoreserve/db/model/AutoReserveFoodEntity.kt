@@ -6,7 +6,7 @@ import com.ravan.foodie.autoreserve.domain.model.AutoReserveFoodPriority
 
 @Entity(tableName = "food_priority")
 data class AutoReserveFoodEntity(
-    @PrimaryKey() val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int=0,
     val name: String,
     var priority: Int
 )

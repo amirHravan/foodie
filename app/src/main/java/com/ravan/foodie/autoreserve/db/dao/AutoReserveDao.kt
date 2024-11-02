@@ -27,4 +27,7 @@ interface AutoReserveDao {
 
     @Query("DELETE FROM auto_reserve_days")
     suspend fun clearAutoReserveDays()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFood(food: AutoReserveFoodEntity)
 }
