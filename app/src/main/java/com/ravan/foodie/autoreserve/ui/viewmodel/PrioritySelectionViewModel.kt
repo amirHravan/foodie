@@ -43,10 +43,6 @@ class PrioritySelectionViewModel(
                                 .sortedBy { it.priority }.reversed().toImmutableList()
                         )
                     )
-                    foodPriorityList?.forEach {
-                        Log.d("temp", "onLaunch: $it")
-                    }
-                    Log.d("temp size", "onLaunch: ${foodPriorityList?.size}")
                 },
                 onFailure = { error ->
                     priorityScreenUIModel.value =
