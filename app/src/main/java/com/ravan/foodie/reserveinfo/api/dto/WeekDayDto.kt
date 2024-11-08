@@ -19,6 +19,6 @@ fun WeekDayDto.toReservationDayInfo(): ReservationDayInfo {
         iranianDate = dateJStr,
         date = date,
         mealInfo = mealTypeDtoList.mapNotNull { it.toReservationMealInfo() }
-            .filter { !it.hasPassed && !it.consumed }
+            .filter { !it.hasPassed }
     )
 }
