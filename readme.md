@@ -20,10 +20,21 @@ Foodie simplifies the food reservation process for SUT students, allowing seamle
 #### 3. **Reservation Information**
 - View all your reservations in a convenient card-list format.
 - Regardless of the reservation location, your bookings are aggregated in one place for easy management.
+- Get the forget code on demand for each food.
 
-#### 4. **Profile Management**
-- View and manage personal information retrieved directly from the Samad system.
+#### 4. **Profile Inforamtion**
+- View personal information retrieved directly from the Samad system.
 - **Important**: There is **no intermediary server** between your phone and the Samad servers, ensuring that your personal data remains secure and private.
+
+#### 5. **Automatic Reservation**
+- Select your priorities and just click on a button so the app starts reservation process in real-time.
+- The priority table will update itself on automatic reserves.
+
+#### 6. **Daily Sale**
+- Buy food when a daily sale program is defined by the university.
+
+#### 7. **Reminder Notification**
+- Foodie tries to remind you to not to forget food reservation.
 
 ## 🛠️ Project Architecture & Tech Stack
 
@@ -36,16 +47,9 @@ Foodie follows the **Model-View-ViewModel (MVVM)** architecture, a design patter
 - **Room**: A persistence library that provides an abstraction layer over SQLite to manage the local database efficiently.
 - **Coroutines**: Used for asynchronous programming, ensuring smooth and responsive user interactions.
 
-## 📖 Usage
-
-1. **Login**: Enter your university credentials (username and password) to log in.
-2. **Reserve**: Select meals for the upcoming week and confirm your reservation.
-3. **View Reservations**: Manage your current reservations in the app.
-4. **Profile**: Review personal information securely fetched from Samad servers.
-
 ## 🤝 Contributing
 
-We welcome contributions from the community! If you'd like to contribute, please check out the [CONTRIBUTING.md](contributing.md) for guidelines.
+I welcome contributions! If you'd like to contribute, please check out the [CONTRIBUTING.md](contributing.md) for guidelines.
 
 ## 👨🏻‍💻 About the Author
 
