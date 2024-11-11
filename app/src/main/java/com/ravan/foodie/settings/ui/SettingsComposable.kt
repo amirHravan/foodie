@@ -1,5 +1,7 @@
 package com.ravan.foodie.settings.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.ravan.foodie.R
@@ -35,6 +38,8 @@ fun SettingsComposable(
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false,
     )
+
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -74,6 +79,12 @@ fun SettingsComposable(
                         SettingsBottomSheet(
                             onSendFeedbackClick = {
                                 viewModel.onSendFeedBackClick(it)
+                            },
+                            onGithubRedirectClick = {
+                                viewModel.onRedirectToGithub { url ->
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                    context.startActivity(intent)
+                                }
                             }
                         )
                     }

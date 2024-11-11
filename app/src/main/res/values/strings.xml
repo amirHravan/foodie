@@ -86,9 +86,9 @@
     <string name="about_us_question_2">فودی چطور کار می‌کنه؟</string>
     <string name="about_us_question_3">چطوری اعتماد کنم؟ (توهم توطئه دارم)</string>
     <string name="about_us_question_5">چطور می‌تونم باگ‌ها رو گزارش بدم یا پیشنهاد بدم؟</string>
-    <string name="about_us_answer_1">درحال حاضر نه؛ به زودی اوپن سورس خواهد شد.</string>
+    <string name="about_us_answer_1">بله، با دکمه زیر به کد‌ها دسترسی دارید.</string>
     <string name="about_us_answer_2">بین این نرم‌افزار و سرور‌های سامانه samad.app هیچ واسطی نیست. همه محاسبات و داده‌ها، سمت سرور‌های دانشگاه یا داخل گوشیتون هست. پس درواقع کسی رمز و داده‌های شما رو این وسط نمی‌بینه. بدیهی هستش که اگر داده‌های نرم‌افزار رو پاک کنید، بخش‌هایی که قبلا پر کرده بودین و برای خود برنامه بود، پاک خواهند شد.</string>
-    <string name="about_us_answer_3">تا زمانی که کد اوپن‌سورس نیست، از ابزار‌هایی مث وایرشارک استفاده کنید. هر وقت اوپن‌سورس شد، برید کد‌ها رو بخونید.</string>
+    <string name="about_us_answer_3">کدها رو بخونید.</string>
     <string name="about_us_answer_5">می‌تونید از طریق دکمه پایین باگ‌ها یا پیشنهاداتتون رو ایمیل کنید،  یا اگه تو دانشگاه من رو دیدید، بهم بگید.</string>
     <string name="about_us_title">درباره ما (من)</string>
     <string name="about_us_send_feedback">ارسال انتقاد/پیشنهاد</string>
@@ -105,5 +105,6 @@
     <string name="settings_button_title">تنظیمات</string>
     <string name="settings_logout_button_label">خروج از حساب</string>
     <string name="settings_button_label">تنظیمات</string>
+    <string name="code_github_address">amirHravan/Foodie</string>
 
 </resources>

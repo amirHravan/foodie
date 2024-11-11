@@ -40,4 +40,8 @@ class SettingsViewModel(
     fun onSendFeedBackClick(onFinish: () -> Unit) {
         onFinish()
     }
+
+    fun onRedirectToGithub(invokeIntent: (String) -> Unit) {
+        invokeIntent("https://github.com/amirHravan/foodie")
+    }
 }
