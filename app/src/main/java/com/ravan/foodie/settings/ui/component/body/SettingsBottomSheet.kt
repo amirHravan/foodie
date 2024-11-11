@@ -27,10 +27,10 @@ import okhttp3.internal.toImmutableList
 @Composable
 fun SettingsBottomSheet(
     onSendFeedbackClick: (() -> Unit) -> Unit,
+    onGithubRedirectClick: () -> Unit,
 ) {
     val questionAnswerList = remember(true) {
         listOf(
-            (R.string.about_us_question_1 to R.string.about_us_answer_1),
             (R.string.about_us_question_2 to R.string.about_us_answer_2),
             (R.string.about_us_question_3 to R.string.about_us_answer_3),
             (R.string.about_us_question_5 to R.string.about_us_answer_5),
@@ -65,6 +65,20 @@ fun SettingsBottomSheet(
         }
 
         item {}
+
+        item {
+            SettingsQuestionAnswerRow(
+                data = SettingsQuestionAnswerRowUIModel(
+                    question = stringResource(id = R.string.about_us_question_1),
+                    answer = stringResource(id = R.string.about_us_answer_1)
+                ),
+            ) {
+                FoodieButton(data = FoodieButtonUIModel.General(
+                    iconRes = R.drawable.ic_github,
+                    title = stringResource(id = R.string.code_github_address)
+                ), onClick = { onGithubRedirectClick() })
+            }
+        }
 
         items(count = questionAnswerList.size, key = { it }) {
             SettingsQuestionAnswerRow(
@@ -109,7 +123,8 @@ private fun SettingsBottomSheetPreview() {
     RavanTheme {
         Column {
             SettingsBottomSheet(
-                onSendFeedbackClick = {}
+                onSendFeedbackClick = {},
+                onGithubRedirectClick = {},
             )
         }
     }

@@ -26,7 +26,8 @@ import com.ravan.foodie.settings.ui.model.SettingsQuestionAnswerRowUIModel
 fun SettingsQuestionAnswerRow(
     data: SettingsQuestionAnswerRowUIModel,
     modifier: Modifier = Modifier,
-    color: Color = RavanTheme.colors.text.onSecondary
+    color: Color = RavanTheme.colors.text.onSecondary,
+    content: (@Composable () -> Unit)? = null
 ) {
     val isExpanded = remember {
         mutableStateOf(false)
@@ -74,6 +75,9 @@ fun SettingsQuestionAnswerRow(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             )
+            if (content != null) {
+                content()
+            }
         }
 
     }
