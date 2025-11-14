@@ -34,7 +34,8 @@ data class SelfWeekProgramDto(
 )
 
 fun SelfWeekProgramDto.toReservableFoodDetail(
-    isSelected: Boolean
+    isSelected: Boolean,
+    canSelect: Boolean,
 ): ReservableFoodDetail {
     return ReservableFoodDetail(
         foodTypeId = foodTypeId,
@@ -46,6 +47,7 @@ fun SelfWeekProgramDto.toReservableFoodDetail(
         isReserved = isSelected,
         isDisabled = reserveRuleViolated || cancelRuleViolated,
         hasPassed = daysDifferenceWithToday < 0,
+        canSelect = canSelect
     )
 }
 
@@ -56,7 +58,15 @@ fun List<SelfWeekProgramDto>.toReservableFoodMap(
         .mapValues { (_, selfWeekProgramDtos) ->
             selfWeekProgramDtos.map {
                 it.toReservableFoodDetail(
-                    userWeekReserveDtoList.any { userWeekReserveDto -> userWeekReserveDto.foodId == it.foodId }
+                    isSelected = userWeekReserveDtoList.any { userWeekReserveDto ->
+                        userWeekReserveDto.foodId == it.foodId &&
+                                it.date == userWeekReserveDto.programDate &&
+                                userWeekReserveDto.selfId == it.selfId
+                    },
+                    canSelect = !userWeekReserveDtoList.any { userWeekReserveDto ->
+                                it.date == userWeekReserveDto.programDate &&
+                                userWeekReserveDto.selfId != it.selfId
+                    }
                 )
             }.filter { !it.hasPassed }
         }

@@ -27,6 +27,7 @@ private val DarkColorsDefault = RavanColors(
         secondary = RavanWhite,
         tertiary = RavanBlack,
         success = FunctionalGreen.copy(alpha = 0.2f),
+        alreadySelectedElsewhere = FunctionalYellow.copy(alpha = 0.2f),
         fail = FunctionalRedDark.copy(alpha = 0.2f),
         disable = RavanBlack.copy(alpha = 0.2f),
     ),
@@ -127,6 +128,7 @@ data class SurfaceColors(
     val secondary: Color,
     val tertiary: Color,
     val success: Color,
+    val alreadySelectedElsewhere: Color,
     val fail: Color,
     val disable: Color,
 )

@@ -12,6 +12,7 @@ data class OrderFoodDetailUIModel(
     val isSelected: Boolean = false,
     val isDisable: Boolean = false,
     val hasPassed: Boolean = false,
+    val canSelect: Boolean = true,
 )
 
 fun ReservableFoodDetail.toReserveFoodDetailUIModel(): OrderFoodDetailUIModel {
@@ -25,5 +26,6 @@ fun ReservableFoodDetail.toReserveFoodDetailUIModel(): OrderFoodDetailUIModel {
         isSelected = isReserved,
         isDisable = isDisabled,
         hasPassed = hasPassed,
+        canSelect = canSelect,
     )
 }

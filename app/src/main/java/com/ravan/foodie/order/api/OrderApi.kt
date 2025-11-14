@@ -12,7 +12,7 @@ import retrofit2.http.Query
 
 interface OrderApi {
 
-    @GET("rest/programs/v2")
+    @GET("rest/reservations/programs/v2")
     suspend fun getReserveProgram(
         @Query("selfId") selfId: Int,
         @Query("weekStartDate") date: String,
@@ -24,7 +24,7 @@ interface OrderApi {
         @Body reservableFoodDetail: ReserveRequestBodyData,
     ): SamadResponse<Unit>
 
-    @GET("rest/selfs")
+    @GET("rest/reservations/selfs")
     suspend fun getAvailableSelfs(
     ): SamadResponse<List<SelfDto>>
 }

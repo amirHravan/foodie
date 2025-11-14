@@ -37,7 +37,7 @@ data class UserWeekReserveDto(
 //    @SerialName("selfChangeToll") val selfChangeToll: Int,
 //    @SerialName("selfCode") val selfCode: String,
 //    @SerialName("selfCodeName") val selfCodeName: String,
-//    @SerialName("selfId") val selfId: Int,
+    @SerialName("selfId") val selfId: Int,
 //    @SerialName("selfName") val selfName: String,
 //    @SerialName("sold") val sold: Boolean,
 //    @SerialName("timeDistanceUntilToday") val timeDistanceUntilToday: Int,
