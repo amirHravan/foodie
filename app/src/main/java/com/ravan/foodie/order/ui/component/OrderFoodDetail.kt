@@ -32,10 +32,18 @@ fun OrderFoodDetail(
     modifier: Modifier = Modifier,
     showActionButton: Boolean = true
 ) {
-    val (backgroundColor, _) = getBackgroundColor(data.isSelected, data.isDisable)
+    val (backgroundColor, _) = getBackgroundColor(data.isSelected, data.isDisable, data.canSelect)
     val isFoodMissed = remember { mutableStateOf(!data.isSelected && data.isDisable) }
     val tagLabelId =
-        remember { mutableIntStateOf(getTagLabel(isFoodMissed.value, data.isSelected)) }
+        remember {
+            mutableIntStateOf(
+                getTagLabel(
+                    isFoodMissed.value,
+                    data.isSelected,
+                    data.canSelect
+                )
+            )
+        }
     val buttonData = remember { mutableStateOf(getButtonTitleIconId(data.isSelected)) }
 
     Column(
@@ -70,7 +78,7 @@ fun OrderFoodDetail(
             color = RavanTheme.colors.text.onSecondary,
             textStyle = RavanTheme.typography.body2,
         )
-        if (!data.isDisable && showActionButton) {
+        if (!data.isDisable && data.canSelect && showActionButton) {
             FoodieButton(
                 data = FoodieButtonUIModel.General(
                     iconRes = buttonData.value.second,
@@ -90,11 +98,13 @@ fun getButtonTitleIconId(selected: Boolean): Pair<Int, Int> {
     }
 }
 
-fun getTagLabel(isMissed: Boolean, isSelected: Boolean): Int {
+fun getTagLabel(isMissed: Boolean, isSelected: Boolean, canSelect: Boolean): Int {
     return if (isMissed) {
         R.string.order_order_food_detail_disabled
     } else if (isSelected) {
         R.string.order_order_food_detail_selected
+    } else if (!canSelect) {
+        R.string.order_order_food_detail_selected_elsewhere
     } else {
         R.string.order_order_food_detail_not_selected
     }
@@ -102,11 +112,17 @@ fun getTagLabel(isMissed: Boolean, isSelected: Boolean): Int {
 
 
 @Composable
-private fun getBackgroundColor(isSelected: Boolean, isDisabled: Boolean): Pair<Color, Color> {
+private fun getBackgroundColor(
+    isSelected: Boolean,
+    isDisabled: Boolean,
+    canSelect: Boolean
+): Pair<Color, Color> {
     return if (isSelected) {
         RavanTheme.colors.background.success to RavanTheme.colors.border.onSuccess
     } else if (isDisabled) {
         RavanTheme.colors.background.disable.copy(alpha = 0.1f) to RavanTheme.colors.border.onDisable
+    } else if (!canSelect) {
+        RavanTheme.colors.background.alreadySelectedElsewhere to RavanTheme.colors.border.onSuccess
     } else {
         RavanTheme.colors.background.secondary to Color.Transparent
 

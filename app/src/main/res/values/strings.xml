@@ -42,6 +42,7 @@
     <string name="order_order_food_detail_disabled">مهلت رزرو این غذا تمام شده</string>
     <string name="increase_credit_button_label">افزایش اعتبار</string>
     <string name="order_order_food_detail_selected">رزرو شده</string>
+    <string name="order_order_food_detail_selected_elsewhere">از سلف دیگری رزرو شده</string>
     <string name="order_order_food_detail_not_selected">قابل رزرو</string>
     <string name="order_order_food_detail_cancel">حذف رزرو</string>
     <string name="order_order_food_detail_reserve">رزرو غذا</string>

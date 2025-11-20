@@ -10,4 +10,5 @@ data class ReservableFoodDetail(
     val isReserved: Boolean = true,
     val isDisabled: Boolean = false,
     val hasPassed: Boolean = false,
+    val canSelect: Boolean = true,
 )
