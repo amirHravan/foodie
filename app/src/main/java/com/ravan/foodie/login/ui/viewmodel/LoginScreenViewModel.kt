@@ -3,47 +3,51 @@ package com.ravan.foodie.login.ui.viewmodel
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.ravan.foodie.account.domain.repository.AccountManager
+import com.ravan.foodie.account.domain.repository.AccountStore
 import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.model.NavigationEvent
-import com.ravan.foodie.domain.model.PreferencesManager
-import com.ravan.foodie.domain.model.SamadToken
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxState
 import com.ravan.foodie.domain.ui.model.FoodieInformationBoxUIModel
 import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
-import com.ravan.foodie.domain.usecase.LoginUseCase
-import com.ravan.foodie.domain.util.SharedPrefKeys
-import com.ravan.foodie.domain.util.toEnglishNumber
 import com.ravan.foodie.domain.util.toLocalNumber
+import com.ravan.foodie.login.domain.model.LoginMode
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class LoginScreenViewModel(
-    private val samadLoginUseCase: LoginUseCase,
-    private val preferencesManager: PreferencesManager,
+    private val accountManager: AccountManager,
+    private val accountStore: AccountStore,
+    val mode: LoginMode,
+    private val reauthUsername: String?,
 ) : FoodieViewModel() {
 
-    val username = mutableStateOf("")
+    val username = mutableStateOf(reauthUsername?.toLocalNumber().orEmpty())
     val password = mutableStateOf("")
-    val loginToken: MutableState<LoadableData<String>> = mutableStateOf(LoadableData.NotLoaded)
+    val loginToken: MutableState<LoadableData<Unit>> = mutableStateOf(LoadableData.NotLoaded)
     val informationBoxData: MutableState<FoodieInformationBoxUIModel?> = mutableStateOf(null)
+    private var hideInformationBoxJob: Job? = null
 
-    val navReservationInfo: NavigationEvent = NavigationEvent()
+    /** The username can't be changed when logging in again to a saved account. */
+    val isUsernameEditable: Boolean
+        get() = mode != LoginMode.Reauth
+
+    val navHome: NavigationEvent = NavigationEvent()
 
     fun onLaunch() {
-        preferencesManager.getString(SharedPrefKeys.Username.key, "").let {
-            username.value = it.toLocalNumber()
+        if (mode == LoginMode.Reauth && reauthUsername != null) {
+            accountStore.find(reauthUsername)?.let {
+                informationBoxData.value = FoodieInformationBoxUIModel(
+                    FoodieInformationBoxState.FAILED,
+                    "${it.label}: رمز عبور ذخیره‌شده دیگه کار نمی‌کنه.",
+                )
+            }
         }
-        preferencesManager.getString(SharedPrefKeys.Password.key, "").let {
-            password.value = it.toLocalNumber()
-        }
-        if (username.value.isEmpty() || password.value.isEmpty()) {
-            return
-        }
-        onLoginClick()
     }
 
     fun onUserNameChange(newUserName: String) {
-        username.value = newUserName.toLocalNumber()
+        if (isUsernameEditable) username.value = newUserName.toLocalNumber()
     }
 
     fun onPasswordChange(newPassword: String) {
@@ -51,13 +55,13 @@ class LoginScreenViewModel(
     }
 
     fun onLoginClick() {
+        if (loginToken.value is LoadableData.Loading) return
         loginToken.value = LoadableData.Loading
         viewModelScope.launch {
-            samadLoginUseCase(username.value, password.value).fold(
+            accountManager.addAccount(username.value, password.value).fold(
                 onSuccess = {
-                    saveData(it)
-                    loginToken.value = LoadableData.Loaded(it.accessToken)
-                    navReservationInfo.navigate()
+                    loginToken.value = LoadableData.Loaded(Unit)
+                    navHome.navigate()
                 },
                 onFailure = {
                     loginToken.value = LoadableData.Failed(it.message ?: "خطای ناشناخته")
@@ -70,19 +74,12 @@ class LoginScreenViewModel(
         }
     }
 
-    private fun saveData(token: SamadToken) {
-        preferencesManager.putString(SharedPrefKeys.Username.key, username.value.toEnglishNumber())
-        preferencesManager.putString(SharedPrefKeys.Password.key, password.value.toEnglishNumber())
-        preferencesManager.putString(SharedPrefKeys.AccessToken.key, token.accessToken)
-        preferencesManager.putString(SharedPrefKeys.RefreshToken.key, token.refreshToken)
-    }
-
     private fun showInformationBox(message: String, state: FoodieInformationBoxState) {
-        viewModelScope.launch {
+        hideInformationBoxJob?.cancel()
+        hideInformationBoxJob = viewModelScope.launch {
             informationBoxData.value = FoodieInformationBoxUIModel(state, message)
             delay(5000)
             informationBoxData.value = null
         }
     }
-
 }

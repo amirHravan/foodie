@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
@@ -33,6 +34,7 @@ fun LoginTextField(
     data: LoginTextFieldUIModel,
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
+    enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onValueChange: (String) -> Unit,
 ) {
@@ -56,8 +58,10 @@ fun LoginTextField(
         BasicTextField(
             value = data.value,
             onValueChange = onValueChange,
+            enabled = enabled,
             modifier = Modifier
                 .fillMaxWidth()
+                .alpha(if (enabled) 1f else 0.6f)
                 .border(
                     width = 1.dp,
                     color = RavanTheme.colors.text.onPrimary,

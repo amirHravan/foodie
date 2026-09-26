@@ -1,5 +1,8 @@
 package com.ravan.foodie.order.ui.viewmodel
 
+import com.ravan.foodie.account.domain.model.Account
+import com.ravan.foodie.account.domain.repository.AccountStore
+import com.ravan.foodie.account.domain.repository.ReserveInFlightTracker
 import com.ravan.foodie.credit.domain.model.RedirectLoginAsToken
 import com.ravan.foodie.credit.domain.repository.CreditRepository
 import com.ravan.foodie.credit.domain.usecase.GetRedirectLoginAsTokenUseCase
@@ -19,6 +22,7 @@ import com.ravan.foodie.order.ui.model.OrderFoodKey
 import com.ravan.foodie.order.ui.model.OrderScreenUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
 import com.ravan.foodie.order.ui.model.key
+import com.ravan.foodie.testing.FakeKeyValueStore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +34,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.serialization.json.Json
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -42,6 +47,7 @@ class OrderScreenViewModelTest {
 
     private val dispatcher = StandardTestDispatcher()
     private val repository = FakeOrderFoodRepository()
+    private val accountStore = AccountStore(FakeKeyValueStore(), Json)
     private lateinit var viewModel: OrderScreenViewModel
 
     @Before
@@ -50,9 +56,12 @@ class OrderScreenViewModelTest {
         viewModel = OrderScreenViewModel(
             getReservableProgramUseCase = GetReservableProgramUseCase(repository),
             getAvailableSelfsUseCase = GetAvailableSelfsUseCase(repository),
-            reserveFoodUseCase = ReserveFoodUseCase(repository),
+            reserveFoodUseCase = ReserveFoodUseCase(repository, ReserveInFlightTracker()),
             getRedirectLoginAsTokenUseCase = GetRedirectLoginAsTokenUseCase(FakeCreditRepository()),
+            accountStore = accountStore,
         )
+        accountStore.upsert(Account(username = "me", password = "pw", displayName = "Me"))
+        accountStore.setActive("me")
     }
 
     @After
@@ -202,6 +211,20 @@ class OrderScreenViewModelTest {
         assertTrue(food(KABAB).isSelected)
         assertTrue(food(DINNER).isSelected)
         assertEquals(2, programCalls)
+    }
+
+    @Test
+    fun `messages name the account once there is more than one`() = runTest(dispatcher) {
+        loadSelf()
+
+        viewModel.onOrderFoodClick(food(KABAB))
+        advanceUntilIdle()
+        assertEquals("ok", viewModel.informationBoxUIModel.value?.message)
+
+        accountStore.upsert(Account(username = "ali", password = "pw", displayName = "Ali"))
+        viewModel.onOrderFoodClick(food(DINNER))
+        advanceUntilIdle()
+        assertEquals("برای Me: ok", viewModel.informationBoxUIModel.value?.message)
     }
 
     @Test

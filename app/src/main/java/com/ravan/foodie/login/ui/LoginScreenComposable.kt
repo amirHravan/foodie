@@ -6,9 +6,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
+import com.ravan.foodie.R
 import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.ui.component.FoodieButtonState
 import com.ravan.foodie.domain.util.FoodieRoutes
+import com.ravan.foodie.domain.util.navigateClearingStack
+import com.ravan.foodie.login.domain.model.LoginMode
 import com.ravan.foodie.login.ui.component.LoginScreen
 import com.ravan.foodie.login.ui.model.LoginScreenUIModel
 import com.ravan.foodie.login.ui.viewmodel.LoginScreenViewModel
@@ -36,6 +39,12 @@ fun LoginScreenComposable(
             username = viewModel.username.value,
             password = viewModel.password.value,
         ),
+        titleRes = when (viewModel.mode) {
+            LoginMode.Initial -> R.string.login_title
+            LoginMode.Add -> R.string.login_title_add_account
+            LoginMode.Reauth -> R.string.login_title_reauth
+        },
+        isUsernameEditable = viewModel.isUsernameEditable,
         onUserNameChange = { username -> viewModel.onUserNameChange(username) },
         onPasswordChange = { password -> viewModel.onPasswordChange(password) },
         loginStatus = viewModel.informationBoxData.value,
@@ -47,15 +56,19 @@ fun LoginScreenComposable(
         viewModel.onLaunch()
     }
 
-    LaunchedEffect(viewModel.loginToken.value) {
-        viewModel.navReservationInfo.setNavigateAction {
-            navController.navigate(FoodieRoutes.ReservationInfoScreen.route)
+    LaunchedEffect(viewModel) {
+        viewModel.navHome.setNavigateAction {
+            navController.navigateClearingStack(FoodieRoutes.ReservationInfoScreen.route)
         }
     }
 
     BackHandler {
-        finish()
+        // Adding an account or logging in again from Profile returns there; a login that
+        // started the app has nothing behind it.
+        if (navController.previousBackStackEntry != null) {
+            navController.popBackStack()
+        } else {
+            finish()
+        }
     }
-
-
 }

@@ -1,0 +1,59 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "3e7f1c778f3f8c305358f8b907da2649",
+    "entities": [
+      {
+        "tableName": "forget_code_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`reserveId` INTEGER NOT NULL, `code` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `isValid` INTEGER NOT NULL, `accountId` TEXT NOT NULL DEFAULT '', PRIMARY KEY(`reserveId`))",
+        "fields": [
+          {
+            "fieldPath": "reserveId",
+            "columnName": "reserveId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isValid",
+            "columnName": "isValid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountId",
+            "columnName": "accountId",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "reserveId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3e7f1c778f3f8c305358f8b907da2649')"
+    ]
+  }
+}

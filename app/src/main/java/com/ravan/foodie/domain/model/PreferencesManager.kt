@@ -4,21 +4,25 @@ import android.content.Context
 import android.content.SharedPreferences
 
 
-class PreferencesManager(context: Context) {
+class PreferencesManager(context: Context) : KeyValueStore {
 
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("", Context.MODE_PRIVATE)
 
-    fun remove(key: String) {
+    override fun remove(key: String) {
         val editor = sharedPreferences.edit()
         editor.remove(key)
         editor.apply()
     }
 
-    fun putString(key: String, value: String) {
+    override fun putString(key: String, value: String) {
         val editor = sharedPreferences.edit()
         editor.putString(key, value)
         editor.apply()
+    }
+
+    override fun getString(key: String): String? {
+        return sharedPreferences.getString(key, null)
     }
 
     fun getString(key: String, defaultValue: String): String {

@@ -8,8 +8,9 @@ data class ForgetCode(
     val isValid: Boolean,
 )
 
-fun ForgetCode.toForgetCodeEntity() = ForgetCodeEntity(
+fun ForgetCode.toForgetCodeEntity(accountId: String) = ForgetCodeEntity(
     reserveId = reserveId,
     code = code,
     isValid = isValid,
+    accountId = accountId,
 )

@@ -27,4 +27,10 @@ interface ForgetCodeDao {
 
     @Query("SELECT * FROM forget_code_table")
     suspend fun getAllForgetCodes(): List<ForgetCodeEntity>
+
+    @Query("SELECT reserveId FROM forget_code_table WHERE accountId = :accountId")
+    suspend fun getReserveIds(accountId: String): List<Int>
+
+    @Query("DELETE FROM forget_code_table WHERE accountId = :accountId")
+    suspend fun deleteForAccount(accountId: String)
 }

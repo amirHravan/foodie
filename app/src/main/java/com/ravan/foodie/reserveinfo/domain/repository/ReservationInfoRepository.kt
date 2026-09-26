@@ -1,9 +1,10 @@
 package com.ravan.foodie.reserveinfo.domain.repository
 
+import com.ravan.foodie.account.domain.repository.AccountScopedData
 import com.ravan.foodie.reserveinfo.domain.model.ForgetCode
 import com.ravan.foodie.reserveinfo.domain.model.ReservationInfo
 
-interface ReservationInfoRepository {
+interface ReservationInfoRepository : AccountScopedData {
     suspend fun getReservationInfo(
         weekStartDate: String = "",
     ): Result<ReservationInfo>

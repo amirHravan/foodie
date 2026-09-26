@@ -3,96 +3,48 @@ package com.ravan.foodie.splash.ui.viewmodel
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.ravan.foodie.account.domain.model.AuthException
+import com.ravan.foodie.account.domain.model.ResumeResult
+import com.ravan.foodie.account.domain.repository.AccountManager
 import com.ravan.foodie.domain.model.NavigationEvent
-import com.ravan.foodie.domain.model.PreferencesManager
 import com.ravan.foodie.domain.network.ConnectionState
 import com.ravan.foodie.domain.network.currentConnectivityState
 import com.ravan.foodie.domain.ui.viewmodel.FoodieViewModel
-import com.ravan.foodie.domain.usecase.CacheAccessTokenUseCase
-import com.ravan.foodie.domain.usecase.LoginUseCase
-import com.ravan.foodie.domain.usecase.RefreshAccessTokenUseCase
-import com.ravan.foodie.domain.util.SharedPrefKeys
 import kotlinx.coroutines.launch
 
 class SplashScreenViewModel(
-    private val cacheAccessTokenUseCase: CacheAccessTokenUseCase,
-    private val samadLoginUseCase: LoginUseCase,
-    private val refreshAccessTokenUseCase: RefreshAccessTokenUseCase,
-    private val preferencesManager: PreferencesManager,
+    private val accountManager: AccountManager,
 ) : FoodieViewModel() {
-
-    private var username = ""
-    private var password = ""
-
-    private var refreshToken = ""
 
     val showNetworkError = mutableStateOf(false)
     val navLogin: NavigationEvent = NavigationEvent()
+    val navReauth: NavigationEvent = NavigationEvent()
     val navReserveInfo: NavigationEvent = NavigationEvent()
 
-    init {
-        preferencesManager.getString(SharedPrefKeys.RefreshToken.key, "").let {
-            refreshToken = it
-        }
-
-
-    }
-
-    private fun loadUserNamePassword() {
-        preferencesManager.getString(SharedPrefKeys.Username.key, "").let {
-            username = it
-        }
-
-        preferencesManager.getString(SharedPrefKeys.Password.key, "").let {
-            password = it
-        }
-    }
+    /** Account whose saved password was rejected, for [navReauth]. */
+    var reauthUsername: String? = null
+        private set
 
     fun onLaunch(context: Context) {
         when (context.currentConnectivityState) {
-            ConnectionState.Available -> {
-                checkOldAccessToken()
-            }
-
-            ConnectionState.Unavailable -> {
-                showNetworkError.value = true
-            }
+            ConnectionState.Available -> resumeActiveAccount()
+            ConnectionState.Unavailable -> showNetworkError.value = true
         }
     }
 
-    private fun checkOldAccessToken() {
-        if (refreshToken.isNotEmpty()) {
-            viewModelScope.launch {
-                refreshAccessTokenUseCase().fold(
-                    onSuccess = { _ ->
-                        navReserveInfo.navigate()
-                    },
-                    onFailure = {
-                        getNewAccessToken()
+    private fun resumeActiveAccount() {
+        viewModelScope.launch {
+            when (val result = accountManager.resumeActive()) {
+                ResumeResult.Resumed -> navReserveInfo.navigate()
+                ResumeResult.NoAccount -> navLogin.navigate()
+                is ResumeResult.NeedsLogin -> when (result.error) {
+                    is AuthException.Network -> showNetworkError.value = true
+                    is AuthException.InvalidCredentials -> {
+                        reauthUsername = result.username
+                        navReauth.navigate()
                     }
-                )
+                }
             }
-        } else {
-            getNewAccessToken()
-        }
-    }
-
-    private fun getNewAccessToken() {
-        loadUserNamePassword()
-        if (username.isNotEmpty() && password.isNotEmpty()) {
-            viewModelScope.launch {
-                samadLoginUseCase(username = username, password = password).fold(
-                    onSuccess = { samadToken ->
-                        cacheAccessTokenUseCase(samadToken)
-                        navReserveInfo.navigate()
-                    },
-                    onFailure = {
-                        navLogin.navigate()
-                    }
-                )
-            }
-        } else {
-            navLogin.navigate()
         }
     }
 

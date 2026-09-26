@@ -104,8 +104,26 @@
 
     <!-- Settings -->
     <string name="settings_button_title">تنظیمات</string>
-    <string name="settings_logout_button_label">خروج از حساب</string>
+    <string name="settings_logout_button_label">خروج از این حساب</string>
     <string name="settings_button_label">تنظیمات</string>
     <string name="code_github_address">amirHravan/Foodie</string>
+
+    <!-- Accounts -->
+    <string name="accounts_title">حساب‌ها</string>
+    <string name="accounts_add">افزودن حساب</string>
+    <string name="accounts_limit_reached">حداکثر ۵ حساب می‌تونی داشته باشی.</string>
+    <string name="accounts_active">فعال</string>
+    <string name="accounts_needs_login">نیاز به ورود دوباره</string>
+    <string name="accounts_login_again">ورود دوباره</string>
+    <string name="accounts_remove">حذف</string>
+    <string name="accounts_reorder_hint">برای جابه‌جایی، روی حساب نگه دار و بکش.</string>
+    <string name="accounts_waiting_for_reserve">در حال رزرو… بعد از اتمام، حساب عوض می‌شه.</string>
+    <string name="accounts_switching">در حال ورود به حساب %1$s…</string>
+    <string name="accounts_remove_title">حذف حساب</string>
+    <string name="accounts_remove_message">حساب %1$s و اولویت‌های غذاییش از این گوشی حذف می‌شه. رزروهای ثبت‌شده در سامانه دست نمی‌خورن.</string>
+    <string name="accounts_remove_confirm">حذف کن</string>
+    <string name="accounts_cancel">انصراف</string>
+    <string name="login_title_add_account">حساب جدید اضافه کن:</string>
+    <string name="login_title_reauth">رمز عبور این حساب رو دوباره وارد کن:</string>
 
 </resources>

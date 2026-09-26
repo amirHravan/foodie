@@ -15,6 +15,8 @@ import kotlinx.coroutines.launch
 class ReservationInfoRepositoryImplementation(
     private val api: ReserveInfoApi,
     private val forgetCodeDao: ForgetCodeDao,
+    /** Username of the active account. */
+    private val activeAccountId: () -> String?,
 ) : ReservationInfoRepository {
 
     private val forgetCodeCache = mutableMapOf<Int, String>()
@@ -61,7 +63,9 @@ class ReservationInfoRepositoryImplementation(
                 if (result.isSuccessful) {
                     val forgetCode = result.payload!!.toForgetCode(reserveId)
                     forgetCodeCache[reserveId] = forgetCode.code
-                    forgetCodeDao.insertForgetCode(forgetCode.toForgetCodeEntity())
+                    forgetCodeDao.insertForgetCode(
+                        forgetCode.toForgetCodeEntity(accountId = activeAccountId().orEmpty())
+                    )
                     Result.success(forgetCode)
                 } else {
                     Result.failure(Exception(result.getErrorMessage()))
@@ -81,6 +85,15 @@ class ReservationInfoRepositoryImplementation(
 
     override fun getMapCache(): Map<Int, String> {
         return forgetCodeCache
+    }
+
+    // Forget codes are keyed by Samad's reservation id, which is unique across accounts, so
+    // there is nothing to copy; they only need removing with the account.
+    override suspend fun copyAccountData(fromUsername: String?, toUsername: String) = Unit
+
+    override suspend fun deleteAccountData(username: String) {
+        forgetCodeDao.getReserveIds(username).forEach { forgetCodeCache.remove(it) }
+        forgetCodeDao.deleteForAccount(username)
     }
 
 }

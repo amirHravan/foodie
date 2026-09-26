@@ -1,8 +1,10 @@
 package com.ravan.foodie.reserveinfo.di
 
 import androidx.room.Room
+import com.ravan.foodie.account.domain.repository.AccountStore
 import com.ravan.foodie.reserveinfo.api.ReserveInfoApi
 import com.ravan.foodie.reserveinfo.db.ForgetCodeDatabase
+import com.ravan.foodie.reserveinfo.db.ForgetCodeMigration1To2
 import com.ravan.foodie.reserveinfo.domain.repository.ReservationInfoRepository
 import com.ravan.foodie.reserveinfo.domain.repository.ReservationInfoRepositoryImplementation
 import com.ravan.foodie.reserveinfo.domain.usecase.GetForgetCodeMapCacheUseCase
@@ -19,19 +21,22 @@ val reserveInfoModule = module {
     }
 
     single {
+        val accountStore = get<AccountStore>()
         Room
             .databaseBuilder(
                 get(),
                 ForgetCodeDatabase::class.java,
                 ForgetCodeDatabase.DATABASE_NAME
             )
+            .addMigrations(ForgetCodeMigration1To2 { accountStore.legacyUsername })
             .build()
     }
 
     single { get<ForgetCodeDatabase>().forgetCodeDao() }
 
     single<ReservationInfoRepository> {
-        ReservationInfoRepositoryImplementation(get(), get())
+        val accountStore = get<AccountStore>()
+        ReservationInfoRepositoryImplementation(get(), get()) { accountStore.active?.username }
     }
 
     factory {
