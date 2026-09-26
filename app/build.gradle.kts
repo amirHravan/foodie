@@ -48,10 +48,20 @@ android {
         // Local unit tests touch android.* stubs (Build.VERSION, Log) through app code.
         unitTests.isReturnDefaultValues = true
     }
+    sourceSets {
+        getByName("androidTest").assets.srcDir("$projectDir/schemas")
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+}
+
+kapt {
+    arguments {
+        // Exported schemas are the baseline for Room migration tests.
+        arg("room.schemaLocation", "$projectDir/schemas")
     }
 }
 
@@ -108,6 +118,7 @@ dependencies {
 
     // Tests
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.room:room-testing:2.6.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
