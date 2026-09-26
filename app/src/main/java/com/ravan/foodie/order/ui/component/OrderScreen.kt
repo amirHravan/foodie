@@ -11,12 +11,16 @@ import androidx.compose.ui.unit.dp
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.order.ui.fixture.orderScreenUIModelFixture
 import com.ravan.foodie.order.ui.model.OrderFoodDetailUIModel
+import com.ravan.foodie.order.ui.model.OrderFoodKey
 import com.ravan.foodie.order.ui.model.OrderScreenUIModel
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 
 @Composable
 fun OrderScreen(
     data: OrderScreenUIModel,
-    onReserveFoodClick: (OrderFoodDetailUIModel, () -> Unit) -> Unit,
+    pendingFoods: ImmutableSet<OrderFoodKey>,
+    onReserveFoodClick: (OrderFoodDetailUIModel) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -25,9 +29,11 @@ fun OrderScreen(
         item {
             Spacer(modifier = Modifier.size(8.dp))
         }
-        data.orderCardUIModelList.forEach { reserveCardUIModel ->
+        data.orderCardUIModelList.forEachIndexed { index, reserveCardUIModel ->
             orderCard(
                 data = reserveCardUIModel,
+                dayIndex = index,
+                pendingFoods = pendingFoods,
                 onReserveFoodClick = onReserveFoodClick,
             )
         }
@@ -40,7 +46,8 @@ private fun ReserveScreenPreview() {
     RavanTheme {
         OrderScreen(
             data = orderScreenUIModelFixture,
-            onReserveFoodClick = { _, _ -> },
+            pendingFoods = persistentSetOf(),
+            onReserveFoodClick = {},
         )
     }
 }

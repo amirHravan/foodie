@@ -44,6 +44,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+    testOptions {
+        // Local unit tests touch android.* stubs (Build.VERSION, Log) through app code.
+        unitTests.isReturnDefaultValues = true
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -64,6 +68,7 @@ dependencies {
     implementation("androidx.compose.material:material")
     implementation("androidx.navigation:navigation-compose:2.7.7")
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
 
     // Accompanists
     implementation("com.google.accompanist:accompanist-permissions:0.33.1-alpha")

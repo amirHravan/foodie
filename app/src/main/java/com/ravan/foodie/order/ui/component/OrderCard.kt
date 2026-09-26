@@ -9,32 +9,39 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ravan.foodie.domain.ui.component.FoodieDivider
-import com.ravan.foodie.domain.ui.component.FoodieProgressIndicator
 import com.ravan.foodie.domain.ui.theme.RavanTheme
 import com.ravan.foodie.order.domain.model.MealType
 import com.ravan.foodie.order.ui.fixture.orderCardUIModelFixture1
 import com.ravan.foodie.order.ui.model.OrderCardUIModel
 import com.ravan.foodie.order.ui.model.OrderFoodDetailUIModel
+import com.ravan.foodie.order.ui.model.OrderFoodKey
+import com.ravan.foodie.order.ui.model.key
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 
 
+/**
+ * @param dayIndex position of the day in the list; part of the lazy item keys so they stay unique
+ * even if two days ever share a date.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.orderCard(
     data: OrderCardUIModel,
-    onReserveFoodClick: (OrderFoodDetailUIModel, () -> Unit) -> Unit,
+    dayIndex: Int,
+    pendingFoods: ImmutableSet<OrderFoodKey>,
+    onReserveFoodClick: (OrderFoodDetailUIModel) -> Unit,
 ) {
     if (data.reserveInfoList.isNotEmpty()) {
-        stickyHeader {
+        stickyHeader(key = "day-$dayIndex-${data.date}") {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -54,10 +61,14 @@ fun LazyListScope.orderCard(
                 color = RavanTheme.colors.border.onPrimary,
             )
         }
-        itemsIndexed(data.reserveInfoList.toList()) { _, (mealType, reservationFoodDetailList) ->
+        items(
+            items = data.reserveInfoList.toList(),
+            key = { (mealType, _) -> "day-$dayIndex-${data.date}-$mealType" },
+        ) { (mealType, reservationFoodDetailList) ->
             OrderMealTypeSection(
                 mealType,
                 reservationFoodDetailList,
+                pendingFoods,
                 onReserveFoodClick,
                 modifier = Modifier.padding(8.dp)
             )
@@ -70,13 +81,10 @@ fun LazyListScope.orderCard(
 private fun OrderMealTypeSection(
     mealType: MealType,
     reservationFoodDetailList: List<OrderFoodDetailUIModel>,
-    onReserveFoodClick: (OrderFoodDetailUIModel, () -> Unit) -> Unit,
+    pendingFoods: ImmutableSet<OrderFoodKey>,
+    onReserveFoodClick: (OrderFoodDetailUIModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isLoading = remember(mealType) {
-        mutableStateOf(false)
-    }
-
     Column(
         modifier = modifier
             .background(RavanTheme.colors.background.primary)
@@ -86,14 +94,7 @@ private fun OrderMealTypeSection(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        if (isLoading.value) {
-            FoodieProgressIndicator(
-                color = RavanTheme.colors.text.onSecondary,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            )
-        } else if (reservationFoodDetailList.isNotEmpty()) {
+        if (reservationFoodDetailList.isNotEmpty()) {
             Text(
                 text = mealType.getLocalName(),
                 style = RavanTheme.typography.h6,
@@ -108,11 +109,9 @@ private fun OrderMealTypeSection(
                 )
                 OrderFoodDetail(
                     data = reservationFoodDetail,
+                    isLoading = reservationFoodDetail.key in pendingFoods,
                     onReserveFoodDetailClick = {
-                        isLoading.value = true
-                        onReserveFoodClick(
-                            reservationFoodDetail
-                        ) { isLoading.value = false }
+                        onReserveFoodClick(reservationFoodDetail)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -129,7 +128,9 @@ private fun OrderCardPreview() {
         LazyColumn {
             orderCard(
                 data = orderCardUIModelFixture1,
-                onReserveFoodClick = { _, _ -> }
+                dayIndex = 0,
+                pendingFoods = persistentSetOf(),
+                onReserveFoodClick = {}
             )
         }
     }

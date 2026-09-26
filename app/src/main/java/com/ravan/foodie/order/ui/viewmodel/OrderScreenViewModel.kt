@@ -16,13 +16,21 @@ import com.ravan.foodie.order.domain.usecase.GetAvailableSelfsUseCase
 import com.ravan.foodie.order.domain.usecase.GetReservableProgramUseCase
 import com.ravan.foodie.order.domain.usecase.ReserveFoodUseCase
 import com.ravan.foodie.order.ui.model.OrderFoodDetailUIModel
+import com.ravan.foodie.order.ui.model.OrderFoodKey
 import com.ravan.foodie.order.ui.model.OrderScreenUIModel
 import com.ravan.foodie.order.ui.model.SelectSelfRowUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogRowUIModel
 import com.ravan.foodie.order.ui.model.SelfDialogUIModel
+import com.ravan.foodie.order.ui.model.key
 import com.ravan.foodie.order.ui.model.toReservableScreenUIModel
 import com.ravan.foodie.order.ui.model.toSelfDialogUIModel
+import com.ravan.foodie.order.ui.model.withFoodSelected
+import kotlinx.collections.immutable.PersistentSet
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
 
@@ -37,6 +45,10 @@ class OrderScreenViewModel(
     val orderScreenUIModel =
         mutableStateOf<LoadableData<OrderScreenUIModel>>(LoadableData.NotLoaded)
 
+    // foods with a reserve/cancel request in flight
+    val pendingFoods = mutableStateOf<PersistentSet<OrderFoodKey>>(persistentSetOf())
+    private var programRefreshJob: Job? = null
+
     // selected self row
     private var selectedSelfId = -1
 
@@ -47,6 +59,7 @@ class OrderScreenViewModel(
     // information box
     val showMessage = mutableStateOf(false)
     val informationBoxUIModel = mutableStateOf<FoodieInformationBoxUIModel?>(null)
+    private var hideMessageJob: Job? = null
 
     // navigation
     val navBack: NavigationEvent = NavigationEvent()
@@ -61,7 +74,8 @@ class OrderScreenViewModel(
     }
 
     private fun loadProgram() {
-        viewModelScope.launch {
+        programRefreshJob?.cancel()
+        programRefreshJob = viewModelScope.launch {
             getReservableScreenUIModel(
                 offlineFirst = false,
                 onSuccess = {
@@ -71,28 +85,31 @@ class OrderScreenViewModel(
         }
     }
 
-    fun onOrderFoodClick(
-        detail: OrderFoodDetailUIModel,
-        onFinish: () -> Unit,
-    ) {
+    fun onOrderFoodClick(detail: OrderFoodDetailUIModel) {
+        val key = detail.key
+        if (key in pendingFoods.value) return
+        pendingFoods.value = pendingFoods.value.add(key)
+        val selected = !detail.isSelected
+
         viewModelScope.launch {
             reserveFoodUseCase(
                 foodTypeId = detail.foodTypeId,
                 mealTypeId = detail.mealTypeId,
                 programId = detail.programId,
-                selected = !detail.isSelected,
+                selected = selected,
             ).fold(
                 onSuccess = { message ->
+                    // Show the result right away; the refresh below corrects anything else the
+                    // server changed (e.g. another food in the same meal).
+                    (orderScreenUIModel.value as? LoadableData.Loaded)?.let {
+                        orderScreenUIModel.value =
+                            LoadableData.Loaded(it.data.withFoodSelected(key, selected))
+                    }
                     informationBoxUIModel.value = FoodieInformationBoxUIModel(
                         message = message,
                         state = FoodieInformationBoxState.SUCCESS
                     )
-                    getReservableScreenUIModel(
-                        offlineFirst = true,
-                        onSuccess = {
-                            orderScreenUIModel.value = LoadableData.Loaded(it)
-                        },
-                    )
+                    refreshProgramSilently()
                 },
                 onFailure = {
                     informationBoxUIModel.value = FoodieInformationBoxUIModel(
@@ -101,18 +118,36 @@ class OrderScreenViewModel(
                     )
                 }
             )
+            pendingFoods.value = pendingFoods.value.remove(key)
             showMessage()
-            onFinish()
         }
     }
 
+    /**
+     * Fetches the program again without showing the loading state. A newer call cancels an older
+     * one, so a slow response can never overwrite a fresher one. If it replaces a visible load
+     * (e.g. the self was just changed), it stays visible so the screen can't get stuck loading.
+     */
+    private fun refreshProgramSilently() {
+        programRefreshJob?.cancel()
+        programRefreshJob = viewModelScope.launch {
+            delay(PROGRAM_REFRESH_DEBOUNCE_MS)
+            getReservableScreenUIModel(
+                offlineFirst = orderScreenUIModel.value is LoadableData.Loaded,
+                onSuccess = {
+                    orderScreenUIModel.value = LoadableData.Loaded(it)
+                },
+            )
+        }
+    }
 
     fun onBackClick() {
         navBack.navigate()
     }
 
     fun onRefresh() {
-        viewModelScope.launch {
+        programRefreshJob?.cancel()
+        programRefreshJob = viewModelScope.launch {
             getReservableScreenUIModel(
                 offlineFirst = false,
                 onSuccess = {
@@ -160,8 +195,9 @@ class OrderScreenViewModel(
 
     private fun showMessage() {
         showMessage.value = true
-        viewModelScope.launch {
-            delay(3000)
+        hideMessageJob?.cancel()
+        hideMessageJob = viewModelScope.launch {
+            delay(MESSAGE_DURATION_MS)
             showMessage.value = false
         }
     }
@@ -183,11 +219,19 @@ class OrderScreenViewModel(
             weekStartDate = getNextSaturday()
         )
 
+        // The repository turns every exception into a failed Result, cancellation included, so
+        // check here that this load hasn't been replaced by a newer one before touching state.
+        currentCoroutineContext().ensureActive()
+
         if (previousProgram.isFailure && nextProgram.isFailure) {
-            informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                message = "هیچ برنامه غذایی‌ای برای این سلف تعریف نشده است.",
-                state = FoodieInformationBoxState.FAILED
-            )
+            // A silent refresh keeps what is on screen; a visible load shows the retry card
+            // instead of spinning forever.
+            if (!offlineFirst) {
+                orderScreenUIModel.value = LoadableData.Failed(
+                    nextProgram.exceptionOrNull()?.message
+                        ?: "هیچ برنامه غذایی‌ای برای این سلف تعریف نشده است."
+                )
+            }
         } else {
             return onSuccess(
                 previousProgram.getOrNull().merge(nextProgram.getOrNull())
@@ -231,4 +275,8 @@ class OrderScreenViewModel(
 
     }
 
+    private companion object {
+        const val PROGRAM_REFRESH_DEBOUNCE_MS = 300L
+        const val MESSAGE_DURATION_MS = 3000L
+    }
 }
