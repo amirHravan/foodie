@@ -1,7 +1,6 @@
 package com.ravan.foodie.autoreserve.domain.usecase
 
 import com.ravan.foodie.autoreserve.domain.model.AutoReserveDays
-import com.ravan.foodie.autoreserve.domain.model.toAutoReserveDaysDao
 import com.ravan.foodie.autoreserve.domain.repository.AutoReserveRepository
 
 class UpdateAutoReserveDaysUseCase(
@@ -10,7 +9,7 @@ class UpdateAutoReserveDaysUseCase(
     suspend operator fun invoke(
         days: AutoReserveDays,
     ) {
-        repository.updateReserveDays(days.toAutoReserveDaysDao())
+        repository.updateReserveDays(days.days.map { it.name })
     }
 
 }

@@ -1,6 +1,5 @@
 package com.ravan.foodie.domain.network
 
-import android.util.Log
 import com.ravan.foodie.domain.repository.TokenProvider
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -14,9 +13,9 @@ class AuthInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val token = tokenProvider.getSamadToken()?.accessToken ?: DEFAULT_ACCESS_TOKEN
-
-        Log.d("AuthInterceptor", "Token: $token")
+        // The account this request belongs to, even if the active account changes meanwhile.
+        val username = tokenProvider.activeUsername()
+        val token = tokenProvider.getSamadToken(username)?.accessToken ?: DEFAULT_ACCESS_TOKEN
 
         val modifiedRequest = originalRequest.newBuilder()
             .addHeader("Authorization", token)
@@ -24,25 +23,23 @@ class AuthInterceptor(
 
         var response = chain.proceed(modifiedRequest)
 
-        if (response.code == 401) {
-            // Handle token refreshing
+        if (response.code == 401 && username != null) {
             synchronized(this) {
-                val newToken = runBlocking {
-                    tokenProvider.refreshAccessToken()
-                        .fold(
-                            onSuccess = {
-                                it
-                            },
-                            onFailure = {
-                                null
-                            }
-                        )
+                // Another request may have refreshed this account while we waited for the lock;
+                // refreshing again would spend the refresh token for nothing.
+                val current = tokenProvider.getSamadToken(username)?.accessToken
+                val newToken = if (current != null && current != token) {
+                    current
+                } else {
+                    runBlocking {
+                        tokenProvider.refreshAccessToken(username).getOrNull()?.accessToken
+                    }
                 }
                 newToken?.let {
                     response.close()
 
                     val retryRequest = originalRequest.newBuilder()
-                        .addHeader("Authorization", newToken.accessToken)
+                        .addHeader("Authorization", it)
                         .build()
 
                     response = chain.proceed(retryRequest)

@@ -1,0 +1,52 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "ef500678caed112d7de9c1eac5a9eae8",
+    "entities": [
+      {
+        "tableName": "forget_code_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`reserveId` INTEGER NOT NULL, `code` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `isValid` INTEGER NOT NULL, PRIMARY KEY(`reserveId`))",
+        "fields": [
+          {
+            "fieldPath": "reserveId",
+            "columnName": "reserveId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isValid",
+            "columnName": "isValid",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "reserveId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ef500678caed112d7de9c1eac5a9eae8')"
+    ]
+  }
+}

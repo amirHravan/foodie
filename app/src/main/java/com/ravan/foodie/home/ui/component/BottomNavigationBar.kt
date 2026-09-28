@@ -1,16 +1,26 @@
 package com.ravan.foodie.home.ui.component
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -28,7 +38,10 @@ private val BOTTOM_NAV_ITEMS = listOf(
 ).toImmutableList()
 
 @Composable
-fun BottomNavigationBar(navController: NavController) {
+fun BottomNavigationBar(
+    navController: NavController,
+    onProfileLongPress: () -> Unit,
+) {
     BottomNavigation(
         backgroundColor = RavanTheme.colors.background.primary,
         contentColor = RavanTheme.colors.text.onPrimary,
@@ -51,16 +64,26 @@ fun BottomNavigationBar(navController: NavController) {
         if (currentRoute in whiteList) {
             BOTTOM_NAV_ITEMS.forEach { item ->
                 val isSelected = currentRoute == item.route
+                val onClick = {
+                    if (currentRoute != item.route) {
+                        navController.navigate(item.route) {
+                            popUpTo(FoodieRoutes.ReservationInfoScreen.route)
+                            launchSingleTop = true
+                        }
+                    }
+                }
+                if (item == BottomNavItems.Profile) {
+                    LongPressNavigationItem(
+                        iconRes = item.iconRes,
+                        isSelected = isSelected,
+                        onClick = onClick,
+                        onLongClick = onProfileLongPress,
+                    )
+                    return@forEach
+                }
                 BottomNavigationItem(
                     selected = isSelected,
-                    onClick = {
-                        if (currentRoute != item.route) {
-                            navController.navigate(item.route) {
-                                popUpTo(FoodieRoutes.ReservationInfoScreen.route)
-                                launchSingleTop = true
-                            }
-                        }
-                    },
+                    onClick = onClick,
                     icon = {
                         Box(
                             modifier = Modifier,
@@ -92,5 +115,47 @@ fun BottomNavigationBar(navController: NavController) {
                 )
             }
         }
+    }
+}
+
+/**
+ * A bottom navigation item that also reacts to long press. Material's BottomNavigationItem
+ * only exposes onClick.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun RowScope.LongPressNavigationItem(
+    @DrawableRes iconRes: Int,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+) {
+    val haptic = LocalHapticFeedback.current
+    Box(
+        modifier = Modifier
+            .weight(1f)
+            .fillMaxHeight()
+            .combinedClickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(bounded = false),
+                role = Role.Tab,
+                onClick = onClick,
+                onLongClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    onLongClick()
+                },
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            painter = painterResource(iconRes),
+            tint = if (isSelected) {
+                RavanTheme.colors.icon.onPrimary
+            } else {
+                RavanTheme.colors.icon.onPrimary.copy(alpha = 0.5f)
+            },
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        )
     }
 }

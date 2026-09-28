@@ -7,7 +7,7 @@ import com.ravan.foodie.domain.util.DaysOfWeek
 
 @Entity(tableName = "auto_reserve_days")
 data class AutoReserveDaysEntity(
-    @PrimaryKey val id: Int = 0,
+    @PrimaryKey val accountId: String,
     val days: List<String>
 )
 

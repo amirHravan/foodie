@@ -10,7 +10,7 @@ abstract class ForgetCodeDatabase : RoomDatabase() {
 
     companion object {
         const val DATABASE_NAME = "forget_code_database"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
         const val DATABASE_TABLE_NAME = "forget_code_table"
     }
 

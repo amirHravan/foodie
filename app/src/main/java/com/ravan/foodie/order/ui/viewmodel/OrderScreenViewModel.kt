@@ -3,6 +3,7 @@ package com.ravan.foodie.order.ui.viewmodel
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.ravan.foodie.account.domain.repository.AccountStore
 import com.ravan.foodie.credit.domain.usecase.GetRedirectLoginAsTokenUseCase
 import com.ravan.foodie.domain.model.LoadableData
 import com.ravan.foodie.domain.model.NavigationEvent
@@ -39,6 +40,7 @@ class OrderScreenViewModel(
     private val getAvailableSelfsUseCase: GetAvailableSelfsUseCase,
     private val reserveFoodUseCase: ReserveFoodUseCase,
     private val getRedirectLoginAsTokenUseCase: GetRedirectLoginAsTokenUseCase,
+    private val accountStore: AccountStore,
 ) : FoodieViewModel() {
 
     // reserve program
@@ -106,14 +108,14 @@ class OrderScreenViewModel(
                             LoadableData.Loaded(it.data.withFoodSelected(key, selected))
                     }
                     informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                        message = message,
+                        message = forActiveAccount(message),
                         state = FoodieInformationBoxState.SUCCESS
                     )
                     refreshProgramSilently()
                 },
                 onFailure = {
                     informationBoxUIModel.value = FoodieInformationBoxUIModel(
-                        message = it.message ?: "در رزرو غذا خطایی پیش آمده",
+                        message = forActiveAccount(it.message ?: "در رزرو غذا خطایی پیش آمده"),
                         state = FoodieInformationBoxState.FAILED
                     )
                 }
@@ -121,6 +123,16 @@ class OrderScreenViewModel(
             pendingFoods.value = pendingFoods.value.remove(key)
             showMessage()
         }
+    }
+
+    /**
+     * With more than one saved account, says whose reservation a message is about, since
+     * reserving for the wrong person costs real credit.
+     */
+    private fun forActiveAccount(message: String): String {
+        val state = accountStore.state.value
+        val active = state.active ?: return message
+        return if (state.accounts.size > 1) "برای ${active.label}: $message" else message
     }
 
     /**

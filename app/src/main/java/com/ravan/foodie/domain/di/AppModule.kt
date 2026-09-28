@@ -8,10 +8,7 @@ import com.ravan.foodie.domain.network.AuthInterceptor
 import com.ravan.foodie.domain.repository.DomainRepository
 import com.ravan.foodie.domain.repository.DomainRepositoryImplementation
 import com.ravan.foodie.domain.repository.TokenProvider
-import com.ravan.foodie.domain.usecase.CacheAccessTokenUseCase
 import com.ravan.foodie.domain.usecase.CheckTokenValidationUseCase
-import com.ravan.foodie.domain.usecase.LoginUseCase
-import com.ravan.foodie.domain.usecase.RefreshAccessTokenUseCase
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -57,11 +54,5 @@ val appModule = module {
 
     single<DomainRepository> { DomainRepositoryImplementation(get()) }
 
-    factory { CacheAccessTokenUseCase(get()) }
-
     factory { CheckTokenValidationUseCase(get()) }
-
-    factory { RefreshAccessTokenUseCase(get()) }
-
-    factory { LoginUseCase(get()) }
 }

@@ -25,7 +25,7 @@ val orderModule = module {
     }
 
     factory {
-        ReserveFoodUseCase(get())
+        ReserveFoodUseCase(get(), get())
     }
 
     factory {
@@ -33,6 +33,6 @@ val orderModule = module {
     }
 
     viewModel {
-        OrderScreenViewModel(get(), get(), get(), get())
+        OrderScreenViewModel(get(), get(), get(), get(), get())
     }
 }

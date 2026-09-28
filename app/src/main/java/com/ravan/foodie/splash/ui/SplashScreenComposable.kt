@@ -7,6 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.ravan.foodie.domain.util.FoodieRoutes
+import com.ravan.foodie.domain.util.navigateClearingStack
+import com.ravan.foodie.login.domain.model.LoginMode
 import com.ravan.foodie.splash.ui.component.SplashScreen
 import com.ravan.foodie.splash.ui.viewmodel.SplashScreenViewModel
 
@@ -33,10 +35,15 @@ fun SplashScreenComposable(
 
     LaunchedEffect(true) {
         viewModel.navLogin.setNavigateAction {
-            navController.navigate(FoodieRoutes.LoginScreen.route)
+            navController.navigateClearingStack(FoodieRoutes.login(LoginMode.Initial))
+        }
+        viewModel.navReauth.setNavigateAction {
+            navController.navigateClearingStack(
+                FoodieRoutes.login(LoginMode.Reauth, viewModel.reauthUsername)
+            )
         }
         viewModel.navReserveInfo.setNavigateAction {
-            navController.navigate(FoodieRoutes.ReservationInfoScreen.route)
+            navController.navigateClearingStack(FoodieRoutes.ReservationInfoScreen.route)
         }
 
         viewModel.onLaunch(context)

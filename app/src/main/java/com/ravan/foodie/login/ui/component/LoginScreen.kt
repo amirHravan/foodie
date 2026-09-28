@@ -1,5 +1,6 @@
 package com.ravan.foodie.login.ui.component
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +43,8 @@ fun LoginScreen(
     onUserNameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
+    @StringRes titleRes: Int = R.string.login_title,
+    isUsernameEditable: Boolean = true,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,7 +55,7 @@ fun LoginScreen(
             .padding(16.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.login_title),
+            text = stringResource(id = titleRes),
             style = RavanTheme.typography.h4,
             color = RavanTheme.colors.text.onPrimary,
         )
@@ -68,6 +72,7 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next,
             ),
+            enabled = isUsernameEditable,
             onValueChange = onUserNameChange,
         )
         Spacer(modifier = Modifier.size(16.dp))
@@ -89,10 +94,10 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.size(8.dp))
         AnimatedVisibility(visible = loginStatus != null) {
-            val status = remember {
-                loginStatus
-            }
-            status?.let {
+            // Keeps the last message while the box animates out.
+            val status = remember { mutableStateOf(loginStatus) }
+            if (loginStatus != null) status.value = loginStatus
+            status.value?.let {
                 FoodieInformationBox(
                     data = it,
                     modifier = Modifier.fillMaxWidth()

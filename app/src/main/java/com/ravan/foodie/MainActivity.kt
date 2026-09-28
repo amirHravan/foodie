@@ -39,7 +39,27 @@ import com.ravan.foodie.settings.ui.SettingsComposable
 import com.ravan.foodie.settings.ui.viewmodel.SettingsViewModel
 import com.ravan.foodie.splash.ui.SplashScreenComposable
 import com.ravan.foodie.splash.ui.viewmodel.SplashScreenViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.ravan.foodie.account.ui.component.AccountSwitcherSheet
+import com.ravan.foodie.account.ui.component.RemoveAccountDialog
+import com.ravan.foodie.account.ui.model.AccountNavEvent
+import com.ravan.foodie.account.ui.viewmodel.AccountsViewModel
+import com.ravan.foodie.domain.util.LOGIN_ARG_MODE
+import com.ravan.foodie.domain.util.LOGIN_ARG_USERNAME
+import com.ravan.foodie.domain.util.navigateClearingStack
+import com.ravan.foodie.login.domain.model.LoginMode
+import org.koin.core.parameter.parametersOf
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,11 +68,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             RavanTheme {
                 val navController = rememberNavController()
+                // Activity-scoped so Profile and the long-press switcher share it.
+                val accountsViewModel = getViewModel<AccountsViewModel>()
+                val screenStoreOwner = accountsViewModel.screenViewModelStoreOwner.value
+                AccountNavigation(accountsViewModel, navController)
                 Surface(
                     color = RavanTheme.colors.background.primary,
                 ) {
                     Scaffold(
-                        bottomBar = { BottomNavigationBar(navController = navController) },
+                        bottomBar = {
+                            BottomNavigationBar(
+                                navController = navController,
+                                onProfileLongPress = { accountsViewModel.onProfileLongPress() },
+                            )
+                        },
                         containerColor = RavanTheme.colors.background.primary,
                     ) { paddingValues ->
 
@@ -71,15 +100,34 @@ class MainActivity : ComponentActivity() {
                                 .padding(bottom = bottomPadding.value)
                         ) {
                             composable(route = FoodieRoutes.SplashScreen.route) {
-                                val splashScreenViewModel = getViewModel<SplashScreenViewModel>()
+                                val splashScreenViewModel = koinViewModel<SplashScreenViewModel>()
                                 SplashScreenComposable(
                                     viewModel = splashScreenViewModel,
                                     navController = navController,
                                     finish = { finish() }
                                 )
                             }
-                            composable(route = FoodieRoutes.LoginScreen.route) {
-                                val loginViewModel = getViewModel<LoginScreenViewModel>()
+                            composable(
+                                route = FoodieRoutes.LoginScreen.route,
+                                arguments = listOf(
+                                    navArgument(LOGIN_ARG_MODE) {
+                                        type = NavType.StringType
+                                        defaultValue = LoginMode.Initial.name
+                                    },
+                                    navArgument(LOGIN_ARG_USERNAME) {
+                                        type = NavType.StringType
+                                        nullable = true
+                                        defaultValue = null
+                                    },
+                                ),
+                            ) { entry ->
+                                val mode = entry.arguments?.getString(LOGIN_ARG_MODE)
+                                    ?.let { runCatching { LoginMode.valueOf(it) }.getOrNull() }
+                                    ?: LoginMode.Initial
+                                val username = entry.arguments?.getString(LOGIN_ARG_USERNAME)
+                                val loginViewModel = koinViewModel<LoginScreenViewModel> {
+                                    parametersOf(mode, username)
+                                }
                                 LoginScreenComposable(
                                     viewModel = loginViewModel,
                                     navController = navController,
@@ -92,7 +140,9 @@ class MainActivity : ComponentActivity() {
 //                                popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700)) },
                             ) {
                                 val reservationInfoViewModel =
-                                    getViewModel<ReservationInfoViewModel>()
+                                    koinViewModel<ReservationInfoViewModel>(
+                                        viewModelStoreOwner = screenStoreOwner
+                                    )
                                 ReservationInfoScreenComposable(
                                     viewModel = reservationInfoViewModel,
                                     navController = navController,
@@ -116,9 +166,11 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                             ) {
-                                val reservationInfoViewModel = getViewModel<OrderScreenViewModel>()
+                                val orderScreenViewModel = koinViewModel<OrderScreenViewModel>(
+                                    viewModelStoreOwner = screenStoreOwner
+                                )
                                 OrderScreenComposable(
-                                    viewModel = reservationInfoViewModel,
+                                    viewModel = orderScreenViewModel,
                                     navController = navController
                                 )
                             }
@@ -139,11 +191,13 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                             ) {
-                                val reservationInfoViewModel = getViewModel<ProfileViewModel>()
+                                val profileViewModel = koinViewModel<ProfileViewModel>(
+                                    viewModelStoreOwner = screenStoreOwner
+                                )
                                 ProfileComposable(
-                                    viewModel = reservationInfoViewModel,
+                                    viewModel = profileViewModel,
+                                    accountsViewModel = accountsViewModel,
                                     navController = navController,
-                                    onFinish = { finish() }
                                 )
                             }
                             composable(
@@ -163,14 +217,18 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                             ) {
-                                val dailySellViewModel = getViewModel<DailySellViewModel>()
+                                val dailySellViewModel = koinViewModel<DailySellViewModel>(
+                                    viewModelStoreOwner = screenStoreOwner
+                                )
                                 DailySellComposable(
                                     viewModel = dailySellViewModel,
                                     navController = navController
                                 )
                             }
                             composable(route = FoodieRoutes.SettingsScreen.route) {
-                                val settingsViewModel = getViewModel<SettingsViewModel>()
+                                val settingsViewModel = koinViewModel<SettingsViewModel>(
+                                    viewModelStoreOwner = screenStoreOwner
+                                )
                                 SettingsComposable(
                                     viewModel = settingsViewModel,
                                     navController = navController,
@@ -193,7 +251,9 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                             ) {
-                                val autoReserveViewModel = getViewModel<AutoReserveViewModel>()
+                                val autoReserveViewModel = koinViewModel<AutoReserveViewModel>(
+                                    viewModelStoreOwner = screenStoreOwner
+                                )
                                 AutoReserveComposable(
                                     viewModel = autoReserveViewModel,
                                     navController = navController
@@ -201,7 +261,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(route = FoodieRoutes.FoodPriorityScreen.route) {
                                 val prioritySelectionViewModel =
-                                    getViewModel<PrioritySelectionViewModel>()
+                                    koinViewModel<PrioritySelectionViewModel>(
+                                        viewModelStoreOwner = screenStoreOwner
+                                    )
                                 PrioritySelectionComposable(
                                     viewModel = prioritySelectionViewModel,
                                     navController = navController
@@ -211,12 +273,72 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+                AccountDialogs(accountsViewModel)
             }
         }
 
         createNotificationChannel(this)
         setAlarmsBasedOnPreference(this)
     }
+}
 
+/** Follows the account view model's navigation requests (after a switch, add or removal). */
+@Composable
+private fun AccountNavigation(
+    accountsViewModel: AccountsViewModel,
+    navController: NavController,
+) {
+    LaunchedEffect(accountsViewModel) {
+        accountsViewModel.navEvents.collect { event ->
+            when (event) {
+                AccountNavEvent.Home ->
+                    navController.navigateClearingStack(FoodieRoutes.ReservationInfoScreen.route)
 
+                is AccountNavEvent.Login -> {
+                    val route = FoodieRoutes.login(event.mode, event.username)
+                    if (event.clearStack) {
+                        navController.navigateClearingStack(route)
+                    } else {
+                        navController.navigate(route)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AccountDialogs(accountsViewModel: AccountsViewModel) {
+    val reservesInFlight by accountsViewModel.reservesInFlight.collectAsState()
+
+    if (accountsViewModel.showSwitcher.value) {
+        ModalBottomSheet(
+            onDismissRequest = { accountsViewModel.onSwitcherDismiss() },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = RavanTheme.colors.background.secondary,
+        ) {
+            // The sheet is its own window and loses the theme's right-to-left layout.
+            RavanTheme {
+                AccountSwitcherSheet(
+                    accounts = accountsViewModel.accounts.value,
+                    canAddAccount = accountsViewModel.canAddAccount.value,
+                    switchingTo = accountsViewModel.switchingTo.value,
+                    waitingForReserve = reservesInFlight > 0,
+                    status = accountsViewModel.status.value,
+                    onAccountClick = { accountsViewModel.onAccountClick(it) },
+                    onLoginAgainClick = { accountsViewModel.onLoginAgainClick(it) },
+                    onAddAccountClick = { accountsViewModel.onAddAccountClick() },
+                )
+            }
+        }
+    }
+
+    accountsViewModel.pendingRemoval.value?.let {
+        RemoveAccountDialog(
+            account = it,
+            onConfirm = { accountsViewModel.onRemoveConfirm() },
+            onDismiss = { accountsViewModel.onRemoveDismiss() },
+        )
+    }
 }

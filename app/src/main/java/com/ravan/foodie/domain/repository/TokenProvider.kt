@@ -1,84 +1,78 @@
 package com.ravan.foodie.domain.repository
 
 import android.util.Log
+import com.ravan.foodie.account.domain.model.AuthException
+import com.ravan.foodie.account.domain.repository.AccountStore
 import com.ravan.foodie.domain.api.TokenApi
+import com.ravan.foodie.domain.api.dto.SamadTokenDto
 import com.ravan.foodie.domain.api.dto.toSamadToken
-import com.ravan.foodie.domain.model.PreferencesManager
 import com.ravan.foodie.domain.model.SamadToken
-import com.ravan.foodie.domain.util.SharedPrefKeys
+import kotlinx.coroutines.CancellationException
+import retrofit2.Response
 
+private const val NETWORK_ERROR = "به سرور وصل نمی‌تونیم بشیم. اینترنتت اوکیه؟"
+private const val INVALID_CREDENTIALS = "نام‌ کاربری / رمزعبور نادرست است"
+private const val BROKEN_TOKEN = "توکن زایید!"
+
+/**
+ * Talks to Samad's OAuth endpoint and keeps each account's tokens in [AccountStore].
+ */
 class TokenProvider(
     private val tokenApi: TokenApi,
-    private val preferencesManager: PreferencesManager,
+    private val accountStore: AccountStore,
 ) {
-    private var token: SamadToken? = null
 
-    init {
-        val accessToken = preferencesManager.getString(SharedPrefKeys.AccessToken.key, "")
-        val refreshToken = preferencesManager.getString(SharedPrefKeys.RefreshToken.key, "")
-        if (accessToken.isNotEmpty() && refreshToken.isNotEmpty()) {
-            token = SamadToken(accessToken, refreshToken)
+    fun activeUsername(): String? = accountStore.active?.username
+
+    fun getSamadToken(username: String? = activeUsername()): SamadToken? =
+        username?.let { accountStore.find(it)?.token }
+
+    /**
+     * Refreshes [username]'s access token and saves it to that account, even if another account
+     * became active while the request was running.
+     */
+    suspend fun refreshAccessToken(username: String): Result<SamadToken> {
+        val refreshToken = accountStore.find(username)?.refreshToken?.takeIf { it.isNotEmpty() }
+            ?: return Result.failure(AuthException.InvalidCredentials(BROKEN_TOKEN))
+        return requestRefresh(refreshToken).onSuccess { token ->
+            accountStore.update(username) {
+                it.copy(accessToken = token.accessToken, refreshToken = token.refreshToken)
+            }
         }
     }
 
-    fun getSamadToken(): SamadToken? {
-        return token
+    /** Exchanges a refresh token for new tokens without saving them. */
+    suspend fun requestRefresh(refreshToken: String): Result<SamadToken> = request {
+        tokenApi.refreshAccessToken(refreshToken = refreshToken)
     }
 
-    fun setSamadToken(token: SamadToken) {
-        this.token = token
+    /** Logs in with a username and password without saving anything. */
+    suspend fun requestLogin(username: String, password: String): Result<SamadToken> = request {
+        tokenApi.login(username = username, password = password)
     }
 
-    suspend fun refreshAccessToken(): Result<SamadToken> {
-        val refreshToken = token?.refreshToken
-            ?: return Result.failure(Exception("اوضاع خیطه! اپ رو می‌شه ببندی دوباره باز کنی؟"))
-        val response = try {
-            tokenApi.refreshAccessToken(
-                refreshToken = refreshToken,
-            )
-        } catch (e: Exception) {
-            Log.e("TokenProvider", "refreshAccessToken: ${e.message}")
-            return Result.failure(Exception("به سرور وصل نمی\u200Cتونیم بشیم. اینترنتت اوکیه؟"))
-        }
-        return if (response.isSuccessful) {
-            val newToken =
-                response.body()?.toSamadToken() ?: return Result.failure(Exception("توکن زایید!"))
-            token = newToken
-
-            sharedPrefSaveToken(newToken)
-
-            Result.success(newToken)
-        } else {
-            Result.failure(Exception("${response.errorBody() ?: "نام\u200C کاربری / رمزعبور نادرست است"}"))
-        }
-    }
-
-    private fun sharedPrefSaveToken(newToken: SamadToken) {
-        preferencesManager.putString(SharedPrefKeys.AccessToken.key, newToken.accessToken)
-        preferencesManager.putString(SharedPrefKeys.RefreshToken.key, newToken.refreshToken)
-    }
-
-    suspend fun login(
-        userName: String,
-        password: String
+    private suspend fun request(
+        call: suspend () -> Response<SamadTokenDto>,
     ): Result<SamadToken> {
-        val result = try {
-            tokenApi.login(username = userName, password = password)
+        val response = try {
+            call()
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            Log.e("LoginRepository", "login: ${e.message}")
-            return Result.failure(Exception("به سرور وصل نمی\u200Cتونیم بشیم. اینترنتت اوکیه؟"))
+            Log.e("TokenProvider", "token request failed: ${e.message}")
+            return Result.failure(AuthException.Network(NETWORK_ERROR))
         }
-        return if (result.isSuccessful) {
-            val newToken =
-                result.body()?.toSamadToken() ?: return Result.failure(Exception("توکن زایید!"))
-            token = newToken
-            sharedPrefSaveToken(newToken)
-            Result.success(newToken)
-        } else {
-            Log.e("LoginRepository", "Error: ${result.errorBody()?.string()}")
-            Result.failure(Exception("نام\u200C کاربری / رمزعبور نادرست است"))
+        if (!response.isSuccessful) {
+            return Result.failure(
+                if (response.code() >= 500) {
+                    AuthException.Network(NETWORK_ERROR)
+                } else {
+                    AuthException.InvalidCredentials(INVALID_CREDENTIALS)
+                }
+            )
         }
+        val token = response.body()?.toSamadToken()
+            ?: return Result.failure(AuthException.Network(BROKEN_TOKEN))
+        return Result.success(token)
     }
-
 }
-
