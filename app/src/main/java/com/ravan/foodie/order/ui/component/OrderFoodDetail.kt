@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ravan.foodie.R
 import com.ravan.foodie.domain.ui.component.FoodieButton
+import com.ravan.foodie.domain.ui.component.FoodieButtonState
 import com.ravan.foodie.domain.ui.component.FoodieTextIconRow
 import com.ravan.foodie.domain.ui.model.FoodieButtonUIModel
 import com.ravan.foodie.domain.ui.model.FoodieTextIconRowUIModel
@@ -30,21 +28,15 @@ fun OrderFoodDetail(
     data: OrderFoodDetailUIModel,
     onReserveFoodDetailClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
     showActionButton: Boolean = true
 ) {
     val (backgroundColor, _) = getBackgroundColor(data.isSelected, data.isDisable, data.canSelect)
-    val isFoodMissed = remember { mutableStateOf(!data.isSelected && data.isDisable) }
-    val tagLabelId =
-        remember {
-            mutableIntStateOf(
-                getTagLabel(
-                    isFoodMissed.value,
-                    data.isSelected,
-                    data.canSelect
-                )
-            )
-        }
-    val buttonData = remember { mutableStateOf(getButtonTitleIconId(data.isSelected)) }
+    // Derived from data on every composition: the item stays on screen while it is reserved or
+    // cancelled, so remembered values would go stale.
+    val isFoodMissed = !data.isSelected && data.isDisable
+    val tagLabelId = getTagLabel(isFoodMissed, data.isSelected, data.canSelect)
+    val buttonData = getButtonTitleIconId(data.isSelected)
 
     Column(
         modifier = modifier
@@ -73,7 +65,7 @@ fun OrderFoodDetail(
         FoodieTextIconRow(
             data = FoodieTextIconRowUIModel(
                 iconRes = R.drawable.ic_tag,
-                text = stringResource(tagLabelId.intValue),
+                text = stringResource(tagLabelId),
             ),
             color = RavanTheme.colors.text.onSecondary,
             textStyle = RavanTheme.typography.body2,
@@ -81,9 +73,11 @@ fun OrderFoodDetail(
         if (!data.isDisable && data.canSelect && showActionButton) {
             FoodieButton(
                 data = FoodieButtonUIModel.General(
-                    iconRes = buttonData.value.second,
-                    title = stringResource(id = buttonData.value.first),
+                    iconRes = buttonData.second,
+                    title = stringResource(id = buttonData.first),
                 ), onClick = onReserveFoodDetailClick,
+                // Loading swaps the icon for a same-size spinner, so the item keeps its size.
+                state = if (isLoading) FoodieButtonState.Loading else FoodieButtonState.Enabled,
                 modifier = Modifier.padding(top = 8.dp, bottom = 2.dp)
             )
         }
